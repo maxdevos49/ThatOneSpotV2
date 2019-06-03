@@ -1,0 +1,51 @@
+{
+    "name": "node-app-template",
+    "version": "1.0.0",
+    "description": "Node app template ready to go with a mongodb database and okta integration",
+    "main": "server.js",
+    "devDependencies": {
+        "@types/dotenv": "^6.1.0",
+        "@types/express": "^4.16.1",
+        "@types/express-session": "^1.15.12",
+        "@types/ip": "^1.1.0",
+        "@types/mongoose": "^5.3.24",
+        "@types/node": "^11.10.4",
+        "nodemon": "^1.18.10"
+    },
+    "dependencies": {
+        "@okta/oidc-middleware": "^2.0.0",
+        "@types/nodemailer": "^6.2.0",
+        "dotenv": "^6.2.0",
+        "esm": "^3.2.9",
+        "express": "^4.16.4",
+        "express-session": "^1.15.6",
+        "ip": "^1.1.5",
+        "mongoose": "^5.4.20",
+        "nodemailer": "^6.2.1",
+        "typescript": "^3.4.3",
+        "vash": "^0.12.6"
+    },
+    "scripts": {
+        "setup": "./scripts/dotenv.sh -f && npm i",
+        "build": "tsc",
+        "start": "node -r esm -r dotenv/config src/server.js",
+        "dev": "nodemon"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/maxdevos49/HomeCenter.git"
+    },
+    "nodemonConfig": {
+        "watch": [
+            "src"
+        ],
+        "exec": "npm run build && npm run start",
+        "ext": "ts"
+    },
+    "author": "Maxwell DeVos",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/maxdevos49/HomeCenter/issues"
+    },
+    "homepage": "https://github.com/maxdevos49/HomeCenter#readme"
+}

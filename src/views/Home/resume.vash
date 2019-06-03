@@ -1,0 +1,168 @@
+@html.extend('/Shared/_layout', function(model){
+
+    @html.block('content', function(model){
+
+        @{
+            model.title = "Resume";
+        }
+
+        <style>
+		
+            hr{
+                margin: 0;
+            }
+            ul {
+                list-style-type: none;
+            }
+            
+        </style>
+
+        <div class="col-md-9 mx-auto p-3">
+
+            <div class="shadow p-5">
+
+                <!--Heading-->
+                <div style="text-align: center;">
+                    <h1>Maxwell A. DeVos</h1>
+                    <p>Cherokee, Iowa | 712-229-9631 | MaxDeVos@@iastate.edu | <a href="https://github.com/maxdevos49">https://github.com/maxdevos49</a></p>
+                </div>
+
+                <!--Objectives-->
+                <div>
+                    <hr />
+                    <p class="m-1">
+                        <b>Objective</b>
+                    </p>
+                    <hr />
+                    <ul class="m-1">
+                        <li>
+                        I am a motivated freshmen looking for a summer internship 
+                        to gain experiance for my software Engineering major. I enjoy
+                        learning new things and like to solve every problem in 
+                        the most efficent way. I am willing to expand my knowledge 
+                        in anyway that I can.
+                        </li>
+                    </ul>
+                </div>
+                
+                <!--Education-->
+                <div>
+                    <hr />
+                    <p class="m-1"><b>Education</b></p>
+                    <hr />
+                    <p class="m-1">
+                        <span class="float-left">
+                            <b>Iowa State University</b>
+                        </span>
+                        <span class="float-right">
+                            <b>Expected Graduation: May 2021</b>
+                        </span>
+                    </p>
+                    <br>
+                    <ul class="m-1">
+                        <li>Freshmen | Software Engineering</li>
+                    </ul>
+                    <p class="m-1">
+                        <span class="float-left">
+                            <b>Washington High School</b>
+                        </span>
+                        <span class="float-right">
+                            <b>Graduated: May 21, 2017</b>
+                        </span>
+                    </p>
+                    <br />
+                    <ul class="m-1">
+                        <li>Class Rank 23/60 | GPA 3.5 | Blood Donor Recognition(Gallon Grad)</li>
+                    </ul>
+                </div>
+                
+                <!-- Internship-->
+                <div>
+                    <hr />
+                    <p class="m-1"><b>Internships</b></p>
+                    <hr />
+                    <p class="m-1">
+                        <b>
+                            <span class="float-left">Icon Ag&Turf</span>
+                            <span class="float-right">Job Title: IT Intern</span>
+                        </b>
+                    </p>
+                    <br />
+                    <ul class="m-1">
+                        <li>
+                        Le Mars, Iowa - 35 hours weekly (3 Months for summer of 2017). 
+                        Was an assistant to the IT Manager and traveled between the 5 
+                        different locations fixing varius issues like printing, software, 
+                        and other Technical issues. I ran new ethernet wires and 
+                        installed a new security camera system in one location. I wrote 
+                        a powershell script to add new employees into the active 
+                        directory system more efficently.
+                        </li>
+                    </ul>
+                </div>
+                
+                <!--Employment History-->
+                <div>
+                    <hr />
+                    <p class="m-1">
+                        <b>Employment History</b>
+                    </p>
+                    <hr />
+                    <p class="m-1">
+                        <b>
+                            <span class="float-left">HyVee</span>
+                            <span class="float-right">Job Title: Stocker,Curtesy and Checker</span>
+                        </b>
+                    </p>
+                    <br />
+                    <ul class="m-1">
+                        <li>
+                        Cherokee, Iowa - (November 2014, present). I have gained
+                        useful customer interaction experience through this job and 
+                        have learned to apply it to other jobs.
+                        </li>
+                    </ul>
+                </div>
+                
+                <!--Skills-->
+                <div>
+                    <hr />
+                    <p class="m-1">
+                        <b>Skills</b>
+                    </p>
+                    <hr />
+                    <b>Languages</b>
+                    <ul class="m-1">
+                        <li>HTML: 3 Years</li>
+                        <li>CSS: 3 Years</li>
+                        <li>Javascript: 3 Years</li>
+                        <li>PHP: 2 Years</li>
+                        <li>Powershell: 1 Year</li>
+                    </ul>
+                    <b>Programs</b>
+                    <ul class="m-1">
+                        <li>Blender 3D Modeling Program: 4 Years</li>
+                        <li>Word: 3 years</li>
+                        <li>Excel: 3 years</li>
+                        <li>PowerPoint: 3 Years</li>
+                    </ul>
+                </div>
+                
+                <!--Extra Curricular Activities-->
+                <div>
+                    <hr>
+                    <p class="m-1"><b>Extra Curricular Activities</b></p>
+                    <hr>
+                    <p class="m-1">
+                        <b>Clubs</b>
+                        <ul class="m-1">
+                            <li>Web Development Club</li>
+                            <li>ISU Juggling & Unicycling Club</li>
+                        </ul>
+                    </p>
+                </div>
+            </div>
+            
+        </div>
+    })
+})

@@ -1,0 +1,28 @@
+{
+    "folders": [
+        {
+            "name": "Source",
+            "path": "./src"
+        },
+        {
+            "name": "Other",
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            "**/node_modules": true,
+            "**/.git": false,
+            "**/.svn": true,
+            "**/.hg": true,
+            "**/.gitignore": true,
+            "**/src": true,            
+            "**/CVS": true,
+            "**/.DS_Store": true,
+            "**/*.js.m*": true,
+            "**/*.js": {
+                "when": "$(basename).ts"
+            }
+        }
+    }
+}

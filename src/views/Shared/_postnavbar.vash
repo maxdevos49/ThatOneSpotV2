@@ -1,0 +1,6 @@
+<div class="col-md-6 mt-md-0 mt-3">
+    <h5 class="text-uppercase text">@model.project</h5>
+    <p class="text">
+        This node app template includes a MVC style backend and okta support ready for proper credentials. 
+    </p>
+</div>
