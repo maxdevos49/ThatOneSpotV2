@@ -1,0 +1,22 @@
+ 
+ @*Name*@
+<div class="form-group">
+    @html.LabelFor(model => model.name)
+    @html.EditorFor(model => model.name, "", {class: "form-control"})
+    @html.ValidationMessageFor(model => model.name)
+</div>
+
+@*Description*@
+<div class="form-group">
+    @html.LabelFor(model => model.description)
+    @html.EditorFor(model => model.description, "", {class: "form-control"})
+    @html.ValidationMessageFor(model => model.description)
+</div>
+
+@*url*@
+<div class="form-group">
+    @html.LabelFor(model => model.url)
+    @html.EditorFor(model => model.url, "", {class: "form-control"})
+    @html.ValidationMessageFor(model => model.url)
+</div>
+

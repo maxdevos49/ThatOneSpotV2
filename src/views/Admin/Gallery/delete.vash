@@ -1,0 +1,32 @@
+@html.extend('/Shared/_layout', function(model){
+
+    @html.block('content', function(model){
+
+        @{
+            model.title = "Gallery - Delete";
+        }
+
+        <div class="col-md-10 p-3 mx-auto">
+
+            <div class="col-md-12 shadow p-3">
+
+                <h1>@model.title</h1>
+                <hr/>
+
+                @html.include("Admin/Gallery/_detailsBody")
+
+                <form action="Delete" method="POST">
+                
+                    @html.HiddenFor(model => model.id)
+
+                    @html.Navigator(html.Back, "Back", "index", {})
+                    @html.Input(html.Delete, "Delete", {class: "pull-right"})
+
+                </form>
+
+
+            </div>
+
+        </div>
+    })
+})

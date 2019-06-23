@@ -87,7 +87,8 @@ vash.helpers.EditorFor = function (model: Function, value?: string, attributes?:
     let property: IViewProperty = model(m);
 
     //dont throw undefined for lack of data
-    if (this.model.data) value = model(this.model.data);
+    if (this.model.data) 
+        value = model(this.model.data);
 
     let type: string = getType(property.type.name as InputType); //property.subtype ? property.subtype :
 

@@ -1,0 +1,56 @@
+@html.extend('/Shared/_layout', function(model){
+
+    @html.block('content', function(model){
+
+        @{
+            model.title = "Project - Index";
+        }
+
+        <div class="col-md-10 p-3 mx-auto">
+
+            <div class="col-md-12 shadow pt-2">
+
+                <h2>@model.title</h2>
+                <hr/>
+
+                @html.Navigator(html.Create, "Create", "/Admin/Projects/Create", {})
+                <br />
+                <br />
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 33%;">
+                                @html.DisplayNameFor(model => model.name)
+                            </th>
+                            <th style="width: 33%;">
+                                @html.DisplayNameFor(model => model.url)
+                            </th>
+                            <th style="width: 34%;">
+                                Action(s)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @model.data.forEach(function(item){
+                            <tr>
+                                <td>
+                                    @html.DisplayFor(model => item.name)
+                                </td>
+                                <td>
+                                    <a href="@item.url">@item.url</a>
+                                </td>
+                                <td>
+                                    @html.Navigator(html.Edit, null, "/Admin/Projects/Edit?id=" + item.id, {})
+                                    @html.Navigator(html.Details, null, "/Admin/Projects/Details?id=" + item.id, {})
+                                    @html.Navigator(html.Delete, null, "/Admin/Projects/Delete?id=" + item.id, {})
+                                </td>
+                            </tr>
+                        })
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    })
+})

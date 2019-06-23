@@ -61,6 +61,10 @@ export class Shared {
             return map[m];
         });
     }
+
+    static async UploadImage() {
+
+    }
 }
 
 

@@ -2,19 +2,12 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const ProjectSchema = new Schema({
-    name: {
+const FileSchema = new Schema({
+    name: {//original file name. New file name will be db id.
         required: true,
         type: String
     },
-    url: {
-        required: true,
-        type: String,
-    },
     description: {
-        type: String,
-    },
-    imageUrl: {
         type: String,
     },
     isActive: {
@@ -37,4 +30,4 @@ const ProjectSchema = new Schema({
     }
 });
 
-export default mongoose.model("project", ProjectSchema);
+export default mongoose.model("files", FileSchema);

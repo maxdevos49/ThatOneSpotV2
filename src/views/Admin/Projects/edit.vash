@@ -1,0 +1,35 @@
+@html.extend('/Shared/_layout', function(model){
+
+    @html.block('content', function(model){
+
+        @{
+            model.title = "Project - Edit";
+        }
+
+        <div class="col-md-10 p-3 mx-auto">
+
+            <div class="col-md-12 shadow p-3">
+
+               <h1>@model.title</h1>
+                <hr/>
+
+                <form method="POST" action="/Admin/Projects/edit?id=@model.data.id">
+                    
+                    <div class="form-horizontal">
+                        @html.ValidationSummary()
+
+                        @html.include("Admin/Projects/_ProjectMainForm", model)
+
+                        <input type="hidden" name="id" value="@model.data.id">
+
+                        @html.Navigator(html.Back, "Back", "/Admin/Projects/Index", {})
+                        @html.Input(html.Save, "Submit", {class:"float-right"})
+
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    })
+})

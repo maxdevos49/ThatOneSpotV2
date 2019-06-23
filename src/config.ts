@@ -3,6 +3,7 @@ export const config = {
     "versionRelease": "TBD",
     "versionTitle": "alpha",
     "version": "1.0.0",
+    "path": __dirname,
     "server": {
         "enviroment": process.env.NODE_ENVIROMENT,
         "port": process.env.PORT,
