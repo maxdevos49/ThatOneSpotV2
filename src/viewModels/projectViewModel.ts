@@ -27,6 +27,12 @@ export class ProjectViewModel implements IViewModel {
         name: "Description"
     };
 
+    public image: IViewProperty = {
+        type: function File(){},//Has to be a function so we make it a function. File.name = "File" so this works
+        path: "image",
+        name: "Image"
+    }
+
     public imageUrl: IViewProperty = {
         type: String,
         path: "imageUrl",

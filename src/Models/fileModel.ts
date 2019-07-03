@@ -18,16 +18,9 @@ const FileSchema = new Schema({
         type: Date,
         default: Date.now()
     },
-    createdBy: {
-        required: true,
-        type: String
-    },
     updatedOn: {
         type: Number
     },
-    updatedBy: {
-        type: String,
-    }
 });
 
 export default mongoose.model("files", FileSchema);

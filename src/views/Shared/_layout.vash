@@ -12,55 +12,70 @@
 
 		<title>@model.title | @model.project</title>
     </head>
-    <body class="bg-aluminum" >
+    <body class="bg-theme-primary" onload="init()">
+        <div id="body-wrapper" style="overflow-x:hidden; height: 100vh; width: 100vw;">
+            <nav id="header" class="navbar navbar-expand-lg navbar-dark navbar-fixed-top mx-auto nav-z-index" style="transition: 0.3s;">
+                <a class="navbar-brand" href="/Home/">
+                    @model.project
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-        <nav class="navbar navbar-expand-lg navbar-dark bg-blue col-md-10 mx-auto">
-            <a class="navbar-brand" href="/Home/">
-                @model.project
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    @html.include("Shared/_navbar")
+                </div>
+            </nav>  
+            <div class="bg-theme-secondary">
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                @html.include("Shared/_navbar")
+                @*Theme design*@
+                <div class="slanted slanted-left" style="--slant-color: var(--theme-primary);"></div>
+                @*Shadow shapes*@
+                <div class="theme-shadow-base">
+                    <div class="theme-shadow-texture" id="shadow-tex-1"></div>
+                    <div class="theme-shadow-texture" id="shadow-tex-2"></div>
+                    <div class="theme-shadow-texture" id="shadow-tex-3"></div>
+                </div>
+
+                <div style="margin-top: -100px;">
+                    @html.block('content')
+                </div>
+
             </div>
-        </nav>
 
-        <div class="bg-white">
+            <footer class="font-small pt-4 col-md-10 mx-auto" style="color: white;">
 
-            @html.block('content')
+                <div class="container-fluid text-center text-md-left">
+                    <div class="row">
+                        
+                        @html.include("Shared/_postnavbar")
 
-        </div>
+                        <hr class="clearfix w-100 d-md-none pb-3">
 
-        <footer class="font-small bg-aluminum pt-4 col-md-10 mx-auto" style="color: white;">
+                        <div class="col-md-3 mb-md-0 mb-3">
+                            <h5 class="text-uppercase text">Site</h5>
+                            <ul class="list-unstyled">
+                                <li class="nav-item">
+                                    <a class="nav-custom-link" href="/Home/">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-custom-link" href="/Home/about">About</a>
+                                </li>
+                            </ul>
+                        </div>
 
-            <div class="container-fluid text-center text-md-left">
-                <div class="row">
-                    
-                    @html.include("Shared/_postnavbar")
-
-                    <hr class="clearfix w-100 d-md-none pb-3">
-
-                    <div class="col-md-3 mb-md-0 mb-3">
-                        <h5 class="text-uppercase text">Site</h5>
-                        <ul class="list-unstyled">
-                            <li class="nav-item"><a href="/Home/">Home</a></li>
-                            <li class="nav-item"><a href="/Home/about">About</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="col-md-3 mb-md-0 mb-3">
-                        <h5 class="text-uppercase text">Developers</h5>
-                        <ul class="list-unstyled">
-                            <li class="nav-item"><a href="https://github.com/Maxdevos49">Maxwell DeVos</a></li>
-                        </ul>
+                        <div class="col-md-3 mb-md-0 mb-3">
+                            <h5 class="text-uppercase text">Developers</h5>
+                            <ul class="list-unstyled">
+                                <li class="nav-item"><a class="nav-custom-link" href="https://github.com/Maxdevos49">Maxwell DeVos</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="footer-copyright text-center py-3 text">
-                © 2018 - @(new Date().getFullYear()): Maxwell DeVos
-            </div>
-        </footer>        
+                <div class="footer-copyright text-center py-3 text">
+                    © 2018 - @(new Date().getFullYear()): Maxwell DeVos
+                </div>
+            </footer>  
+        </div>
     </body>
 </html>

@@ -1,12 +1,18 @@
 import express, { Request, Response, Router } from "express";
 const router: Router = express.Router();
 import { config } from "../config";
+import projectModel from "../Models/projectModel";
+import { View } from "../helpers/vash/view";
+import { ProjectViewModel } from "../viewModels/projectViewModel";
 
 /**
  * GET:/Project/index
  */
-router.get("/index", (req, res) => {
-    res.render("Projects/index");
+router.get("/index", async (req, res) => {
+
+    let model = await projectModel.find({isActive: true});
+
+    res.render("Projects/index", View(res, ProjectViewModel, model));
 });
 
 /**

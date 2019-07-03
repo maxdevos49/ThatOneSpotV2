@@ -14,21 +14,26 @@
     },
     "dependencies": {
         "@okta/oidc-middleware": "^2.0.0",
+        "@types/express-fileupload": "^1.1.0",
         "@types/nodemailer": "^6.2.0",
+        "@types/uuid": "^3.4.4",
         "dotenv": "^6.2.0",
         "esm": "^3.2.9",
         "express": "^4.16.4",
+        "express-fileupload": "^1.1.5",
         "express-session": "^1.15.6",
         "ip": "^1.1.5",
         "mongoose": "^5.4.20",
         "nodemailer": "^6.2.1",
+        "source-map-support": "^0.5.12",
         "typescript": "^3.4.3",
+        "uuid": "^3.3.2",
         "vash": "^0.12.6"
     },
     "scripts": {
         "setup": "./scripts/dotenv.sh -f && npm i",
         "build": "tsc",
-        "start": "node -r esm -r dotenv/config src/server.js",
+        "start": "node -r esm -r source-map-support/register -r dotenv/config src/server.js",
         "dev": "nodemon"
     },
     "repository": {

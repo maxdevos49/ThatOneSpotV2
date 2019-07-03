@@ -1,8 +1,18 @@
+ 
+ @html.HiddenFor(model => model.imageUrl)
+ 
  @*Name*@
 <div class="form-group">
     @html.LabelFor(model => model.name)
     @html.EditorFor(model => model.name, "", {class: "form-control"})
     @html.ValidationMessageFor(model => model.name)
+</div>
+
+@*url*@
+<div class="form-group">
+    @html.LabelFor(model => model.url)
+    @html.EditorFor(model => model.url, "", {class: "form-control"})
+    @html.ValidationMessageFor(model => model.url)
 </div>
 
 @*Description*@
@@ -12,10 +22,21 @@
     @html.ValidationMessageFor(model => model.description)
 </div>
 
-@*url*@
+@*Image*@
 <div class="form-group">
-    @html.LabelFor(model => model.url)
-    @html.EditorFor(model => model.url, "", {class: "form-control"})
-    @html.ValidationMessageFor(model => model.url)
+    <div class="row">
+        <div class="col-md-10">
+            @html.LabelFor(model => model.image)
+            @html.EditorFor(model => model.image, "", {class: "form-control"})
+            @html.ValidationMessageFor(model => model.image)
+        </div>
+        <div class="col-md-2">
+            @if(model.data){
+                <img class="img-fluid" src="/Uploads/@model.data.imageUrl">
+            }
+        </div>
+    </div>
 </div>
+
+
 

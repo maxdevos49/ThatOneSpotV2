@@ -3,20 +3,114 @@
     @html.block('content', function(model){
 
         @{
-            model.title = "Projects Index";
+            model.title = "My Projects";
         }
 
-        <div class="col-md-10 p-3 mx-auto">
+        <div class="bg-theme-secondary">
 
-            <div class="col-md-12 shadow pt-2">
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
 
-                <h1>@model.title Page</h1>
-                <hr/>
+            <a href="@model.data[1].url" target="_blank">
+                <div class="img-3d" id="number2">
+                    <img src="/uploads/@model.data[1].imageUrl">
+                </div>
+            </a>
 
+            <a href="@model.data[2].url" target="_blank">
+                <div class="img-3d" id="number1">
+                    <img src="/uploads/@model.data[2].imageUrl">
+                </div>
+            </a>
 
-
-            </div>
+            <a href="@model.data[0].url" target="_blank">
+                <div class="img-3d" id="number3">
+                    <img src="/uploads/@model.data[0].imageUrl">
+                </div>
+            </a>
 
         </div>
+      
+            <style>
+
+                .img-3d:hover{
+                    animation: 0.2s switch;
+                    z-index: 10;
+                }
+
+                @@keyframes switch{
+                    0%{
+                        width: 350px;
+                        opacity: 0.5;
+                    }
+                    100%{
+                        width: 400px;
+                        opacity: 1.0;
+                    }
+                }
+
+                .img-3d > img{
+                    width: 400px;
+                   
+                }
+
+                :root{
+                    --cluster-x: 140px;
+                    --cluster-y: 190px; 
+                }
+
+
+                #number3{
+                    top: calc(var(--cluster-y) + 0px);
+                    right: calc(var(--cluster-x) - 20px);
+                }
+
+                #number2{
+                    top: calc(var(--cluster-y) + 10px);
+                    right: calc(var(--cluster-x) + 70px);
+                }
+
+                #number1{
+                    top: calc(var(--cluster-y) + 100px);
+                    right: calc(var(--cluster-x) + 80px);
+                }
+
+            </style>
+
     })
 })

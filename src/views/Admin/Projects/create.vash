@@ -8,21 +8,20 @@
 
         <div class="col-md-10 p-3 mx-auto">
 
-            <div class="col-md-12 shadow p-2">
+            <div class="col-md-12 shadow p-2 bg-white">
 
                 <h1>@model.title</h1>
                 <hr/>
 
-                <form method="POST" action="/Admin/Projects/Create">
+                <form method="POST" action="/Admin/Projects/Create" enctype="multipart/form-data">
                     
                     <div class="form-horizontal">
                         @html.ValidationSummary()
 
-                       @html.include("Admin/Projects/_ProjectMainForm", model)
+                        @html.include("Admin/Projects/_projectMainForm", model)
 
                         @html.Navigator(html.Back, "Back", "/Admin/Projects/Index", {})
                         @html.Input(html.Save, "Submit", {class:"float-right"})
-
                     </div>
                 </form>
 

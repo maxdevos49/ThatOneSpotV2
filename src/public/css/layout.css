@@ -1,20 +1,19 @@
-/**
-******Color Scheme******
-* Blue: #4484CE
-* Aluminumn: #D9D9D9
-* Light: #F9CF00
-* Tangerine: #F19F4D
-*/
-.bg-blue{
-    background-color: rgb(51, 70, 91) !important;
-    /* background-color: #4484CE !important; */
-
+/**** Site Colors*****/
+:root{
+    --theme-primary:  rgb(51, 70, 91);
+    --theme-secondary: var(--dark);
 }
 
-.bg-aluminum{
-    /* background-color: rgb(255, 255, 255) !important; */
-    background-color: rgb(51, 70, 91) !important;
-    /* background-color: #D9D9D9 !important; */
+.nav-z-index{
+    z-index: 1000;
+}
+
+.bg-theme-primary{
+    background-color: var(--theme-primary) !important;
+}
+
+.bg-theme-secondary{
+    background-color: var(--theme-secondary) !important;
 }
 
 .bg-yellow {
@@ -25,16 +24,93 @@
     background-color: #F19F4D !important;
 }
 
+/****box Shadow****/
 .shadow{
     box-shadow: 0 4px 8px 0 black !important;
 }
 
 /****Debug CSS******/
 .border {
-    border: 2px solid black !important;
+    border: 1px solid black !important;
 }
 
-a {
-    color: rgb(198, 198, 198);
+/**** Slanted Divs *****/
+div.slanted{
+    background: var(--slant-color);
+    position: relative;
+    padding: 30px;
+    margin-bottom: 100px;
 }
 
+div.slanted::after{
+    position:absolute;
+    content: "";
+    display:block;
+    left:0;
+    bottom:-100px;
+    width:100%;
+    border-style: solid;
+}
+
+div.slanted-left::after{
+    border-width: 0 100vw 100px 0;
+    border-color: transparent var(--slant-color) transparent transparent;
+}
+
+div.slanted-right::after{
+    border-width: 0 0 100px 100vw;
+    border-color: transparent transparent  transparent var(--slant-color)   ;
+}
+
+
+/*****Shadow textures****/
+.theme-shadow-base{
+    position: relative;
+}
+
+.theme-shadow-texture{
+
+    position: absolute;
+    width: 175%;/*175%*/
+    height: 300px;
+    left: -50%;
+    transform: skew(50deg, -25deg);
+    box-shadow: 3px 3px 50px rgba(0,0,0, 0.3);
+}
+
+#shadow-tex-1{
+    top: 0;
+}
+
+#shadow-tex-2{
+    top: -200px;
+}
+
+#shadow-tex-3{
+    top: 300px;
+}
+
+
+
+/*****Sticky header*****/
+.navbar-fixed-top {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+
+/****3d images/divs****/
+.img-3d{
+    position: absolute;
+    z-index: 1;
+    transform: skew(50deg, -25deg);
+    box-shadow: 3px 3px 50px 10px rgba(0,0,0, 0.3);
+}
+
+.nav-custom-link{
+    color: rgba(255,255,255,.5);
+}
+
+body{
+    overflow-x: hidden !important;
+}

@@ -5,12 +5,13 @@ export const config = {
     "version": "1.0.0",
     "path": __dirname,
     "server": {
-        "enviroment": process.env.NODE_ENVIROMENT,
+        "environment": process.env.NODE_ENVIRONMENT,
         "port": process.env.PORT,
         "domain": process.env.DOMAIN,
         "transport": process.env.TRANSPORT
     },
     "email": {
+        "errorNotificationEmail": process.env.ERROREMAIL,
         "username": process.env.USERNAME,
         "password": process.env.PASSWORD,
         "from": process.env.FROM

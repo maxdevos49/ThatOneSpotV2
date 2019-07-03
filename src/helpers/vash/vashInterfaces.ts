@@ -6,6 +6,7 @@ export enum InputType {
     Number = "Number",
     Date = "Date",
     Boolean = "Boolean",
+    File = "File",
     Other = ""
 }
 
@@ -81,7 +82,7 @@ export interface IConfig {
      */
     server: {
 
-        enviroment: string;
+        environment: string;
 
         port: string;
 
