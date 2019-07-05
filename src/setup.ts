@@ -43,7 +43,7 @@ export function setup(server: http.Server) {
 
     const oidc = new ExpressOIDC({
         issuer: config.okta.issuer,
-        appBaseUrl: `${config.server.transport}://${config.server.domain}:${config.server.port}`,
+        appBaseUrl: `${config.server.transport}://${config.server.domain}${(config.server.environment === "development") ? (":" + config.server.port) : ""}`,
         client_id: config.okta.client_id,
         client_secret: config.okta.client_secret,
         scope: 'openid profile groups',
