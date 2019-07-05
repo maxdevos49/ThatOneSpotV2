@@ -3,114 +3,103 @@
     @html.block('content', function(model){
 
         @{
-            model.title = "My Projects";
+            model.title = "Projects";
         }
 
-        <div class="bg-theme-secondary">
+        <div class="p-2">
+            @model.data.forEach(function(item, index){
+            <div class="m-3 col-md-10 row mx-auto">
 
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-
-            <a href="@model.data[1].url" target="_blank">
-                <div class="img-3d" id="number2">
-                    <img src="/uploads/@model.data[1].imageUrl">
+                <div class="col-md-5 m-5 p-0 card shadow">
+                    <div class="card-body">
+                        <h3 class="card-title">@html.DisplayFor(model => item.name)</h3>
+                        <p class="card-text" id="description@index">@html.DisplayFor(model => item.description)</p>
+                        <p>Check it out <a href="@html.DisplayFor(model => item.url)">here</a>.</p>
+                        <textarea data-preview-index="@index" style="display: none;">@html.DisplayFor(model => item.description)</textarea>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <p>Last updated: 
+                            @if(item.updatedOn){
+                                @html.DisplayFor(model => item.updatedOn)
+                            }else{
+                                @html.DisplayFor(model => item.createdOn)
+                            }
+                        </p>
+                    </div>
                 </div>
-            </a>
-
-            <a href="@model.data[2].url" target="_blank">
-                <div class="img-3d" id="number1">
-                    <img src="/uploads/@model.data[2].imageUrl">
+                
+                <div class="col-md-6 m-1 p-2 card p-0 shadow bg-theme-primary">
+                    <a class=" my-auto" href="@html.DisplayFor(model => item.url)">
+                        <img class="card-img-top" src="/uploads/@html.DisplayFor(model => item.imageUrl)">
+                    </a>
                 </div>
-            </a>
 
-            <a href="@model.data[0].url" target="_blank">
-                <div class="img-3d" id="number3">
-                    <img src="/uploads/@model.data[0].imageUrl">
-                </div>
-            </a>
-
+            </div>
+            })
         </div>
-      
-            <style>
 
-                .img-3d:hover{
-                    animation: 0.2s switch;
-                    z-index: 10;
+        <!--Preview Script-->
+        <script>
+        
+            let previews = document.querySelectorAll(`textarea[data-preview-index]`);
+
+            previews.forEach((item) => {
+                let easyEditor = new EasyMDE({element: item});
+                document.getElementById("description"+item.dataset.previewIndex).innerHTML = easyEditor.markdown(easyEditor.value());
+                easyEditor.toTextArea();
+                item.style.display = "none";
+                easyEditor = null;
+            });
+
+        </script>
+
+        <style>
+
+
+            /* entire container, keeps perspective */
+            .flip-container {
+                perspective: 1000px;
+            }
+                /* flip the pane when hovered */
+                .flip-container:hover .flipper, .flip-container.hover .flipper {
+                    transform: rotateY(180deg);
                 }
 
-                @@keyframes switch{
-                    0%{
-                        width: 350px;
-                        opacity: 0.5;
-                    }
-                    100%{
-                        width: 400px;
-                        opacity: 1.0;
-                    }
-                }
+            .flip-container, .front, .back {
+                width: 320px;
+                height: 480px;
+            }
 
-                .img-3d > img{
-                    width: 400px;
-                   
-                }
+            /* flip speed goes here */
+            .flipper {
+                transition: 0.6s;
+                transform-style: preserve-3d;
 
-                :root{
-                    --cluster-x: 140px;
-                    --cluster-y: 190px; 
-                }
+                position: relative;
+            }
 
+            /* hide back of pane during swap */
+            .front, .back {
+                backface-visibility: hidden;
 
-                #number3{
-                    top: calc(var(--cluster-y) + 0px);
-                    right: calc(var(--cluster-x) - 20px);
-                }
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
 
-                #number2{
-                    top: calc(var(--cluster-y) + 10px);
-                    right: calc(var(--cluster-x) + 70px);
-                }
+            /* front pane, placed above back */
+            .front {
+                z-index: 2;
+                /* for firefox 31 */
+                transform: rotateY(0deg);
+            }
 
-                #number1{
-                    top: calc(var(--cluster-y) + 100px);
-                    right: calc(var(--cluster-x) + 80px);
-                }
+            /* back, initially hidden pane */
+            .back {
+                transform: rotateY(180deg);
+            }
 
-            </style>
+        </style>
 
     })
 })

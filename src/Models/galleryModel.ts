@@ -30,7 +30,7 @@ const GallerySchema = new Schema({
         type: String
     },
     updatedOn: {
-        type: Number
+        type: Date
     },
     updatedBy: {
         type: String,

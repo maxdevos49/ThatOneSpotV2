@@ -76,6 +76,7 @@ router.get("/edit:id?", async (req: Request, res: Response) => {
     try {
 
         let model = await projectModel.findOne({ _id: id });
+
         return res.render("Admin/Projects/edit", View(res, ProjectViewModel, model));
 
     } catch (err) {
@@ -110,6 +111,9 @@ router.post("/edit:id?", async (req: Request, res: Response) => {
             }
 
         }
+
+        req.body.updatedOn = Date.now();
+        req.body.updatedBy = Shared.GetLoggedInUserId(res);
 
         await projectModel.updateOne({ _id: req.body.id }, req.body);
         return res.redirect("/Admin/Projects/Index");
@@ -158,7 +162,13 @@ router.get("/delete:id?", async (req: Request, res: Response) => {
 router.post("/delete", async (req: Request, res: Response) => {
     try {
 
-        await projectModel.findOneAndUpdate({ _id: req.body.id }, { isActive: false });
+        let change = {
+            isActive: false,
+            updatedOn: Date.now(),
+            updatedBy: Shared.GetLoggedInUserId(res)
+        };
+
+        await projectModel.findOneAndUpdate({ _id: req.body.id }, change);
         return res.redirect("/Admin/Projects/Index");
 
     } catch (err) {

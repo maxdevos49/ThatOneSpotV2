@@ -2,7 +2,6 @@
 function init() {
 
     document.getElementById("body-wrapper").addEventListener("scroll", function(e) {
-        console.log("test");
         let header = document.getElementById("header");
 
         if (this.scrollTop > 50 || document.documentElement.scrollTop > 50) {

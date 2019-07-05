@@ -5,7 +5,7 @@
 }
 
 .nav-z-index{
-    z-index: 1000;
+    z-index: 4;
 }
 
 .bg-theme-primary{
@@ -53,44 +53,22 @@ div.slanted::after{
 }
 
 div.slanted-left::after{
-    border-width: 0 100vw 100px 0;
+    border-width:    0 100vw 100px  0;
     border-color: transparent var(--slant-color) transparent transparent;
 }
 
 div.slanted-right::after{
     border-width: 0 0 100px 100vw;
-    border-color: transparent transparent  transparent var(--slant-color)   ;
+    border-color: transparent transparent  transparent var(--slant-color);
 }
 
 
 /*****Shadow textures****/
-.theme-shadow-base{
-    position: relative;
-}
-
-.theme-shadow-texture{
-
+.theme-shadow{
     position: absolute;
-    width: 175%;/*175%*/
-    height: 300px;
-    left: -50%;
-    transform: skew(50deg, -25deg);
-    box-shadow: 3px 3px 50px rgba(0,0,0, 0.3);
-}
-
-#shadow-tex-1{
     top: 0;
+    left: 0;
 }
-
-#shadow-tex-2{
-    top: -200px;
-}
-
-#shadow-tex-3{
-    top: 300px;
-}
-
-
 
 /*****Sticky header*****/
 .navbar-fixed-top {

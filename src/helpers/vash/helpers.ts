@@ -1,6 +1,9 @@
 import { IViewModel, IViewProperty, InputType } from "./vashInterfaces";
 import { Validation } from "./validation";
 
+const days: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
 const vash = require("vash");
 
 /**
@@ -26,14 +29,15 @@ vash.helpers.LabelFor = function (model: Function, attributes?: any) {
         `);
 };
 
+
 /**
- * TextBoxFor()
+ * TextAreaFor()
  * @param property represents the property to select
- * @param value value to give the text box
+ * @param value value to give the text area
  * @param attributes represents html attributes
  * @returns html markup representing a text box
  */
-vash.helpers.TextBoxFor = function (model: Function, value?: string | number, attributes?: any) {
+vash.helpers.TextAreaFor = function (model: Function, value?: string | number, attributes?: any) {
     let m: IViewModel = new this.model.viewModel();
     let property: IViewProperty = model(m);
 
@@ -43,14 +47,13 @@ vash.helpers.TextBoxFor = function (model: Function, value?: string | number, at
     Object.assign(attributes, Validation(property));
 
     this.buffer.push(`
-            <input
-              type="text"
+            <textarea
               id="${property.path}"
               name="${property.path}"
-              value="${value || ""}"
-              ${processAttributes(attributes)} />
+              ${processAttributes(attributes)} >${value || ""}</textarea>
         `);
 };
+
 
 /**
  * HiddenFor()
@@ -159,6 +162,8 @@ vash.helpers.DisplayFor = function (model: Function) {
 
     //0 is falsy but we still want to display it so lets make it a string
     if (typeof value === "number") if (value === 0) value.toString();
+
+    if (value instanceof Date) value = `${days[value.getDay()]}, ${months[value.getMonth()]} ${value.getDate()}, ${value.getFullYear()}`;
 
     this.buffer.push(value || "");
 };

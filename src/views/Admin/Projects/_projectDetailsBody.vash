@@ -21,7 +21,23 @@
                         @html.DisplayNameFor(model => model.description)
                     </dt>
                     <dd class="col-md-9">
-                        @html.DisplayFor(model => model.description)
+                        <div id="description" class="p-3 border" style="border-radius: 5px;"></div>
+
+                        <textarea id="dummyeditor" style="display: none;">@html.DisplayFor(model => model.description)</textarea>
+                        
+                        <script>
+
+                            let easyEditor = new EasyMDE();
+
+                            console.log(easyEditor.value())
+                            let rendered = easyEditor.markdown(easyEditor.value());
+                            document.getElementById("description").innerHTML = rendered;
+                            easyEditor.toTextArea();
+                            document.getElementById("dummyeditor").style.display = "none";
+                            easyEditor = null;
+                        </script>
+
+                        
                     </dd>
                     
                     @*ImageUrl*@

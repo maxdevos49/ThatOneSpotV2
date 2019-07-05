@@ -8,10 +8,22 @@
         
         <div class="col-md-10 p-3 mx-auto">
 
-            <div class="col-md-12 shadow">
-                <h1>@model.title page not found.</h1>
-                
-                <p>@model.url was not a valid request.</p>
+            <div class="bg-white col-md-12 shadow p-0 pb-5" style="overflow: hidden;">
+
+                <div class="slanted slanted-right text-white" style="--slant-color: var(--theme-primary);">
+                    <h1>@model.title page not found.</h1>
+                </div>
+
+                <div class="col-md-6 mx-auto">
+                    <h3>The page <mark>@model.url</mark> was not a valid request.<br/><br/>Try one of these awesome pages instead:</h3>
+                </div>
+
+                <div class="list-group col-md-6 mx-auto">
+                    <a href="/Home/Index" class="list-group-item list-group-item-action list-group-item-dark">Home</a>
+                    <a href="/Home/Resume" class="list-group-item list-group-item-action list-group-item-dark">Resume</a>
+                    <a href="/Projects/Index" class="list-group-item list-group-item-action list-group-item-dark">Projects</a>
+                    <a href="/Gallery/Index" class="list-group-item list-group-item-action list-group-item-dark">Gallery</a>
+                </div>
 
             </div>
         </div>

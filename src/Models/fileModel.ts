@@ -19,7 +19,7 @@ const FileSchema = new Schema({
         default: Date.now()
     },
     updatedOn: {
-        type: Number
+        type: Date
     },
 });
 

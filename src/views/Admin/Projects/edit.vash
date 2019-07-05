@@ -23,7 +23,7 @@
                         <input type="hidden" name="id" value="@model.data.id">
 
                         @html.Navigator(html.Back, "Back", "/Admin/Projects/Index", {})
-                        @html.Input(html.Save, "Submit", {class:"float-right"})
+                        @html.Input(html.Save, "Save", { class:"float-right" })
 
                     </div>
                 </form>

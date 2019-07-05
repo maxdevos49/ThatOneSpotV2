@@ -18,14 +18,6 @@ router.get("/", (req: Request, res: Response) => {
 });
 
 /**
- * GET:/about
- */
-router.get("/about", (req: Request, res: Response) => {
-    res.render("Home/about");
-});
-
-
-/**
  * GET:/resume
  */
 router.get("/resume", (req: Request, res: Response) => {

@@ -1,13 +1,16 @@
 import nodemailer from "nodemailer";
 import { config } from "../config";
 import fileModel from "../Models/fileModel";
+import { Response } from "express";
+import userModel from "../Models/userModel";
+
 
 /**
  * Shared class for commonly reused code`
  */
 export class Shared {
 
-    static async sendEmail(email: IEmail): Promise<void> {
+    public static async sendEmail(email: IEmail): Promise<void> {
 
         let account = { user: "", pass: "" }
 
@@ -44,7 +47,7 @@ export class Shared {
         }
     }
 
-    static sendErrorNotification(error: string): void {
+    public static sendErrorNotification(error: string): void {
         Shared.sendEmail({
             to: [config.email.errorNotificationEmail],
             subject: "Error in ThatOneSpot",
@@ -57,7 +60,7 @@ export class Shared {
      * @param text
      * @returns an escaped string
      */
-    static escapeHtml(text: string): string {
+    public static escapeHtml(text: string): string {
         let map: any = {
             "&": "&amp;",
             "<": "&lt;",
@@ -71,7 +74,7 @@ export class Shared {
         });
     }
 
-    static getFileExtension(file: string): string {
+    private static getFileExtension(file: string): string {
         let ext = file.split(".");
 
         if (ext.length === 1 || (ext[0] === "" && ext.length === 2)) {
@@ -80,7 +83,7 @@ export class Shared {
         return ext.pop();
     }
 
-    static async UploadFiles(options: IFileUploadConfig): Promise<string[]> {
+    public static async UploadFiles(options: IFileUploadConfig): Promise<string[]> {
 
         let resultIds: string[] = [];
         let files: any[] = [];
@@ -137,7 +140,7 @@ export class Shared {
         return resultIds;
     }
 
-    static async DeactivateFiles(files: string[]): Promise<void> {
+    public static async DeactivateFiles(files: string[]): Promise<void> {
         if (files.length > 0) {
 
             await fileModel.updateMany(
@@ -152,6 +155,25 @@ export class Shared {
                     }
                 });
         }
+    }
+
+    public static GetLoggedInUserId(res: Response): string {
+        return res.locals.authentication.id;
+    }
+
+    public static GetLoggedInUserName(res: Response): string {
+        return res.locals.authentication.given_name + " " + res.locals.authentication.family_name;
+    }
+
+    public static async GetNameById(id: string): Promise<string> {
+
+        let userData: any = await userModel.findById(id);
+
+        if (!userData) {
+            return "";
+        }
+
+        return userData.firstname + " " + userData.lastname;
     }
 }
 
