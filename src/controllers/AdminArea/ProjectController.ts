@@ -3,7 +3,7 @@ import { ProjectViewModel } from "../../viewModels/projectViewModel";
 import { View } from "../../helpers/vash/view";
 import { permit } from "../../middleware/permit";
 import projectModel from "../../Models/projectModel";
-import { Shared } from "../../helpers/Shared";
+import { GeneralUtils } from "../../helpers/Shared";
 const router: Router = express.Router();
 
 //Only allow admin here
@@ -20,7 +20,7 @@ router.get("/index", async (req, res) => {
         return res.render("Admin/Projects/index", View(res, ProjectViewModel, model));
 
     } catch (err) {
-        Shared.sendErrorNotification(err);
+        GeneralUtils.sendErrorNotification(err);
     }
 });
 
@@ -46,7 +46,7 @@ router.post("/create", async (req: Request, res: Response) => {
         }
         if (req.files) {
 
-            let fileNames: string[] = await Shared.UploadFiles({
+            let fileNames: string[] = await GeneralUtils.UploadFiles({
                 files: req.files.image,//this needs defined or it craps itself
                 limit: 1,
                 accept: ["image/png", "image/jpg", "image/jpeg", "image/gif"]
@@ -63,7 +63,7 @@ router.post("/create", async (req: Request, res: Response) => {
         return res.redirect("/Admin/Projects/Index");
 
     } catch (err) {
-        Shared.sendErrorNotification(err);
+        GeneralUtils.sendErrorNotification(err);
     }
 });
 
@@ -80,7 +80,7 @@ router.get("/edit:id?", async (req: Request, res: Response) => {
         return res.render("Admin/Projects/edit", View(res, ProjectViewModel, model));
 
     } catch (err) {
-        Shared.sendErrorNotification(err);
+        GeneralUtils.sendErrorNotification(err);
     }
 });
 
@@ -96,14 +96,14 @@ router.post("/edit:id?", async (req: Request, res: Response) => {
         if (req.files) {
 
             //process it
-            let fileNames: string[] = await Shared.UploadFiles({
+            let fileNames: string[] = await GeneralUtils.UploadFiles({
                 files: req.files.image,//this needs defined or it craps itself
                 limit: 1,
                 accept: ["image/png", "image/jpg", "image/gif"]
             });
 
             //deactivate the old files
-            Shared.DeactivateFiles([req.body.imageUrl]);
+            GeneralUtils.DeactivateFiles([req.body.imageUrl]);
 
             //add reference
             if (fileNames.length != 0) {
@@ -113,13 +113,13 @@ router.post("/edit:id?", async (req: Request, res: Response) => {
         }
 
         req.body.updatedOn = Date.now();
-        req.body.updatedBy = Shared.GetLoggedInUserId(res);
+        req.body.updatedBy = GeneralUtils.GetLoggedInUserId(res);
 
         await projectModel.updateOne({ _id: req.body.id }, req.body);
         return res.redirect("/Admin/Projects/Index");
 
     } catch (err) {
-        Shared.sendErrorNotification(err);
+        GeneralUtils.sendErrorNotification(err);
     }
 
 });
@@ -136,7 +136,7 @@ router.get("/details:id?", async (req: Request, res: Response) => {
         return res.render("Admin/Projects/details", View(res, ProjectViewModel, model));
 
     } catch (err) {
-        Shared.sendErrorNotification(err);
+        GeneralUtils.sendErrorNotification(err);
     }
 });
 
@@ -152,7 +152,7 @@ router.get("/delete:id?", async (req: Request, res: Response) => {
         return res.render("Admin/Projects/delete", View(res, ProjectViewModel, model));
 
     } catch (err) {
-        Shared.sendErrorNotification(err);
+        GeneralUtils.sendErrorNotification(err);
     }
 });
 
@@ -165,14 +165,14 @@ router.post("/delete", async (req: Request, res: Response) => {
         let change = {
             isActive: false,
             updatedOn: Date.now(),
-            updatedBy: Shared.GetLoggedInUserId(res)
+            updatedBy: GeneralUtils.GetLoggedInUserId(res)
         };
 
         await projectModel.findOneAndUpdate({ _id: req.body.id }, change);
         return res.redirect("/Admin/Projects/Index");
 
     } catch (err) {
-        Shared.sendErrorNotification(err);
+        GeneralUtils.sendErrorNotification(err);
     }
 });
 

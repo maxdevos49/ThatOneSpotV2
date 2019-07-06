@@ -113,7 +113,7 @@ export interface IConfig {
 }
 
 export interface IValidation {
-
+    
 }
 
 export interface IViewModel {

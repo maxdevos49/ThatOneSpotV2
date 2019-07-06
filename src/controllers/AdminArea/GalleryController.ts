@@ -1,7 +1,7 @@
 import express, { Request, Response, Router } from "express";
 import { View } from "../../helpers/vash/view";
 import { permit } from "../../middleware/permit";
-import { Shared } from "../../helpers/Shared";
+import { GeneralUtils } from "../../helpers/Shared";
 import galleryModel from "../../Models/galleryModel";
 import { GalleryViewModel } from "../../viewModels/galleryViewModel";
 import { GridFSBucketReadStream } from "mongodb";
@@ -21,7 +21,7 @@ router.get("/index", async (req, res) => {
         return res.render("Admin/Gallery/index", View(res, GalleryViewModel, model));
 
     } catch (err) {
-        Shared.sendErrorNotification(err);
+        GeneralUtils.sendErrorNotification(err);
     }
 
 });
@@ -48,15 +48,7 @@ router.post("/create", async (req: Request, res: Response) => {
             createdBy: res.locals.authentication.id
         }
 
-        // let fileNames: string[] = await Shared.UploadFiles({
-        //     files: req.files.image,//this needs defined or it craps itself
-        //     limit: 1,
-        //     accept: ["image/png", "image/jpg", "image/jpeg", "image/gif"]
-        // });
-
-        // if (fileNames.length > 0) {
-        //     newGalleryPost.imageUrl = fileNames[0];
-        // }
+    
 
         let project = new galleryModel(newGalleryPost);
 
@@ -64,7 +56,7 @@ router.post("/create", async (req: Request, res: Response) => {
         return res.redirect("/Admin/Gallery/Index");
 
     } catch (err) {
-        Shared.sendErrorNotification(err);
+        GeneralUtils.sendErrorNotification(err);
     }
 
 });
@@ -81,7 +73,7 @@ router.get("/edit:id?", async (req: Request, res: Response) => {
         return res.render("Admin/Gallery/edit", View(res, GalleryViewModel, model));
 
     } catch (err) {
-        Shared.sendErrorNotification(err);
+        GeneralUtils.sendErrorNotification(err);
     }
 
 
@@ -103,7 +95,7 @@ router.post("/edit:id?", async (req: Request, res: Response) => {
         return res.redirect("/Admin/Gallery/Index");
 
     } catch (err) {
-        Shared.sendErrorNotification(err);
+        GeneralUtils.sendErrorNotification(err);
     }
 
 
@@ -121,7 +113,7 @@ router.get("/details:id?", async (req: Request, res: Response) => {
         return res.render("Admin/Gallery/details", View(res, GalleryViewModel, model));
 
     } catch (err) {
-        Shared.sendErrorNotification(err);
+        GeneralUtils.sendErrorNotification(err);
     }
 });
 
@@ -137,7 +129,7 @@ router.get("/delete:id?", async (req: Request, res: Response) => {
         return res.render("Admin/Gallery/delete", View(res, GalleryViewModel, model));
 
     } catch (err) {
-        Shared.sendErrorNotification(err);
+        GeneralUtils.sendErrorNotification(err);
     }
 });
 
@@ -152,7 +144,7 @@ router.post("/delete", async (req: Request, res: Response) => {
         return res.redirect("/Admin/Gallery/Index");
 
     } catch (err) {
-        Shared.sendErrorNotification(err);
+        GeneralUtils.sendErrorNotification(err);
     }
 
 });

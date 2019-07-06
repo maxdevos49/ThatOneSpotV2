@@ -1,14 +1,14 @@
-import nodemailer from "nodemailer";
 import { config } from "../config";
-import fileModel from "../Models/fileModel";
 import { Response } from "express";
+import nodemailer from "nodemailer"; 
+import fileModel from "../Models/fileModel";
 import userModel from "../Models/userModel";
 
 
 /**
  * Shared class for commonly reused code`
  */
-export class Shared {
+export class GeneralUtils {
 
     public static async sendEmail(email: IEmail): Promise<void> {
 
@@ -48,7 +48,7 @@ export class Shared {
     }
 
     public static sendErrorNotification(error: string): void {
-        Shared.sendEmail({
+        GeneralUtils.sendEmail({
             to: [config.email.errorNotificationEmail],
             subject: "Error in ThatOneSpot",
             body: error
@@ -122,7 +122,7 @@ export class Shared {
                 let filedata = await newFile.save();
 
                 //get extension
-                let fileName = `${filedata._id}.${Shared.getFileExtension(files[i].name)}`;
+                let fileName = `${filedata._id}.${GeneralUtils.getFileExtension(files[i].name)}`;
 
                 //add to the results
                 resultIds.push(fileName);
@@ -174,6 +174,10 @@ export class Shared {
         }
 
         return userData.firstname + " " + userData.lastname;
+    }
+
+    public static SetModelError(res: Response): void{
+        //TODO
     }
 }
 
