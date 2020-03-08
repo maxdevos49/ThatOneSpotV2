@@ -23,7 +23,7 @@
         "express-fileupload": "^1.1.6",
         "express-session": "^1.15.6",
         "ip": "^1.1.5",
-        "mongoose": "^5.4.20",
+        "mongoose": "^5.7.5",
         "nodemailer": "^6.2.1",
         "source-map-support": "^0.5.12",
         "typescript": "^3.4.3",
