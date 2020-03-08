@@ -8,9 +8,10 @@
     <li class="nav-item">
         <a class="nav-link" href="/Projects/index">Projects</a>
     </li>
+    @*
     <li class="nav-item">
         <a class="nav-link" href="/Gallery/index">Gallery</a>
-    </li>
+    </li>*@
     <li class="nav-item">
         <a class="nav-link" href="/Home/index#about">About</a>
     </li>

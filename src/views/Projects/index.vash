@@ -6,34 +6,37 @@
             model.title = "Projects";
         }
 
-        <div class="p-2">
+        <div class="pb-2">
             @model.data.forEach(function(item, index){
-            <div class="m-3 col-md-10 row mx-auto">
+            <div class="m-5 col-md-8 mx-auto">
 
-                <div class="col-md-5 m-5 p-0 card shadow">
-                    <div class="card-body">
-                        <h3 class="card-title">@html.DisplayFor(model => item.name)</h3>
-                        <p class="card-text" id="description@index">@html.DisplayFor(model => item.description)</p>
-                        <p>Check it out <a href="@html.DisplayFor(model => item.url)">here</a>.</p>
-                        <textarea data-preview-index="@index" style="display: none;">@html.DisplayFor(model => item.description)</textarea>
+                <div class="card">
+                    <h4 class="card-header">
+                        @html.DisplayFor(model => item.name)
+                    </h4>
+                    <div class="card-body row">
+                        <div class="col-md-4">
+                            <p class="card-text" id="description@index">@html.DisplayFor(model => item.description)</p>
+                            <p>Check it out <a href="@html.DisplayFor(model => item.url)">here</a>.</p>
+                            <textarea data-preview-index="@index" style="display: none;">@html.DisplayFor(model => item.description)</textarea>
+                        </div>    
+                        <div class="col-md-8">
+                            <a href="@html.DisplayFor(model => item.url)">
+                                <img class="card-img-top" src="/uploads/@html.DisplayFor(model => item.imageUrl)">
+                            </a>
+                        </div>
                     </div>
                     <div class="card-footer text-muted">
-                        <p>Last updated: 
-                            @if(item.updatedOn){
-                                @html.DisplayFor(model => item.updatedOn)
-                            }else{
-                                @html.DisplayFor(model => item.createdOn)
-                            }
-                        </p>
+                        Last updated: 
+                        @if(item.updatedOn){
+                            @html.DisplayFor(model => item.updatedOn)
+                        }else{
+                            @html.DisplayFor(model => item.createdOn)
+                        }
+                        
                     </div>
                 </div>
                 
-                <div class="col-md-6 m-1 p-2 card p-0 shadow bg-theme-primary">
-                    <a class=" my-auto" href="@html.DisplayFor(model => item.url)">
-                        <img class="card-img-top" src="/uploads/@html.DisplayFor(model => item.imageUrl)">
-                    </a>
-                </div>
-
             </div>
             })
         </div>
@@ -52,54 +55,6 @@
             });
 
         </script>
-
-        <style>
-
-
-            /* entire container, keeps perspective */
-            .flip-container {
-                perspective: 1000px;
-            }
-                /* flip the pane when hovered */
-                .flip-container:hover .flipper, .flip-container.hover .flipper {
-                    transform: rotateY(180deg);
-                }
-
-            .flip-container, .front, .back {
-                width: 320px;
-                height: 480px;
-            }
-
-            /* flip speed goes here */
-            .flipper {
-                transition: 0.6s;
-                transform-style: preserve-3d;
-
-                position: relative;
-            }
-
-            /* hide back of pane during swap */
-            .front, .back {
-                backface-visibility: hidden;
-
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
-
-            /* front pane, placed above back */
-            .front {
-                z-index: 2;
-                /* for firefox 31 */
-                transform: rotateY(0deg);
-            }
-
-            /* back, initially hidden pane */
-            .back {
-                transform: rotateY(180deg);
-            }
-
-        </style>
 
     })
 })

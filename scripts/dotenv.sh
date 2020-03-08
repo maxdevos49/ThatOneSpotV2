@@ -20,7 +20,7 @@ else
     if [[ $* == --force || $* == -f || $gen != 1 ]];
     then
         cat > $env_file <<EOF
-#Enviroment Variables for HomeCenter
+#Enviroment Variables for That One Spot
 #generated with script v$version
 
 #Do not commit this file!

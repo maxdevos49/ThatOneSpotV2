@@ -1,62 +1,40 @@
-@html.extend('/Shared/_layout', function(model){
-
+@html.extend('/Shared/_layoutPlain', function(model){
     @html.block('content', function(model){
+
+        <link rel="stylesheet" href="/css/home.css">
+
 
         @{
             model.title = "Home";
         }
-        
-        <div class="col-md-10 mx-auto">
 
-            <div class="col-md-12 p-0 shadow bg-white" style="overflow: hidden;">
+        @*Wrapper div*@
+        <div class="bg-theme-primary" style="overflow: hidden;height: 100vh;">
 
-                @*Theme slant*@
-                <div class="slanted slanted-left text-white" style="--slant-color: var(--theme-secondary);">
-                    <h1>Welcome Home</h1>    
-                </div>
-
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>  
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>  
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>   
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>  
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                
+            @*Background shadow*@
+            <div style="position:relative; z-index: 1;">
+                <picture>
+                    <source srcset="/images/background.png" media="(min-width: 800px)"/>
+                    <img class="theme-shadow" src="/images/background-mobile.png" alt="example"/>
+                </picture>
             </div>
+
+
+            <nav id="header" class="navbar navbar-dark navbar-fixed-top mx-auto nav-z-index" style="transition: 0.3s;">
+                <a class="navbar-brand" href="/Home/">
+                    Maxwell DeVos | ThatOneSpot
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    @html.include("Shared/_navbar")
+                </div>
+            </nav>  
+
+            
+
         </div>
 
     })

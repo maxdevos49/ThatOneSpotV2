@@ -1,7 +1,7 @@
 {
-    "name": "node-app-template",
+    "name": "thatonespot",
     "version": "1.0.0",
-    "description": "Node app template ready to go with a mongodb database and okta integration",
+    "description": "My personal website",
     "main": "server.js",
     "devDependencies": {
         "@types/dotenv": "^6.1.0",
@@ -10,17 +10,17 @@
         "@types/ip": "^1.1.0",
         "@types/mongoose": "^5.3.24",
         "@types/node": "^11.10.4",
-        "nodemon": "^1.18.10"
-    },
-    "dependencies": {
+        "nodemon": "^1.18.10",
         "@okta/oidc-middleware": "^2.0.0",
         "@types/express-fileupload": "^1.1.0",
         "@types/nodemailer": "^6.2.0",
-        "@types/uuid": "^3.4.4",
+        "@types/uuid": "^3.4.4"
+    },
+    "dependencies": {
         "dotenv": "^6.2.0",
         "esm": "^3.2.9",
         "express": "^4.16.4",
-        "express-fileupload": "^1.1.5",
+        "express-fileupload": "^1.1.6",
         "express-session": "^1.15.6",
         "ip": "^1.1.5",
         "mongoose": "^5.4.20",
@@ -37,8 +37,7 @@
         "dev": "nodemon"
     },
     "repository": {
-        "type": "git",
-        "url": "git+https://github.com/maxdevos49/HomeCenter.git"
+        "type": "git"
     },
     "nodemonConfig": {
         "watch": [
@@ -48,9 +47,5 @@
         "ext": "ts"
     },
     "author": "Maxwell DeVos",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/maxdevos49/HomeCenter/issues"
-    },
-    "homepage": "https://github.com/maxdevos49/HomeCenter#readme"
+    "license": "ISC"
 }

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        @*Meta*@
+        <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="author" content="Max DeVos">
+
+        @html.include("Shared/_viewstart")
+
+        @html.include("Shared/_bundleconfig")
+
+		<title>@model.title | @model.project</title>
+    </head>
+    <body>
+
+        @html.block('content')
+
+    </body>
+</html>

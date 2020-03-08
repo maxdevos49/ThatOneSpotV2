@@ -34,6 +34,12 @@
     border: 1px solid black !important;
 }
 
+/*****Frosted Glass******/
+.frosty {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
 /**** Slanted Divs *****/
 div.slanted{
     background: var(--slant-color);

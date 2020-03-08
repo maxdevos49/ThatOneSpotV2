@@ -43,7 +43,7 @@
                     <div class="slanted slanted-left" style="--slant-color: var(--theme-primary);"></div>
                 </div>
 
-                <div style="margin-top: -100px; position: relative; z-index: 3;">
+                <div style="margin-top: -150px; position: relative; z-index: 3;">
                     @html.block('content')
                 </div>
 

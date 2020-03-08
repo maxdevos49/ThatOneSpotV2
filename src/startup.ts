@@ -80,7 +80,6 @@ export function setup(server: http.Server) {
 
     //respond with a 404 request if the document was not found
     router.use((req: express.Request, res: express.Response) => {
-
         res.status(404);
         res.render("Shared/404", { url: `${config.server.transport}://${config.server.domain}:${config.server.port}${req.url}` });
     });

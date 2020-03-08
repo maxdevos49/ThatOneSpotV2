@@ -1,12 +1,13 @@
 import { IViewModel, IViewProperty, InputType } from "./vashInterfaces";
 import { Validation } from "./validation";
+const vash = require("vash");
 
 const days: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-const vash = require("vash");
 
 /**
+ * v0.1.1.1
  * Module containing useful vash helpers for faster page building
  */
 
