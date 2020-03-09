@@ -1,10 +1,4 @@
-# Node Web MVC Template
+# Maxwell DeVos | ThatOneSpot
 
-Template is ready for okta credentials and a mongodb connection string.
-
-Future Additions:
----
-- Email is sent on server error
-- CI for Travis CI setup and ready
-- Code scaffolding
+My second go at a presonal website
   

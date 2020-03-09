@@ -1,4 +1,5 @@
-@html.extend('/Shared/_layoutPlain', function(model){
+@html.extend('/Shared/_layout', function(model){
+    
     @html.block('content', function(model){
 
         <link rel="stylesheet" href="/css/home.css">
@@ -8,32 +9,106 @@
             model.title = "Home";
         }
 
-        @*Wrapper div*@
-        <div class="bg-theme-primary" style="overflow: hidden;height: 100vh;">
+        <!-- Terminal-->
+        <div class="col-md-8 mx-auto pt-5 pb-5">
+            <div class="shadow rounded-top" style="background-color: #000000">
 
-            @*Background shadow*@
-            <div style="position:relative; z-index: 1;">
-                <picture>
-                    <source srcset="/images/background.png" media="(min-width: 800px)"/>
-                    <img class="theme-shadow" src="/images/background-mobile.png" alt="example"/>
-                </picture>
+                <div class="bg-dark rounded-top row m-0 p-1" style="height: 1.5rem;" >
+                    <div class="bg-danger rounded-circle mr-1" style="height: 1rem; width: 1rem;"></div>
+                    <div class="bg-warning rounded-circle mr-1" style="height: 1rem; width: 1rem;"></div>
+                    <div class="bg-success rounded-circle" style="height: 1rem; width: 1rem;"></div>
+                </div>
+
+                <pre class="p-1 text-success">
+thatonespot % ./bio
+ __  __                          _ _   _____    __      __       
+|  \/  |                        | | | |  __ \   \ \    / /       
+| \  / | __ ___  ____      _____| | | | |  | | __\ \  / /__  ___ 
+| |\/| |/ _` \ \/ /\ \ /\ / / _ \ | | | |  | |/ _ \ \/ / _ \/ __|
+| |  | | (_| |>  <  \ V  V /  __/ | | | |__| |  __/\  / (_) \__ \
+|_|  |_|\__,_/_/\_\  \_/\_/ \___|_|_| |_____/ \___| \/ \___/|___/
+                                                                
+Developer | Creator | Artist
+
+thatonespot % <span class="blink">|</span>
+                </pre>
+            </div>
+        </div>
+
+        <!-- About Me-->
+        <div class="bg-white shadow" id="about">
+            <div class="col-md-7 mx-auto row p-3">
+                
+                <!-- Picture-->
+                <div class="col-md-4" style="display: flex;align-items: center;justify-content: center;" >
+                    <img src="/images/default-user.png" width="100%" style="vertical-align: middle;">
+                </div>
+                <!-- Summary -->
+                <div class="col-md-8">
+                    <h2>About Me</h2>
+                    <p>My name is Maxwell DeVos and I am a mostly self taught developer for nearly 9 years now. I love learning, designing, and creating things. I enjoy working with languages such as C#, Javascript, and C/C++ on an assortment of projects. I strive to make the best out of what I am given and learn from mistakes.</p>
+                    
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <p>Notable Skills</p>
+                            <ul>
+                                <li>Javascript/Nodejs</li>
+                                <li>C#/.NET</li>
+                                <li>C</li>
+                                <li>C++</li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-6">
+                            <p>Hobbies</p>
+                            <ul>
+                                <li>Carpentry</li>
+                                <li>Running</li>
+                                <li>Drawing</li>
+                            </ul>
+                        </div>  
+                    </div>
+                    
+
+                    
+                </div>
+
             </div>
 
 
-            <nav id="header" class="navbar navbar-dark navbar-fixed-top mx-auto nav-z-index" style="transition: 0.3s;">
-                <a class="navbar-brand" href="/Home/">
-                    Maxwell DeVos | ThatOneSpot
+            <!-- Recent Blog-->
+            <div class="col-md-7 mx-auto p-3">
+                <h2 class="right">Latest Blog</h2>
+                <div></div>
+
+                <a href="/Blog/index">
+                    View all Blogs
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    @html.include("Shared/_navbar")
-                </div>
-            </nav>  
+            </div>
 
-            
+            <!-- Recent Projects-->
+            <div class="col-md-7 mx-auto p-3">
+                <h2 class="right">Recent Projects</h2>
+                <div></div>
+
+                <a href="/Projects/index">
+                    Find more projects
+                </a>
+
+            </div>
+
+            <!-- Recent Gallery-->
+            <div class="col-md-7 mx-auto p-3">
+                <h2 class="right">Gallery Highlights</h2>
+                <div></div>
+
+                <a href="/Gallery/index">
+                    View Full Gallery
+                </a>
+
+            </div>
 
         </div>
 
