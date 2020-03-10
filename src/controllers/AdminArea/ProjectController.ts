@@ -99,7 +99,7 @@ router.post("/edit:id?", async (req: Request, res: Response) => {
             let fileNames: string[] = await GeneralUtils.UploadFiles({
                 files: req.files.image,//this needs defined or it craps itself
                 limit: 1,
-                accept: ["image/png", "image/jpg", "image/gif"]
+                accept: ["image/png", "image/jpg","image/jpeg", "image/gif"]
             });
 
             //deactivate the old files

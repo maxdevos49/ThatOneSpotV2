@@ -29,6 +29,10 @@
     box-shadow: 0 4px 8px 0 black !important;
 }
 
+.inset-shadow{
+    box-shadow: inset 0 4px 8px 0 black !important;
+}
+
 /****Debug CSS******/
 .border {
     border: 1px solid black !important;

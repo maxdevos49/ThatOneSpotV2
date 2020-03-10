@@ -31,12 +31,20 @@ thatonespot % ./bio
 Developer | Creator | Artist
 
 thatonespot % <span class="blink">|</span>
+
+
+
+
+
+
+
                 </pre>
             </div>
         </div>
 
         <!-- About Me-->
-        <div class="bg-white shadow" id="about">
+        <div class="bg-white inset-shadow" id="about">
+            <br/>
             <div class="col-md-7 mx-auto row p-3">
                 
                 <!-- Picture-->
@@ -51,7 +59,7 @@ thatonespot % <span class="blink">|</span>
                     <div class="row">
 
                         <div class="col-md-6">
-                            <p>Notable Skills</p>
+                            <h4>Notable Skills</h4>
                             <ul>
                                 <li>Javascript/Nodejs</li>
                                 <li>C#/.NET</li>
@@ -61,7 +69,7 @@ thatonespot % <span class="blink">|</span>
                         </div>
 
                         <div class="col-md-6">
-                            <p>Hobbies</p>
+                            <h4>Hobbies</h4>
                             <ul>
                                 <li>Carpentry</li>
                                 <li>Running</li>
@@ -69,46 +77,139 @@ thatonespot % <span class="blink">|</span>
                             </ul>
                         </div>  
                     </div>
-                    
-
-                    
                 </div>
-
             </div>
 
+            <hr/>
 
             <!-- Recent Blog-->
-            <div class="col-md-7 mx-auto p-3">
-                <h2 class="right">Latest Blog</h2>
-                <div></div>
+            <div class="col-md-7 mx-auto p-3 text-center">
+                <h2>Latest Blog</h2>
+                <div>
+                    <div class="card mb-3">
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                <img src="/images/default.png" class="card-img">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div>
+                    
+                    </div>
+                    <div>
+                    
+                    </div>
+                
+                </div>
+
+                <br/>
                 <a href="/Blog/index">
                     View all Blogs
                 </a>
-
             </div>
 
-            <!-- Recent Projects-->
-            <div class="col-md-7 mx-auto p-3">
-                <h2 class="right">Recent Projects</h2>
-                <div></div>
+            <hr/>
 
+            <!-- Recent Projects-->
+            <div class="col-md-7 mx-auto p-3 text-center">
+                <h2>Recent Projects</h2>
+                <div class="clearfix">
+
+                    <!-- row 1-->
+                    <div class="row col-md-10 float-md-left mx-auto">
+
+                        <a href="@model.data.recentProjects[0].url" class="shadow m-2 col-md-5 p-0 bg-theme-primary text-white" >
+                            <div style="display: flex; align-items: center; justify-content: center; position: relative">
+                                <img src="/uploads/@model.data.recentProjects[0].imageUrl" class="img-thumbnail p-0 border-0 rounded-0">
+                                    <div class="hover-title" style="position:absolute;">
+                                        <h2 >@model.data.recentProjects[0].name</h2>
+                                    </div>
+                            </div>
+                        </a>
+
+                        <a href="@model.data.recentProjects[1].url" class="shadow m-2 col-md-5 p-0 bg-theme-primary text-white" >
+                            <div style="display: flex; align-items: center; justify-content: center; position: relative">
+                                <img src="/uploads/@model.data.recentProjects[1].imageUrl" class="img-thumbnail p-0 border-0 rounded-0">
+                                <div class="hover-title" style="position:absolute;">
+                                    <h2 >@model.data.recentProjects[1].name</h2>
+                                </div>              
+                            </div>
+                        </a>
+
+                    </div>
+
+                    <!-- row 2-->
+                    <div class="row col-md-10 float-md-right mx-auto">
+
+                        <a href="@model.data.recentProjects[2].url" class="shadow m-2 col-md-5 p-0 bg-theme-primary text-white">
+                            <div style="display: flex; align-items: center; justify-content: center; position: relative">
+                                <img src="/uploads/@model.data.recentProjects[2].imageUrl" class="img-thumbnail p-0 border-0 rounded-0">
+                                <div class="hover-title" style="position:absolute;">
+                                    <h2 >@model.data.recentProjects[2].name</h2>
+                                </div>  
+                            </div>
+                        </a>
+
+                        <a href="@model.data.recentProjects[0].url" class="shadow m-2 col-md-5 p-0 bg-theme-primary text-white" >
+                            <div style="display: flex; align-items: center; justify-content: center; position: relative">
+                                <img src="/uploads/@model.data.recentProjects[0].imageUrl" class="img-thumbnail p-0 border-0 rounded-0">
+                                <div class="hover-title" style="position:absolute;">
+                                    <h2 >@model.data.recentProjects[0].name</h2>
+                                </div>                        
+                            </div>
+                        </a>
+
+                    </div>
+
+                </div>
+            
+                <br/>
                 <a href="/Projects/index">
                     Find more projects
                 </a>
-
             </div>
 
-            <!-- Recent Gallery-->
-            <div class="col-md-7 mx-auto p-3">
-                <h2 class="right">Gallery Highlights</h2>
-                <div></div>
+            <hr/>
 
+            <!-- Recent Gallery-->
+            <div class="col-md-8 mx-auto text-center">
+                <h2>Gallery Highlights</h2>
+                <div class="row">
+
+                    <!-- Column 1-->
+                    <div class="col-md-4">
+                        <img src="/uploads/@model.data.recentProjects[0].imageUrl" class="img-thumbnail img-fluid">
+                        <img src="/uploads/@model.data.recentProjects[2].imageUrl" class="img-thumbnail img-fluid">
+                    </div>
+
+                    <!-- Column 2-->
+                    <div class="col-md-4">
+                        <img src="/uploads/@model.data.recentProjects[2].imageUrl" class="img-thumbnail img-fluid">
+                        <img src="/uploads/@model.data.recentProjects[1].imageUrl" class="img-thumbnail img-fluid">
+                    </div>
+
+                    <!-- Column 3-->
+                    <div class="col-md-4">
+                        <img src="/uploads/@model.data.recentProjects[1].imageUrl" class="img-thumbnail img-fluid">
+                        <img src="/uploads/@model.data.recentProjects[0].imageUrl" class="img-thumbnail img-fluid">
+                    </div>
+
+                </div>
+
+                <br/>
                 <a href="/Gallery/index">
                     View Full Gallery
                 </a>
-
             </div>
+            <br/>
 
         </div>
 

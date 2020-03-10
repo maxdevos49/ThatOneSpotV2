@@ -4,7 +4,6 @@ import { permit } from "../../middleware/permit";
 import { GeneralUtils } from "../../helpers/Shared";
 import galleryModel from "../../Models/galleryModel";
 import { GalleryViewModel } from "../../viewModels/galleryViewModel";
-import { GridFSBucketReadStream } from "mongodb";
 const router: Router = express.Router();
 
 //Only allow admin here
