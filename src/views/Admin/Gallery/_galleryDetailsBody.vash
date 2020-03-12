@@ -1,35 +1,15 @@
 <dl class="row">
 
-                    @*Name*@
+                     @*Image*@
                     <dt class="col-md-3 text-right">
                         @html.DisplayNameFor(model => model.name)
                     </dt>
                     <dd class="col-md-9">
                         @html.DisplayFor(model => model.name)
-                    </dd>
-
-                    @*Url*@
-                    <dt class="col-md-3 text-right">
-                        @html.DisplayNameFor(model => model.url)
-                    </dt>
-                    <dd class="col-md-9">
-                        <a href="@model.data.url">@model.data.url</a>
-                    </dd>
-                    
-                    @*Description*@
-                    <dt class="col-md-3 text-right">
-                        @html.DisplayNameFor(model => model.description)
-                    </dt>
-                    <dd class="col-md-9">
-                        @html.DisplayFor(model => model.description)
-                    </dd>
-                    
-                    @*ImageUrl*@
-                    <dt class="col-md-3 text-right">
-                        @html.DisplayNameFor(model => model.imageUrl)
-                    </dt>
-                    <dd class="col-md-9">
-                        @html.DisplayFor(model => model.imageUrl)
+                        <br/>
+                        @if(model.data){
+                            <img class="img-fluid" src="/Uploads/@model.data.name">
+                        }
                     </dd>
 
                     @*Created By*@

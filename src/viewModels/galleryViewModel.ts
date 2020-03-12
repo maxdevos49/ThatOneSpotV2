@@ -1,16 +1,4 @@
 import { IViewModel, IViewProperty } from "../helpers/vash/vashInterfaces";
-import galleryModel from "../Models/galleryModel";
-
-// export interface IGalleryViewModel{
-//     id: string;
-//     name: string;
-//     url: string;
-//     isActive: boolean;
-//     createdOn: Date;
-//     createdBy: string;
-//     updatedOn?: Date;
-//     updatedBy?: string    
-// }
 
 export class GalleryViewModel implements IViewModel {
 
@@ -22,28 +10,15 @@ export class GalleryViewModel implements IViewModel {
     public name: IViewProperty = {
         type: String,
         path: "name",
-        name: "Project Name",
+        name: "Image Name",
         required: true
     };
 
-    public url: IViewProperty = {
-        type: String,
-        path: "url",
-        name: "Site Url",
-        required: true
-    };
-
-    public description: IViewProperty = {
-        type: String,
-        path: "description",
-        name: "Description"
-    };
-
-    public imageUrl: IViewProperty = {
-        type: String,
-        path: "imageUrl",
-        name: "Image Url"
-    };
+    public image: IViewProperty = {
+        type: function File(){},//Has to be a function so we make it a function. File.name = "File" so this works. basically its a hack but it works for what we need
+        path: "image",
+        name: "Image"
+    }
 
     public isActive: IViewProperty = {
         type: Boolean,
@@ -75,12 +50,4 @@ export class GalleryViewModel implements IViewModel {
         name: "Updated By"
     };
 
-    // public static async find(filter: any = null): Promise<IGalleryViewModel[]> {
-    //     return await galleryModel.find({ isActive: true }) as unknown as IGalleryViewModel[];
-    // }
-
-
-    // public static async findOne(id?: string): Promise<IGalleryViewModel> {
-    //     return await galleryModel.findOne({ _id: id }) as unknown as IGalleryViewModel;
-    // }
 }

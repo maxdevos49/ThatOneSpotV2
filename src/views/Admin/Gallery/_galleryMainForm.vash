@@ -1,22 +1,25 @@
  
- @*Name*@
+@*Image*@
 <div class="form-group">
-    @html.LabelFor(model => model.name)
-    @html.EditorFor(model => model.name, "", {class: "form-control"})
-    @html.ValidationMessageFor(model => model.name)
+
+    @if(!model.data){
+        @html.LabelFor(model => model.image)
+        @html.EditorFor(model => model.image, "", {class: "form-control"})
+        @html.ValidationMessageFor(model => model.image)
+    } else {
+        <div class="row">
+            <div class="col-md-10">
+                @html.LabelFor(model => model.image)
+                @html.EditorFor(model => model.image, "", {class: "form-control"})
+                <p>Image Url: /uploads/@html.DisplayFor(model => model.name)</p>
+                @html.ValidationMessageFor(model => model.image)
+            </div>
+            <div class="col-md-2">
+                <img class="img-fluid" src="/Uploads/@model.data.name">
+            </div>
+        </div>
+    }
+    
 </div>
 
-@*Description*@
-<div class="form-group">
-    @html.LabelFor(model => model.description)
-    @html.EditorFor(model => model.description, "", {class: "form-control"})
-    @html.ValidationMessageFor(model => model.description)
-</div>
-
-@*url*@
-<div class="form-group">
-    @html.LabelFor(model => model.url)
-    @html.EditorFor(model => model.url, "", {class: "form-control"})
-    @html.ValidationMessageFor(model => model.url)
-</div>
 

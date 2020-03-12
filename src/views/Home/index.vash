@@ -42,6 +42,7 @@ thatonespot % <span class="blink">|</span>
             </div>
         </div>
 
+
         <!-- About Me-->
         <div class="bg-white inset-shadow" id="about">
             <br/>
@@ -158,11 +159,11 @@ thatonespot % <span class="blink">|</span>
                             </div>
                         </a>
 
-                        <a href="@model.data.recentProjects[0].url" class="shadow m-2 col-md-5 p-0 bg-theme-primary text-white" >
+                        <a href="@model.data.recentProjects[3].url" class="shadow m-2 col-md-5 p-0 bg-theme-primary text-white" >
                             <div style="display: flex; align-items: center; justify-content: center; position: relative">
-                                <img src="/uploads/@model.data.recentProjects[0].imageUrl" class="img-thumbnail p-0 border-0 rounded-0">
+                                <img src="/uploads/@model.data.recentProjects[3].imageUrl" class="img-thumbnail p-0 border-0 rounded-0">
                                 <div class="hover-title" style="position:absolute;">
-                                    <h2 >@model.data.recentProjects[0].name</h2>
+                                    <h2 >@model.data.recentProjects[3].name</h2>
                                 </div>                        
                             </div>
                         </a>
@@ -182,29 +183,16 @@ thatonespot % <span class="blink">|</span>
             <!-- Recent Gallery-->
             <div class="col-md-8 mx-auto text-center">
                 <h2>Gallery Highlights</h2>
-                <div class="row">
+                <div class="gallery">
 
-                    <!-- Column 1-->
-                    <div class="col-md-4">
-                        <img src="/uploads/@model.data.recentProjects[0].imageUrl" class="img-thumbnail img-fluid">
-                        <img src="/uploads/@model.data.recentProjects[2].imageUrl" class="img-thumbnail img-fluid">
+                @model.data.recentGallery.forEach(function(item, index){
+                    <div class="mb-3 pics animation all 2">
+                        <img src="/uploads/@item.name" class="img-fluid">
                     </div>
-
-                    <!-- Column 2-->
-                    <div class="col-md-4">
-                        <img src="/uploads/@model.data.recentProjects[2].imageUrl" class="img-thumbnail img-fluid">
-                        <img src="/uploads/@model.data.recentProjects[1].imageUrl" class="img-thumbnail img-fluid">
-                    </div>
-
-                    <!-- Column 3-->
-                    <div class="col-md-4">
-                        <img src="/uploads/@model.data.recentProjects[1].imageUrl" class="img-thumbnail img-fluid">
-                        <img src="/uploads/@model.data.recentProjects[0].imageUrl" class="img-thumbnail img-fluid">
-                    </div>
+                })
 
                 </div>
 
-                <br/>
                 <a href="/Gallery/index">
                     View Full Gallery
                 </a>

@@ -12,7 +12,7 @@ router.use(permit(["homecenter-admin"]));
 /**
  * GET:/Admin/Gallery/index
  */
-router.get("/index", async (req, res) => {
+router.get("/index", async (_, res) => {
 
     try {
 
@@ -26,7 +26,7 @@ router.get("/index", async (req, res) => {
 });
 
 /**
- * GET:/Admin/Project/create
+ * GET:/Admin/Gallery/create
  */
 router.get("/create", (req: Request, res: Response) => {
     return res.render("Admin/Gallery/create", View(res, GalleryViewModel));
@@ -39,19 +39,30 @@ router.post("/create", async (req: Request, res: Response) => {
 
     try {
 
+        //Make sure we have a file
+        if(!req.files)
+            return res.redirect("/Admin/Gallery/Create")
+
+
+        //upload file
+        let fileName: string[] = await GeneralUtils.UploadFiles({
+            files: req.files.image,//this needs defined or it craps itself
+            limit: 1,
+            accept: ["image/png", "image/jpg", "image/jpeg", "image/gif"]
+        });
+
+        //make sure we got a picture back
+        if(fileName.length == 0)
+            throw new Error("Filename not returned\n");
+
         let newGalleryPost = {
-            name: req.body.name,
-            description: req.body.description,
-            url: req.body.url,
-            imageUrl: "",
+            name: fileName[0],
             createdBy: res.locals.authentication.id
         }
 
-    
-
         let project = new galleryModel(newGalleryPost);
-
         await project.save();
+
         return res.redirect("/Admin/Gallery/Index");
 
     } catch (err) {
@@ -69,6 +80,7 @@ router.get("/edit:id?", async (req: Request, res: Response) => {
     try {
 
         let model = await galleryModel.findOne({ _id: id });
+        
         return res.render("Admin/Gallery/edit", View(res, GalleryViewModel, model));
 
     } catch (err) {

@@ -22,9 +22,6 @@
                             <th style="width: 33%;">
                                 @html.DisplayNameFor(model => model.name)
                             </th>
-                            <th style="width: 33%;">
-                                @html.DisplayNameFor(model => model.url)
-                            </th>
                             <th style="width: 34%;">
                                 Action(s)
                             </th>
@@ -35,9 +32,6 @@
                             <tr>
                                 <td>
                                     @html.DisplayFor(model => item.name)
-                                </td>
-                                <td>
-                                    <a href="@item.url">@item.url</a>
                                 </td>
                                 <td>
                                     @html.Navigator(html.Edit, null, "Edit?id=" + item.id, {})

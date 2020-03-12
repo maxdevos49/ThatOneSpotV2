@@ -7,16 +7,6 @@ const GallerySchema = new Schema({
         required: true,
         type: String
     },
-    url: {
-        required: true,
-        type: String,
-    },
-    description: {
-        type: String,
-    },
-    imageUrl: {
-        type: String,
-    },
     isActive: {
         type: Boolean,
         default: true

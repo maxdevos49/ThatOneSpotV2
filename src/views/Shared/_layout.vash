@@ -66,7 +66,7 @@
                                     <a class="nav-custom-link" href="/Home/">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-custom-link" href="/Home/about">About</a>
+                                    <a class="nav-custom-link" href="/Home/index#about">About</a>
                                 </li>
                             </ul>
                         </div>

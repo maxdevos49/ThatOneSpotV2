@@ -13,7 +13,7 @@ router.get("/index", async (req: Request, res: Response) => {
 
     let model = {
         recentProjects: await projectModel.find({isActive: true}).sort({date: "desc"}).limit(4),
-        recentGallery: await galleryModel.find({isActive: true}).sort({date: "desc"}).limit(4),
+        recentGallery: await galleryModel.find({isActive: true}).sort({date: "desc"}).limit(6),
         //TODO blogs
     }
 
@@ -27,7 +27,7 @@ router.get("/", async (req: Request, res: Response) => {
     
     let model = {
         recentProjects: await projectModel.find({isActive: true}).sort({date: "desc"}).limit(4),
-        recentGallery: await galleryModel.find({isActive: true}).sort({date: "desc"}).limit(4),
+        recentGallery: await galleryModel.find({isActive: true}).sort({date: "desc"}).limit(6),
         //TODO blogs
     }
 

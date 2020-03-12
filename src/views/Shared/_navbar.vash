@@ -3,17 +3,19 @@
         <a class="nav-link" href="/Home/">Home</a>
     </li>
     <li class="nav-item">
+        <a class="nav-link" href="/Home/index#about">About</a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link" href="/Home/resume">Resume</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="/Projects/index">Projects</a>
     </li>
-    @*
     <li class="nav-item">
         <a class="nav-link" href="/Gallery/index">Gallery</a>
-    </li>*@
+    </li>
     <li class="nav-item">
-        <a class="nav-link" href="/Home/index#about">About</a>
+        <a class="nav-link" href="/Blog/index">Blog</a>
     </li>
 </ul>
 
@@ -39,6 +41,7 @@
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" href="/Admin/Projects/Index">Projects</a>
                 <a class="dropdown-item" href="/Admin/Gallery/Index">Gallery</a>
+                <a class="dropdown-item" href="/Admin/Blog/Index">Blogs</a>
             </div>
         </div>
     }

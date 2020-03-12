@@ -122,13 +122,13 @@ export class GeneralUtils {
                 let filedata = await newFile.save();
 
                 //get extension
-                let fileName = `${filedata._id}.${GeneralUtils.getFileExtension(files[i].name)}`;
+                let fileName = files[i].name;
 
                 //add to the results
                 resultIds.push(fileName);
 
                 //move and rename file
-                files[i].mv(`${config.path}/public/uploads/${fileName}`, (err1: any) => {
+                files[i].mv(`${config.path}/wwwroot/uploads/${fileName}`, (err1: any) => {
                     if (err1) throw err1;
                 });
 
@@ -153,7 +153,7 @@ export class GeneralUtils {
                     $set: {
                         isActive: false
                     }
-                });//TODO remove file?
+                });
         }
     }
 

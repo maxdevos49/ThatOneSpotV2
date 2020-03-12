@@ -1,18 +1,19 @@
 /**** Site Colors*****/
-:root{
-    --theme-primary:  rgb(51, 70, 91);
+
+:root {
+    --theme-primary: rgb(51, 70, 91);
     --theme-secondary: var(--dark);
 }
 
-.nav-z-index{
+.nav-z-index {
     z-index: 4;
 }
 
-.bg-theme-primary{
+.bg-theme-primary {
     background-color: var(--theme-primary) !important;
 }
 
-.bg-theme-secondary{
+.bg-theme-secondary {
     background-color: var(--theme-secondary) !important;
 }
 
@@ -25,62 +26,67 @@
 }
 
 /****box Shadow****/
-.shadow{
+
+.shadow {
     box-shadow: 0 4px 8px 0 black !important;
 }
 
-.inset-shadow{
+.inset-shadow {
     box-shadow: inset 0 4px 8px 0 black !important;
 }
 
 /****Debug CSS******/
+
 .border {
     border: 1px solid black !important;
 }
 
 /*****Frosted Glass******/
+
 .frosty {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
 
 /**** Slanted Divs *****/
-div.slanted{
+
+div.slanted {
     background: var(--slant-color);
     position: relative;
     padding: 30px;
     margin-bottom: 100px;
 }
 
-div.slanted::after{
-    position:absolute;
+div.slanted::after {
+    position: absolute;
     content: "";
-    display:block;
-    left:0;
-    bottom:-100px;
-    width:100%;
+    display: block;
+    left: 0;
+    bottom: -100px;
+    width: 100%;
     border-style: solid;
 }
 
-div.slanted-left::after{
-    border-width:    0 100vw 100px  0;
+div.slanted-left::after {
+    border-width: 0 100vw 100px 0;
     border-color: transparent var(--slant-color) transparent transparent;
 }
 
-div.slanted-right::after{
+div.slanted-right::after {
     border-width: 0 0 100px 100vw;
-    border-color: transparent transparent  transparent var(--slant-color);
+    border-color: transparent transparent transparent var(--slant-color);
 }
 
-
 /*****Shadow textures****/
-.theme-shadow{
+
+.theme-shadow {
     position: absolute;
     top: 0;
     left: 0;
 }
 
 /*****Sticky header*****/
+
 .navbar-fixed-top {
     position: -webkit-sticky;
     position: sticky;
@@ -88,17 +94,59 @@ div.slanted-right::after{
 }
 
 /****3d images/divs****/
-.img-3d{
+
+.img-3d {
     position: absolute;
     z-index: 1;
     transform: skew(50deg, -25deg);
-    box-shadow: 3px 3px 50px 10px rgba(0,0,0, 0.3);
+    box-shadow: 3px 3px 50px 10px rgba(0, 0, 0, 0.3);
 }
 
-.nav-custom-link{
-    color: rgba(255,255,255,.5);
+.nav-custom-link {
+    color: rgba(255, 255, 255, .5);
 }
 
-body{
+body {
     overflow-x: hidden !important;
+}
+
+/********* Gallery Css *******/
+
+/*TODO decide what needs kept*/
+
+.gallery {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+    -webkit-column-width: 33%;
+    -moz-column-width: 33%;
+    column-width: 33%;
+}
+
+.gallery .pics {
+    -webkit-transition: all 350ms ease;
+    transition: all 350ms ease;
+}
+
+.gallery .animation {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+}
+
+@media (max-width: 450px) {
+    .gallery {
+        -webkit-column-count: 1;
+        -moz-column-count: 1;
+        column-count: 1;
+        -webkit-column-width: 100%;
+        -moz-column-width: 100%;
+        column-width: 100%;
+    }
+}
+@media (max-width: 400px) {
+    .btn.filter {
+        padding-left: 1.1rem;
+        padding-right: 1.1rem;
+    }
 }
