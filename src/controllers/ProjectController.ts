@@ -1,16 +1,16 @@
 import express, { Request, Response, Router } from "express";
 const router: Router = express.Router();
-import { config } from "../config";
 import projectModel from "../Models/projectModel";
 import { View } from "../helpers/vash/view";
 import { ProjectViewModel } from "../viewModels/projectViewModel";
+import { GeneralUtils } from "../helpers/Shared";
 
 /**
  * GET:/Project/index
  */
-router.get("/index", async (req, res) => {
+router.get("/index", async (_, res: Response) => {
 
-    let model = await projectModel.find({isActive: true});
+    let model = await projectModel.find({isActive: true, isPublic: true});
 
     res.render("Projects/index", View(res, ProjectViewModel, model));
 });
@@ -18,50 +18,31 @@ router.get("/index", async (req, res) => {
 /**
  * GET:/Project/index
  */
-router.get("/", (req, res) => {
-    res.render("Projects/index");
+router.get("/", (_, res: Response) => {
+    res.redirect("/index");
 });
 
-// /**
-//  * GET:/Project/gameoflife
-//  */
-// router.get("/gameoflife", (req, res) => {
-//     res.render("Projects/gameoflife");
-// });
+/**
+ * GET:/Projects/project?id=<project>
+ */
+router.get("/project:id?", async (req: Request, res: Response) => {
+    let projectId = req.query.id;
 
-// /**
-//  * GET:/Project/langdonsant
-//  */
-// router.get("/langtonsant", (req, res) => {
-//     res.render("Projects/langtonsant");
-// });
+    if(projectId == null)
+        res.redirect("/projects/index")
 
-// /**
-//  * GET:/Project/snake
-//  */
-// router.get("/snake", (req, res) => {
-//     res.render("Projects/snake");
-// });
+    try{
 
-// /**
-//  * GET:/Project/snowflake
-//  */
-// router.get("/snowflake", (req, res) => {
-//     res.render("Projects/snowflake");
-// });
+        if(await projectModel.exists({isActive: true, isPublic: true, projectType: "Internal", url: projectId}))
+            return res.render("Projects/" + projectId);
 
-// /**
-//  * GET:/Project/pacman
-//  */
-// router.get("/pacman", (req, res) => {
-//     res.render("Projects/pacman");
-// });
+        return res.redirect("/projects/index")
 
-// /**
-//  * GET:/Project/blockjumper
-//  */
-// router.get("/blockjumper", (req, res) => {
-//     res.render("Projects/blockjumper");
-// });
+    }catch(err){
+        GeneralUtils.sendErrorNotification(err);
+    }
+    
+});
+
 
 export default router;

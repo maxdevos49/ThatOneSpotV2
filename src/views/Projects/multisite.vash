@@ -1,0 +1,29 @@
+@html.extend('/Shared/_layout', function(model){
+
+    @html.block('content', function(model){
+
+        @{
+            model.title = "MultiSite";
+        }
+
+        <!--Main container-->
+        <div class="main-container">
+
+            <!--List Container-->
+            <div class="list-container">
+
+            </div>
+
+            <!--Root of all Iframes-->
+            <div id="window-target" class="container-body">
+
+
+
+            </div>
+        </div>
+
+        <link rel="stylesheet" type="text/css" href="/css/multisite.css">
+        <script type="module" src="/javascript/multisite.js"></script>
+    
+    })
+})

@@ -37,13 +37,17 @@ router.get("/create", (req: Request, res: Response) => {
 router.post("/create", async (req: Request, res: Response) => {
 
     try {
+        
         let newProject = {
             name: req.body.name,
             description: req.body.description,
             url: req.body.url,
             imageUrl: "",
+            isPublic: req.body.isPublic,
+            projectType: req.body.projectType,
             createdBy: res.locals.authentication.id
         }
+
         if (req.files) {
 
             let fileNames: string[] = await GeneralUtils.UploadFiles({
@@ -52,9 +56,7 @@ router.post("/create", async (req: Request, res: Response) => {
                 accept: ["image/png", "image/jpg", "image/jpeg", "image/gif"]
             });
 
-            if (fileNames.length > 0) {
-                newProject.imageUrl = fileNames[0];
-            }
+            newProject.imageUrl = fileNames[0];
         }
 
         let project = new projectModel(newProject);
@@ -88,12 +90,12 @@ router.get("/edit:id?", async (req: Request, res: Response) => {
  * POST:/Admin/Project/edit
  */
 router.post("/edit:id?", async (req: Request, res: Response) => {
-    let id = req.query.id;
 
     try {
 
         //check to update image
         if (req.files) {
+
 
             //process it
             let fileNames: string[] = await GeneralUtils.UploadFiles({
@@ -105,17 +107,16 @@ router.post("/edit:id?", async (req: Request, res: Response) => {
             //deactivate the old files
             GeneralUtils.DeactivateFiles([req.body.imageUrl]);
 
-            //add reference
-            if (fileNames.length != 0) {
-                req.body.imageUrl = fileNames[0];
-            }
+            req.body.imageUrl = fileNames[0];
 
         }
 
         req.body.updatedOn = Date.now();
         req.body.updatedBy = GeneralUtils.GetLoggedInUserId(res);
 
+
         await projectModel.updateOne({ _id: req.body.id }, req.body);
+
         return res.redirect("/Admin/Projects/Index");
 
     } catch (err) {
@@ -162,13 +163,12 @@ router.get("/delete:id?", async (req: Request, res: Response) => {
 router.post("/delete", async (req: Request, res: Response) => {
     try {
 
-        let change = {
+        await projectModel.findOneAndUpdate({ _id: req.body.id }, {
             isActive: false,
             updatedOn: Date.now(),
             updatedBy: GeneralUtils.GetLoggedInUserId(res)
-        };
-
-        await projectModel.findOneAndUpdate({ _id: req.body.id }, change);
+        });
+        
         return res.redirect("/Admin/Projects/Index");
 
     } catch (err) {

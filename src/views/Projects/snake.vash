@@ -1,0 +1,240 @@
+@html.extend('/Shared/_layout', function(model){
+
+    @html.block('content', function(model){
+
+        @{
+            model.title = "Snake";
+        }
+
+        <div class="col-md-10 bg-white" style="margin: 10px auto;">
+            <div>
+                <h1>Snake</h1>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <canvas id="canvas" style="width: 100%;border: 1px solid black;"></canvas>
+                </div>
+                <div class="col-md-4">
+                
+                    <!-- Accordian -->
+                    <div class="accordion" id="accordion">
+
+                        <!--First Option-->
+                        <div class="card">
+                            <a data-toggle="collapse" data-target="#collapse1">
+                                <div class="card-header bg-blue text-white" id="headingOne">
+                                    <h5 class="mb-0 btn">About</h5>
+                                </div>
+                            </a>
+                            <div id="collapse1" class="collapse show" data-parent="#accordion">
+                                <div class="card-body">
+                                    Text
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Second Option-->
+                        <div class="card">
+                            <a data-toggle="collapse" data-target="#collapse2">
+                                <div class="card-header bg-blue text-white" id="heading2">
+                                    <h5 class="mb-0 btn">
+                                        Settings
+                                    </h5>
+                                </div>
+                            </a>
+                            <div id="collapse2" class="collapse" data-parent="#accordion">
+                                <div class="card-body">
+                                    <button id="fullscreen">Full Screen</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Third Option-->
+                        <div class="card">
+                            <a data-toggle="collapse" data-target="#collapse3">
+                                <div class="card-header bg-blue text-white" id="heading3">
+                                    <h5 class="mb-0 btn">
+                                        Controls
+                                    </h5>
+                                </div>
+                            </a>
+                            <div id="collapse3" class="collapse" data-parent="#accordion">
+                                <div class="card-body">
+                                    TExt
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fourth Option-->
+                        <div class="card">
+                            <a data-toggle="collapse" data-target="#collapse4">
+                                <div class="card-header bg-blue text-white" id="heading4">
+                                    <h5 class="mb-0 btn">
+                                        Reference
+                                    </h5>
+                                </div>
+                            </a>
+                            <div id="collapse4" class="collapse" data-parent="#accordion">
+                                <div class="card-body">
+                                    Text
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Script-->
+        <script type="module">
+
+            import protoCore from "/javascript/protoCore/protoCore.js";
+            import Keyboard from "/javascript/protoCore/input/keyboard.js";
+            import GamePad from "/javascript/protoCore/input/gamepad.js";
+            import Text from "/javascript/protoCore/canvas/text.js";
+            import { Snake, Direction } from "/javascript/snake.js";
+
+            
+            let grid;
+            let columns,rows;
+            let resolution;
+            let x, y, dir;
+            let k, s, p;
+            let score, scoreText;
+
+            function setup(canvas, ctx){
+
+                //grid
+                resolution = 20;
+                columns = this.canvasWidth/resolution;
+                rows = this.canvasHeight/resolution;
+
+                //snake
+                s = new Snake(0, 0, Direction.DOWN);
+
+                //Input module
+                k = new Keyboard();
+
+                score = 0;
+
+                scoreText = new Text(ctx ,0, 0, `Score: ${score} length: ${s.getLength()}`);
+                scoreText.setFontSize(40);
+                scoreText.setAnchor(0,0);
+                //create first food
+                placeFood()
+
+               
+
+            }
+
+            function placeFood(){
+                x = Math.floor(Math.random() * columns);
+                y = Math.floor(Math.random() * rows);
+
+                if( s.getLinks().filter( l => ( (l.x === x) && (l.y === y) )).length > 0  ){
+                    s.grow(3);
+                    placeFood();
+                }
+            }
+
+            function update(canvas){
+
+                //current direction
+                let dir = s.direction;
+
+                //gamepad
+                if(GamePad.controllerConnected()){
+                    let buttons = GamePad.getButtons().map(buttons => buttons.value);;
+
+                    if(buttons[0] || buttons[12] && dir !== Direction.UP){//down
+                        s.direction = Direction.DOWN;
+                    }else if(buttons[2] || buttons[13] && dir !== Direction.RIGHT){//left
+                        s.direction = Direction.LEFT;
+                    }else if(buttons[1] || buttons[14] && dir !== Direction.LEFT){//right
+                        s.direction = Direction.RIGHT;
+                    }else if(buttons[3] || buttons[11] && dir !== Direction.DOWN){//up
+                        s.direction = Direction.UP;
+                    }
+                }
+
+                //keyboard
+                if(k.down()){
+                    let key = k.keyDown();
+
+                    //snake
+                    if((key === 40 || key === 83) && dir !== Direction.UP){//down
+                        s.direction = Direction.DOWN;
+                    }else if((key === 37 || key === 65) && dir !== Direction.RIGHT){//left
+                        s.direction = Direction.LEFT;
+                    }else if((key === 39 || key === 68) && dir !== Direction.LEFT){//right
+                        s.direction = Direction.RIGHT;
+                    }else if((key === 38 || key === 87) && dir !== Direction.DOWN){//up
+                        s.direction = Direction.UP;
+                    }
+                }
+
+                //move direction
+                s.move();
+
+                scoreText.text = `Score: ${score} length: ${s.getLength()}`;
+                //hit wall
+                if(s.x < 0 || s.y < 0 || s.x > columns - 1 || s.y > rows - 1){
+                    console.log("test");
+                    scoreText.text = `Gameover!\n   Score: ${score}\n length: ${s.getLength()}\n Press r to reset`;
+                    p.stop();
+                }
+
+                //eat snake
+                if(s.getLinks().filter((l,i) => ((l.x === s.x) && (l.y === s.y) && (i !== 0))).length > 0){
+                    scoreText.text = `Gameover!\n   Score: ${score}\n length: ${s.getLength()}\n Press r to reset`;
+                    p.stop();
+                }
+
+                //eat food
+                if(s.x === x &&s.y === y){
+                    score += 100;
+                    s.grow(3);
+                    placeFood();
+                }
+
+
+            }
+
+            function draw(ctx){
+                //clear
+                ctx.fillStyle = "white";
+                ctx.fillRect(0,0, p.canvasWidth,p.canvasHeight);
+
+                //snake
+                let links = s.getLinks();
+
+                ctx.fillStyle = "black";
+                for(let i = 0; i < links.length; i++){
+                    ctx.fillRect(links[i].x*resolution,links[i].y*resolution,resolution,resolution);
+                }
+
+                //food
+                ctx.fillStyle = "red";
+                ctx.fillRect(x*resolution, y*resolution, resolution, resolution);
+
+                scoreText.draw();
+            }
+
+            let options = {
+                height: 700,
+                width: 1200,
+                setup: setup,
+                update: update,
+                draw: draw,
+                framerate: 8,
+                fullScreenId: "fullscreen"
+            };
+
+            p = new protoCore(options);
+
+
+        </script>
+        
+    })
+})

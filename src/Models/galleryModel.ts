@@ -7,6 +7,10 @@ const GallerySchema = new Schema({
         required: true,
         type: String
     },
+    isPublic: {
+        type: Boolean,
+        default: false
+    },
     isActive: {
         type: Boolean,
         default: true

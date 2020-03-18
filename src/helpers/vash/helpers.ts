@@ -92,20 +92,40 @@ vash.helpers.EditorFor = function (model: Function, value?: string, attributes?:
 
     //dont throw undefined for lack of data
     if (this.model.data)
-        value = model(this.model.data);
+        value = model(this.model.data) || value;
 
-    let type: string = getType(property.type.name as InputType); //property.subtype ? property.subtype :
+    let type: string = getType(property.type.name as InputType);
 
     Object.assign(attributes, Validation(property));
 
-    this.buffer.push(`
-            <input
-              type="${type || "text"}"
-              id="${property.path}"
-              name="${property.path}"
-              value="${value || ""}"
-              ${processAttributes(attributes)} />
-        `);
+    if(type === "checkbox")
+    {
+        this.buffer.push(`
+
+        <input 
+            type="hidden" 
+            id="${property.path}"
+          name="${property.path}"
+          value="${ value || "false"}"
+          />
+
+        <input
+          type="checkbox"
+          onclick="this.previousElementSibling.value = !(this.previousElementSibling.value === 'true')"
+          ${(value.toString() == "true") ? "checked" : ""}
+    `);
+    }else {
+        this.buffer.push(`
+        <input
+          type="${type || "text"}"
+          id="${property.path}"
+          name="${property.path}"
+          value="${ value || ""}"
+          ${processAttributes(attributes)} \>
+    `);
+    }
+
+   
 };
 
 /**
@@ -162,9 +182,15 @@ vash.helpers.DisplayFor = function (model: Function) {
     let value: any = model(this.model.data);
 
     //0 is falsy but we still want to display it so lets make it a string
-    if (typeof value === "number") if (value === 0) value.toString();
+    if (typeof value === "number") 
+        if (value === 0) 
+            value.toString();
 
-    if (value instanceof Date) value = `${days[value.getDay()]}, ${months[value.getMonth()]} ${value.getDate()}, ${value.getFullYear()}`;
+    if (value instanceof Date) 
+        value = `${days[value.getDay()]}, ${months[value.getMonth()]} ${value.getDate()}, ${value.getFullYear()}`;
+
+    if(typeof value === "boolean")
+        value = `<input type="checkbox" ${(value === true) ? "checked" : ""} disabled="true"/>`;
 
     this.buffer.push(value || "");
 };
@@ -326,7 +352,7 @@ function getType(giventype: InputType): string {
     } else if (giventype === InputType.Date) {
         return "date";
     } else if (giventype === InputType.Boolean) {
-        return "check";
+        return "checkbox";
     } else if (giventype === InputType.Number) {
         return "number";
     } else if (giventype === InputType.File) {

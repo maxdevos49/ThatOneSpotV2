@@ -16,9 +16,17 @@
             </div>
             <div class="col-md-2">
                 <img class="img-fluid" src="/Uploads/@model.data.name">
+                @html.HiddenFor(model => model.name)
             </div>
         </div>
     }
+
+    @*IsPublic*@
+    <div class="form-group">
+        @html.LabelFor(model => model.isPublic)
+        @html.EditorFor(model => model.isPublic, "", {})
+        @html.ValidationMessageFor(model => model.isPublic)
+    </div>
     
 </div>
 

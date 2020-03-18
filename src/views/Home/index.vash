@@ -186,12 +186,14 @@ thatonespot % <span class="blink">|</span>
                 <div class="gallery">
 
                 @model.data.recentGallery.forEach(function(item, index){
-                    <div class="mb-3 pics animation all 2">
+                    <div class="mb-3">
                         <img src="/uploads/@item.name" class="img-fluid">
                     </div>
                 })
 
                 </div>
+
+                <br/>
 
                 <a href="/Gallery/index">
                     View Full Gallery

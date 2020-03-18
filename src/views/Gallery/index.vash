@@ -2,6 +2,15 @@
 
     @html.block('content', function(model){
 
+        <style>
+        img[data-src]{
+            min-height: 200px;
+            min-width: 100%;
+            background: white;
+            transition: 2s;
+        }
+        </style>
+
         @{
             model.title = "Gallery Index";
             var count = model.data.length;
@@ -9,11 +18,15 @@
 
         <div class="gallery col-md-11 mx-auto">
         @model.data.forEach(function(item, index){
-            <div class="mb-3 pics animation all 2">
-                <img src="/uploads/@model.data[index].name" class="img-fluid">
+            <div class="mb-3">
+                <img data-src="/uploads/@model.data[index].name" class="img-fluid">
             </div>
         })
         </div>
 
+        <br/>
+
+        <script src="/javascript/util/lazyImage.js"></script>
+     
     })
 })

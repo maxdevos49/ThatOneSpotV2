@@ -12,6 +12,22 @@
                         }
                     </dd>
 
+                     @*Is Public*@
+                    <dt class="col-md-3 text-right">
+                        @html.DisplayNameFor(model => model.isPublic)
+                    </dt>
+                    <dd class="col-md-9">
+                        @html.DisplayFor(model => model.isPublic)
+                    </dd>
+
+                     @*Is Active*@
+                    <dt class="col-md-3 text-right">
+                        @html.DisplayNameFor(model => model.isActive)
+                    </dt>
+                    <dd class="col-md-9">
+                        @html.DisplayFor(model => model.isActive)
+                    </dd>
+
                     @*Created By*@
                     <dt class="col-md-3 text-right">
                         @html.DisplayNameFor(model => model.createdBy)
@@ -44,12 +60,6 @@
                         @html.DisplayFor(model => model.updatedOn)
                     </dd>
 
-                    @*Is Active*@
-                    <dt class="col-md-3 text-right">
-                        @html.DisplayNameFor(model => model.isActive)
-                    </dt>
-                    <dd class="col-md-9">
-                        @html.DisplayFor(model => model.isActive)
-                    </dd>
+                   
 
                 </dl>

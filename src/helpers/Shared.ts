@@ -48,6 +48,11 @@ export class GeneralUtils {
     }
 
     public static sendErrorNotification(error: string): void {
+        console.log();
+        console.log("Error Start <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        console.log(error);
+        console.log("Error End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        console.log();
         GeneralUtils.sendEmail({
             to: [config.email.errorNotificationEmail],
             subject: "Error in ThatOneSpot",
@@ -114,15 +119,13 @@ export class GeneralUtils {
             //create db object to track file
             let newFile = new fileModel({
                 name: files[i].name,
-                isActive: true,
-                CreatedOn: Date.now()
             });
 
             try {
                 let filedata = await newFile.save();
 
                 //get extension
-                let fileName = files[i].name;
+                let fileName = `${filedata._id}.${GeneralUtils.getFileExtension(files[i].name)}`;
 
                 //add to the results
                 resultIds.push(fileName);
@@ -143,7 +146,12 @@ export class GeneralUtils {
     public static async DeactivateFiles(files: string[]): Promise<void> {
         if (files.length > 0) {
 
-            await fileModel.updateMany(
+            //filter out strings with zero length
+            files = files.filter(x => x.length > 0);
+
+            console.log(files)
+
+            return await fileModel.updateMany(//TODO fix filter if the items do not exist
                 {
                     _id: {
                         $in: files.filter(x => typeof x == "string").map(x => x.split(".")[0])

@@ -8,12 +8,24 @@
                         @html.DisplayFor(model => model.name)
                     </dd>
 
+                     @*Project type*@
+                    <dt class="col-md-3 text-right">
+                        @html.DisplayNameFor(model => model.projectType)
+                    </dt>
+                    <dd class="col-md-9">
+                        @html.DisplayFor(model => model.projectType)
+                    </dd>
+
                     @*Url*@
                     <dt class="col-md-3 text-right">
                         @html.DisplayNameFor(model => model.url)
                     </dt>
                     <dd class="col-md-9">
-                        <a href="@model.data.url">@model.data.url</a>
+                        @if(model.data.projectType == "Internal"){
+                            <a href="/Projects/project?id=@model.data.url">/Projects/project?id=@model.data.url</a>
+                        }else{
+                            <a href="@model.data.url">@model.data.url</a>
+                        }
                     </dd>
                     
                     @*Description*@
@@ -45,11 +57,27 @@
                         @html.DisplayNameFor(model => model.imageUrl)
                     </dt>
                     <dd class="col-md-9">
-                        @html.DisplayFor(model => model.imageUrl)
+                        /uploads/@html.DisplayFor(model => model.imageUrl)
                         <br/>
                         @if(model.data){
                             <img class="img-fluid" src="/Uploads/@model.data.imageUrl">
                         }
+                    </dd>
+
+                    @*Is Active*@
+                    <dt class="col-md-3 text-right">
+                        @html.DisplayNameFor(model => model.isActive)
+                    </dt>
+                    <dd class="col-md-9">
+                        @html.DisplayFor(model => model.isActive)
+                    </dd>
+
+                     @*Name*@
+                    <dt class="col-md-3 text-right">
+                        @html.DisplayNameFor(model => model.isPublic)
+                    </dt>
+                    <dd class="col-md-9">
+                        @html.DisplayFor(model => model.isPublic)
                     </dd>
 
                     @*Created By*@
@@ -82,14 +110,6 @@
                     </dt>
                     <dd class="col-md-9">
                         @html.DisplayFor(model => model.updatedOn)
-                    </dd>
-
-                    @*Is Active*@
-                    <dt class="col-md-3 text-right">
-                        @html.DisplayNameFor(model => model.isActive)
-                    </dt>
-                    <dd class="col-md-9">
-                        @html.DisplayFor(model => model.isActive)
                     </dd>
 
                 </dl>

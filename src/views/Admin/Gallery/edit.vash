@@ -13,7 +13,7 @@
                <h1>@model.title</h1>
                 <hr/>
 
-                <form method="POST" action="edit?id=@model.data.id">
+                <form method="POST" action="edit?id=@model.data.id" enctype="multipart/form-data">
                     
                     <div class="form-horizontal">
                         @html.ValidationSummary()

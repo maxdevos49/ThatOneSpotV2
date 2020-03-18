@@ -27,12 +27,21 @@ const router: express.Router = express.Router();
 export function setup(server: http.Server) {
 
     //setup database connection
-    mongoose.connect(config.database.dbUrl, { useNewUrlParser: true, useFindAndModify: false });
+    mongoose.connect(config.database.dbUrl, { 
+        useNewUrlParser: true,
+        useFindAndModify: false 
+    });
 
     //middleware
-    router.use(bodyParser.urlencoded({ extended: false }));
+    router.use(bodyParser.urlencoded({ 
+        extended: false 
+    }));
+    
     router.use(bodyParser.json());
-    router.use(fileUpload({ safeFileNames: true, preserveExtension: true }));
+    router.use(fileUpload({ 
+        safeFileNames: true, 
+        preserveExtension: true 
+    }));
 
     //Session
     router.use(session({

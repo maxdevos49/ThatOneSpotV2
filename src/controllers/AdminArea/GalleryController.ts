@@ -57,7 +57,8 @@ router.post("/create", async (req: Request, res: Response) => {
 
         let newGalleryPost = {
             name: fileName[0],
-            createdBy: res.locals.authentication.id
+            createdBy: res.locals.authentication.id,
+            isPublic: req.body.isPublic
         }
 
         let project = new galleryModel(newGalleryPost);
@@ -94,15 +95,30 @@ router.get("/edit:id?", async (req: Request, res: Response) => {
  * POST:/Admin/Gallery/edit
  */
 router.post("/edit:id?", async (req: Request, res: Response) => {
-    let id = req.query.id;
-
-    if (id !== req.body.id) {
-        //shouldnt be here so we have error
-    }
 
     try {
+        
+        if(req.files)
+        {
+            let fileNames: string[] = await GeneralUtils.UploadFiles({
+                files: req.files.image,//this needs defined or it craps itself
+                limit: 1,
+                accept: ["image/png", "image/jpg", "image/jpeg", "image/gif"]
+            });
 
+            GeneralUtils.DeactivateFiles([req.body.name]);
+
+            req.body.name = fileNames[0];
+        }
+
+        //update meta info
+        req.body.updatedOn = Date.now();
+        req.body.updatedBy = GeneralUtils.GetLoggedInUserId(res);
+
+        //Save
         await galleryModel.updateOne({ _id: req.body.id }, req.body);
+
+
         return res.redirect("/Admin/Gallery/Index");
 
     } catch (err) {
@@ -151,7 +167,12 @@ router.post("/delete", async (req: Request, res: Response) => {
 
     try {
 
-        await galleryModel.findOneAndUpdate({ _id: req.body.id }, { isActive: false });
+        await galleryModel.findOneAndUpdate({ _id: req.body.id }, {
+            isActive: false,
+            updatedOn: Date.now(),
+            updatedBy: GeneralUtils.GetLoggedInUserId(res)
+        });
+        
         return res.redirect("/Admin/Gallery/Index");
 
     } catch (err) {

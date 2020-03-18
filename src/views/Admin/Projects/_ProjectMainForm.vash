@@ -8,6 +8,14 @@
     @html.ValidationMessageFor(model => model.name)
 </div>
 
+<div class="form-group">
+    @html.LabelFor(model => model.projectType)
+    <select class="form-control" name="projectType">
+        <option value="Internal">Internal</option>
+        <option value="External">External</option>
+    </select>
+</div>
+
 @*url*@
 <div class="form-group">
     @html.LabelFor(model => model.url)
@@ -50,6 +58,13 @@
         </div>
     }
     
+</div>
+
+@*IsPublic*@
+<div class="form-group">
+    @html.LabelFor(model => model.isPublic)
+    @html.EditorFor(model => model.isPublic, "", {})
+    @html.ValidationMessageFor(model => model.isPublic)
 </div>
 
 

@@ -4,18 +4,28 @@ const Schema = mongoose.Schema;
 
 const ProjectSchema = new Schema({
     name: {
-        required: true,
-        type: String
+        type: String,
+        required: true
     },
     url: {
-        required: true,
         type: String,
+        required: true,
     },
     description: {
         type: String,
     },
     imageUrl: {
         type: String,
+    },
+    projectType: {
+        type: String,
+        enum: ["External", "Internal"],
+        default: "Internal",
+        required: true 
+    },
+    isPublic: {
+        type: Boolean,
+        default: false
     },
     isActive: {
         type: Boolean,
@@ -26,8 +36,8 @@ const ProjectSchema = new Schema({
         default: Date.now()
     },
     createdBy: {
-        required: true,
-        type: String
+        type: String,
+        required: true
     },
     updatedOn: {
         type: Date

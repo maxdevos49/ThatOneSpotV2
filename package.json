@@ -33,7 +33,7 @@
     "scripts": {
         "setup": "./scripts/dotenv.sh -f && npm i",
         "build": "tsc",
-        "start": "node -r esm -r source-map-support/register -r dotenv/config src/server.js",
+        "start": "node -r esm -r source-map-support/register -r dotenv/config --unhandled-rejections=strict src/server.js",
         "dev": "nodemon"
     },
     "repository": {

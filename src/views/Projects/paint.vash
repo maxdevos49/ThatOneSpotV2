@@ -1,0 +1,189 @@
+@html.extend('/Shared/_layout', function(model){
+
+    @html.block('content', function(model){
+
+        @{
+            model.title = "Paint";
+        }
+
+        <div class="col-md-10 bg-white" style="margin: 10px auto;">
+            <div>
+                <h1>Paint</h1>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <canvas id="canvas" class="bg-white" style="width: 100%;border: 1px solid black;"></canvas>
+                </div>
+                <div class="col-md-4">
+                    <!-- Accordian -->
+                    <div class="accordion" id="accordion">
+                        <!--First Option-->
+                        <div class="card">
+                            <a data-toggle="collapse" data-target="#collapse1">
+                                <div class="card-header bg-blue text-white" id="headingOne">
+                                    <h5 class="mb-0 btn">About</h5>
+                                </div>
+                            </a>
+                            <div id="collapse1" class="collapse show" data-parent="#accordion">
+                                <div class="card-body">
+                                    Text
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Second Option-->
+                        <div class="card">
+                            <a data-toggle="collapse" data-target="#collapse2">
+                                <div class="card-header bg-blue text-white" id="heading2">
+                                    <h5 class="mb-0 btn">
+                                        Settings
+                                    </h5>
+                                </div>
+                            </a>
+                            <div id="collapse2" class="collapse" data-parent="#accordion">
+                                <div class="card-body">
+                                    Text
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Third Option-->
+                        <div class="card">
+                            <a data-toggle="collapse" data-target="#collapse3">
+                                <div class="card-header bg-blue text-white" id="heading3">
+                                    <h5 class="mb-0 btn">
+                                        Controls
+                                    </h5>
+                                </div>
+                            </a>
+                            <div id="collapse3" class="collapse" data-parent="#accordion">
+                                <div class="card-body">
+                                    Text
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fourth Option-->
+                        <div class="card">
+                            <a data-toggle="collapse" data-target="#collapse4">
+                                <div class="card-header bg-blue text-white" id="heading4">
+                                    <h5 class="mb-0 btn">
+                                        Reference
+                                    </h5>
+                                </div>
+                            </a>
+                            <div id="collapse4" class="collapse" data-parent="#accordion">
+                                <div class="card-body">
+                                    Text
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>                 </div>
+            </div>
+        </div>
+
+        <script type="module">
+
+            import protoCore from "/javascript/protoCore/protoCore.js";
+            import Rectangle from "/javascript/protoCore/canvas/rectangle.js"
+            import Triangle from "/javascript/protoCore/canvas/triangle.js"
+            import Ellipse from "/javascript/protoCore/canvas/ellipse.js"
+            import Text from "/javascript/protoCore/canvas/text.js"
+
+            let shape, shape2, tri, ell, text;
+
+            function setup(canvas, ctx){
+
+                shape = new Rectangle(ctx, 100, 100, 100, 100);
+                shape.noFill();
+                shape.setAnchor(50, 50);
+
+                shape2 = new Rectangle(ctx, 200, 200, 100, 100);
+                shape2.setFillStyle("red");
+                shape2.setAnchor(50, 50);
+
+                tri = new Triangle(ctx, 100, 100, 100, 100);
+                tri.setStrokeStyle("green");
+                tri.setOpacity(0.5);
+                tri.noFill();
+                tri.setLineWidth(10);
+                tri.showBounds();
+                tri.setAnchor(tri.width/2,tri.height/2);
+
+
+
+                ell = new Ellipse(ctx, 400,400, 300,100);
+                ell.setStrokeStyle("blue");
+                ell.noFill();
+                ell.setLineWidth(10);
+                ell.showBounds();
+                ell.setAnchor(150, 50);
+
+
+                text = new Text(ctx, 300,300, "Hello World!!!!!!!!!!!!!!!!!");
+                text.showBounds();
+                text.setFillStyle("blue");
+                text.setStrokeStyle("red");
+                text.setLineWidth(2);
+                text.setFontSize(50);
+                text.setAnchor(text.width/2, text.height/2);
+
+            }
+
+            function update(){
+                shape.x += 3;
+                shape2.x -= 3;
+
+                if(shape.x > this.canvasWidth){
+                    shape.x = 0;
+                }
+                
+                if(shape2.x < 0 - shape2.width - 100){
+                    shape2.x = this.canvasWidth;
+                }
+
+                shape.rotate(3);
+                shape2.rotate(-3);
+
+                tri.rotate(1);//degrees
+                // tri.rotate(0.02, true);//radians
+
+                ell.rotate(-1);
+
+                text.rotate(-1);
+
+            }
+
+            function draw(ctx){
+                ctx.clearRect(0,0, this.canvasWidth, this.canvasHeight);
+
+                shape.draw();
+                shape2.draw();
+
+                tri.draw();
+
+                Triangle.draw(ctx, 300, 20, 100, 100);
+                ctx.fill();
+
+                text.draw();
+                ell.draw();
+
+                Triangle.draw(ctx, 200, 100, 100, 100);
+                ctx.fill();
+
+            }
+
+
+            let options = {
+                setup: setup,
+                update: update,
+                draw: draw,
+            };
+
+            let p = new protoCore(options);
+
+
+        </script>
+    })
+})

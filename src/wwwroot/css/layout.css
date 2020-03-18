@@ -112,8 +112,6 @@ body {
 
 /********* Gallery Css *******/
 
-/*TODO decide what needs kept*/
-
 .gallery {
     -webkit-column-count: 3;
     -moz-column-count: 3;
@@ -121,17 +119,6 @@ body {
     -webkit-column-width: 33%;
     -moz-column-width: 33%;
     column-width: 33%;
-}
-
-.gallery .pics {
-    -webkit-transition: all 350ms ease;
-    transition: all 350ms ease;
-}
-
-.gallery .animation {
-    -webkit-transform: scale(1);
-    -ms-transform: scale(1);
-    transform: scale(1);
 }
 
 @media (max-width: 450px) {

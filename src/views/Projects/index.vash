@@ -17,13 +17,27 @@
                     <div class="card-body row">
                         <div class="col-md-4">
                             <p class="card-text" id="description@index">@html.DisplayFor(model => item.description)</p>
-                            <p>Check it out <a href="@html.DisplayFor(model => item.url)">here</a>.</p>
+
+                            @if(item.projectType == "Internal"){
+                                <p>Check it out <a href="/projects/project?id=@html.DisplayFor(model => item.url)">here</a>.</p>
+                            }else{
+                            <p>
+                                Check it out <a href="@html.DisplayFor(model => item.url)">here</a>.</p>
+                            }
                             <textarea data-preview-index="@index" style="display: none;">@html.DisplayFor(model => item.description)</textarea>
                         </div>    
                         <div class="col-md-8">
-                            <a href="@html.DisplayFor(model => item.url)">
-                                <img class="card-img-top" src="/uploads/@html.DisplayFor(model => item.imageUrl)">
-                            </a>
+
+                            @if(item.projectType == "Internal"){
+                                <a href="/Projects/project?id=@html.DisplayFor(model => item.url)">
+                                    <img class="card-img-top" src="/uploads/@html.DisplayFor(model => item.imageUrl)">
+                                </a>                            
+                            }else{
+                                <a href="@html.DisplayFor(model => item.url)">
+                                    <img class="card-img-top" src="/uploads/@html.DisplayFor(model => item.imageUrl)">
+                                </a>                            
+                            }
+
                         </div>
                     </div>
                     <div class="card-footer text-muted">

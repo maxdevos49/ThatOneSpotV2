@@ -8,11 +8,11 @@ import { GeneralUtils } from "../helpers/Shared";
 /**
  * GET:/Gallery/index
  */
-router.get("/index", async (req, res) => {
+router.get("/index", async (_, res) => {
     
     try {
 
-        let model = await galleryModel.find({ isActive: true });
+        let model = await galleryModel.find({ isActive: true, isPublic: true });
         return res.render("Gallery/index", View(res, GalleryViewModel, model));
 
     } catch (err) {
@@ -23,15 +23,9 @@ router.get("/index", async (req, res) => {
 /**
  * GET:/Gallery/index
  */
-router.get("/", async (req, res) => {
-    try {
-
-        let model = await galleryModel.find({ isActive: true });
-        return res.render("Gallery/index", View(res, GalleryViewModel, model));
-
-    } catch (err) {
-        GeneralUtils.sendErrorNotification(err);
-    }
+router.get("/", (_, res) => {
+    res.redirect("index");
 });
+
 
 export default router;

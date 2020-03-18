@@ -1,0 +1,200 @@
+@html.extend('/Shared/_layout', function(model){
+
+    @html.block('content', function(model){
+
+        @{
+            model.title = "Langtons Ant";
+        }
+
+        <div class="col-md-10 bg-white" style="margin: 10px auto;">
+            <div>
+                <h1>Langton's Ant</h1>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <canvas id="canvas" style="width: 100%;border: 1px solid black;"></canvas>
+                </div>
+                <div class="col-md-4">
+
+                    <!-- Accordian -->
+                    <div class="accordion" id="accordion">
+
+                        <!--First Option-->
+                        <div class="card">
+                            <a data-toggle="collapse" data-target="#collapse1">
+                                <div class="card-header bg-blue text-white" id="headingOne">
+                                    <h5 class="mb-0 btn">About</h5>
+                                </div>
+                            </a>
+                            <div id="collapse1" class="collapse show" data-parent="#accordion">
+                                <div class="card-body">
+                                    Text
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Second Option-->
+                        <div class="card">
+                            <a data-toggle="collapse" data-target="#collapse2">
+                                <div class="card-header bg-blue text-white" id="heading2">
+                                    <h5 class="mb-0 btn">
+                                        Settings
+                                    </h5>
+                                </div>
+                            </a>
+                            <div id="collapse2" class="collapse" data-parent="#accordion">
+                                <div class="card-body">
+                                    Text
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Third Option-->
+                        <div class="card">
+                            <a data-toggle="collapse" data-target="#collapse3">
+                                <div class="card-header bg-blue text-white" id="heading3">
+                                    <h5 class="mb-0 btn">
+                                        Controls
+                                    </h5>
+                                </div>
+                            </a>
+                            <div id="collapse3" class="collapse" data-parent="#accordion">
+                                <div class="card-body">
+                                    Text
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fourth Option-->
+                        <div class="card">
+                            <a data-toggle="collapse" data-target="#collapse4">
+                                <div class="card-header bg-blue text-white" id="heading4">
+                                    <h5 class="mb-0 btn">
+                                        Reference
+                                    </h5>
+                                </div>
+                            </a>
+                            <div id="collapse4" class="collapse" data-parent="#accordion">
+                                <div class="card-body">
+                                    Text
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>               
+                </div>
+            </div>
+        </div>
+
+
+        <script type="module">
+            import protoCore from "/javascript/protoCore/protoCore.js";
+            import ArrayUtil from "/javascript/protoCore/arrays/arrayUtil.js";
+            
+            let p;
+            let grid;
+            let columns;
+            let rows;
+            let resolution;
+            let x, y, dir;
+
+            const up = 0;
+            const right = 1;
+            const down = 2;
+            const left = 3;
+
+            function setup(canvas, ctx){
+
+                //grid
+                resolution = 2;
+                columns = this.canvasWidth/resolution;
+                rows = this.canvasHeight/resolution;
+                grid = ArrayUtil.array2D(columns, rows, 0);
+
+                //ant
+                x = Math.floor(columns/2);
+                y = Math.floor(rows/2);
+                grid[x][y];
+                dir = up;
+            }
+
+            function update(){}
+
+            function draw(ctx){
+
+                for(let i = 0; i < 100; i++){
+
+                    let state = grid[x][y];
+
+                    if(state === 0){
+                        turnRight();
+                        grid[x][y] = 1;
+                        ctx.fillStyle = "black";
+                        ctx.fillRect(x*resolution,y*resolution,resolution,resolution);
+                        moveForward();
+                    }else if(state === 1){
+                        turnLeft()
+                        grid[x][y] = 0;
+                        ctx.fillStyle = "white";
+                        ctx.fillRect(x*resolution,y*resolution,resolution,resolution);
+                        moveForward();
+                    }
+                }
+            }
+
+
+            function moveForward(){
+                if(dir === up){
+                    y--;
+                }else if(dir === down){
+                    y++;
+                }else if(dir === left){
+                    x--;
+                }else if(dir === right){
+                    x++;
+                }
+
+                if(x > columns - 1){
+                    x = 0;
+                }else if(x < 0){
+                    x = columns - 1;
+                }
+
+                if(y > rows - 1){
+                    y = 0;
+                }else if(y < 0){
+                    y = rows - 1;
+                }
+            }
+
+            function turnLeft(){
+                dir++;
+                if(dir > left){
+                    dir = up;
+                }
+            }
+
+            function turnRight(){
+                dir--;
+                if(dir < 0){
+                    dir = left;
+                }
+            }
+
+
+
+            let options = {
+                height:600,
+                width:1000,
+                setup: setup,
+                update: update,
+                draw: draw,
+                framerate: 60
+            };
+
+            p = new protoCore(options);
+
+
+        </script>
+    })
+})

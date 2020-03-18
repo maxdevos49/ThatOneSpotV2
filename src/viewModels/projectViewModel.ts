@@ -39,6 +39,18 @@ export class ProjectViewModel implements IViewModel {
         name: "Image Url"
     };
 
+    public projectType: IViewProperty ={
+        type: String,
+        path: "projectType",
+        name: "Project Type"
+    };
+
+    public isPublic: IViewProperty = {
+        type: Boolean,
+        path: "isPublic",
+        name: "Is Public"
+    };
+
     public isActive: IViewProperty = {
         type: Boolean,
         path: "isActive",

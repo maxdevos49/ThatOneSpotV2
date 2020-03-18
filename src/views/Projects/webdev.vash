@@ -1,0 +1,100 @@
+@html.extend('/Shared/_layout', function(model){
+
+    @html.block('content', function(model){
+
+        @{
+            model.title = "Web Dev";
+        }
+        <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
+        <div style="display: none; font-family: 'Anton', sans-serif;">
+            This is some text
+        </div>
+      
+        <canvas id="canvas" style="width: 100%;border: 1px solid black;"></canvas>
+             
+
+
+        <script type="module">
+
+            import protoCore from "/javascript/protoCore/protoCore.js";
+            import Text from "/javascript/protoCore/canvas/text.js";
+            import Rectangle from "/javascript/protoCore/canvas/rectangle.js";
+
+            let m1, m2, m3, m4;
+
+            function setup(canvas, ctx){
+                m1 = new Text(ctx, this.canvasWidth/2, 200, "Web Development Club");
+                m1.setAnchor(m1.width/2, m1.height/2);
+                m1.setFontSize(150);
+                m1.setFontFamily("Anton");
+                m1.fillStyle = "red";
+                m1.fill = true;
+
+                m2 = new Text(ctx, this.canvasWidth/2, 400, "Web Development Club");
+                m2.setAnchor(m1.width/2, m1.height/2);
+                m2.setFontSize(100);
+                m2.setFontFamily("Anton");
+                m2.fillStyle = "white";
+                m2.fill = true;
+
+                m3 = new Text(ctx, this.canvasWidth/2, 500, "Web Development Club");
+                m3.setAnchor(m1.width/2, m1.height/2);
+                m3.setFontSize(50);
+                m3.setFontFamily("Anton");
+                m3.fillStyle = "#87ceeb";
+                m3.fill = true;
+
+                m4 = new Text(ctx, this.canvasWidth/2, 600, "Web Development Club");
+                m4.setAnchor(m1.width/2, m1.height/2);
+                m4.setFontSize(75);
+                m4.setFontFamily("Anton");
+                m4.fillStyle = "blue";
+                m4.fill = true;
+
+                
+            }
+
+            function update(){
+                m1.x -= 2;
+                if(m1.x < 0 - m1.width){
+                    m1.x = this.canvasWidth;
+                }
+
+                m2.x -= 3;
+                if(m2.x < 0 - m2.width ){
+                    m2.x = this.canvasWidth;
+                }
+
+                m3.x -= 5;
+                if(m3.x < 0 - m3.width){
+                    m3.x = this.canvasWidth;
+                }
+
+                m4.x -= 4;
+                if(m4.x < 0 - m4.width){
+                    m4.x = this.canvasWidth;
+                }
+            }
+
+            function draw(ctx){
+                ctx.clearRect(0,0, this.canvasWidth, this.canvasHeight);
+
+                m1.draw();
+                m2.draw();
+                m3.draw();
+                m4.draw();
+            }
+
+
+            let options = {
+                setup: setup,
+                update: update,
+                draw: draw,
+            };
+
+            let p = new protoCore(options);
+
+
+        </script>
+    })
+})

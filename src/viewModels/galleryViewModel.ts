@@ -17,8 +17,14 @@ export class GalleryViewModel implements IViewModel {
     public image: IViewProperty = {
         type: function File(){},//Has to be a function so we make it a function. File.name = "File" so this works. basically its a hack but it works for what we need
         path: "image",
-        name: "Image"
+        name: "Image",
     }
+
+    public isPublic: IViewProperty = {
+        type: Boolean,
+        path: "isPublic",
+        name: "Is Public"
+    };
 
     public isActive: IViewProperty = {
         type: Boolean,
