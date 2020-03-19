@@ -88,8 +88,8 @@
 
 
         <script type="module">
-            import protoCore from "/javascript/protoCore/protoCore.js";
-            import ArrayUtil from "/javascript/protoCore/arrays/arrayUtil.js";
+            import {protoCore} from "/javascript/protoCore/protoCore.js";
+            import {ArrayUtil} from "/javascript/protoCore/arrays/arrayUtil.js";
             
             let p;
             let grid;

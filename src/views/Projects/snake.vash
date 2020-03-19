@@ -89,11 +89,11 @@
         <!-- Game Script-->
         <script type="module">
 
-            import protoCore from "/javascript/protoCore/protoCore.js";
-            import Keyboard from "/javascript/protoCore/input/keyboard.js";
-            import GamePad from "/javascript/protoCore/input/gamepad.js";
-            import Text from "/javascript/protoCore/canvas/text.js";
-            import { Snake, Direction } from "/javascript/snake.js";
+            import {protoCore} from "/javascript/protoCore/protoCore.js";
+            import {Keyboard} from "/javascript/protoCore/input/keyboard.js";
+            import {GamePad} from "/javascript/protoCore/input/gamepad.js";
+            import {Text} from "/javascript/protoCore/canvas/text.js";
+            import { Snake, SnakeDirection } from "/javascript/snake.js";
 
             
             let grid;
@@ -111,7 +111,7 @@
                 rows = this.canvasHeight/resolution;
 
                 //snake
-                s = new Snake(0, 0, Direction.DOWN);
+                s = new Snake(0, 0, SnakeDirection.DOWN);
 
                 //Input module
                 k = new Keyboard();
@@ -147,14 +147,14 @@
                 if(GamePad.controllerConnected()){
                     let buttons = GamePad.getButtons().map(buttons => buttons.value);;
 
-                    if(buttons[0] || buttons[12] && dir !== Direction.UP){//down
-                        s.direction = Direction.DOWN;
-                    }else if(buttons[2] || buttons[13] && dir !== Direction.RIGHT){//left
-                        s.direction = Direction.LEFT;
-                    }else if(buttons[1] || buttons[14] && dir !== Direction.LEFT){//right
-                        s.direction = Direction.RIGHT;
-                    }else if(buttons[3] || buttons[11] && dir !== Direction.DOWN){//up
-                        s.direction = Direction.UP;
+                    if(buttons[0] || buttons[12] && dir !== SnakeDirection.UP){//down
+                        s.direction = SnakeDirection.DOWN;
+                    }else if(buttons[2] || buttons[13] && dir !== SnakeDirection.RIGHT){//left
+                        s.direction = SnakeDirection.LEFT;
+                    }else if(buttons[1] || buttons[14] && dir !== SnakeDirection.LEFT){//right
+                        s.direction = SnakeDirection.RIGHT;
+                    }else if(buttons[3] || buttons[11] && dir !== SnakeDirection.DOWN){//up
+                        s.direction = SnakeDirection.UP;
                     }
                 }
 
@@ -163,14 +163,14 @@
                     let key = k.keyDown();
 
                     //snake
-                    if((key === 40 || key === 83) && dir !== Direction.UP){//down
-                        s.direction = Direction.DOWN;
-                    }else if((key === 37 || key === 65) && dir !== Direction.RIGHT){//left
-                        s.direction = Direction.LEFT;
-                    }else if((key === 39 || key === 68) && dir !== Direction.LEFT){//right
-                        s.direction = Direction.RIGHT;
-                    }else if((key === 38 || key === 87) && dir !== Direction.DOWN){//up
-                        s.direction = Direction.UP;
+                    if((key === 40 || key === 83) && dir !== SnakeDirection.UP){//down
+                        s.direction = SnakeDirection.DOWN;
+                    }else if((key === 37 || key === 65) && dir !== SnakeDirection.RIGHT){//left
+                        s.direction = SnakeDirection.LEFT;
+                    }else if((key === 39 || key === 68) && dir !== SnakeDirection.LEFT){//right
+                        s.direction = SnakeDirection.RIGHT;
+                    }else if((key === 38 || key === 87) && dir !== SnakeDirection.DOWN){//up
+                        s.direction = SnakeDirection.UP;
                     }
                 }
 

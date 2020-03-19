@@ -4,17 +4,17 @@
     "description": "My personal website",
     "main": "server.js",
     "devDependencies": {
+        "@okta/oidc-middleware": "^2.0.0",
         "@types/dotenv": "^6.1.0",
         "@types/express": "^4.16.1",
+        "@types/express-fileupload": "^1.1.0",
         "@types/express-session": "^1.15.12",
         "@types/ip": "^1.1.0",
-        "@types/node": "^11.10.4",
-        "nodemon": "^1.18.10",
-        "@okta/oidc-middleware": "^2.0.0",
-        "@types/express-fileupload": "^1.1.0",
-        "@types/nodemailer": "^6.2.0",
         "@types/mongoose": "^5.7.3",
-        "@types/uuid": "^3.4.4"
+        "@types/node": "^11.10.4",
+        "@types/nodemailer": "^6.2.0",
+        "@types/uuid": "^3.4.4",
+        "nodemon": "^2.0.2"
     },
     "dependencies": {
         "dotenv": "^6.2.0",
@@ -26,7 +26,7 @@
         "mongoose": "^5.9.3",
         "nodemailer": "^6.2.1",
         "source-map-support": "^0.5.12",
-        "typescript": "^3.4.3",
+        "typescript": "^3.8.3",
         "uuid": "^3.3.2",
         "vash": "^0.12.6"
     },

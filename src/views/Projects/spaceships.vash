@@ -3,16 +3,16 @@
     @html.block('content', function(model){
 
         @{
-            model.title = "Snow Flake";
+            model.title = "Spaceships";
         }
 
         <div class="col-md-10 bg-white" style="margin: 10px auto;">
             <div>
-                <h1>Snow Flake Generator</h1>
+                <h1>Spaceships</h1>
             </div>
             <div class="row">
                 <div class="col-md-8">
-                    <canvas id="canvas" style="width: 100%;border: 1px solid black;"></canvas>
+                    <canvas id="canvas" style="border: 1px solid black; width: 100%"></canvas>
                 </div>
                 <div class="col-md-4">
                     <!-- Accordian -->
@@ -80,29 +80,22 @@
                             </div>
                         </div>
 
-                    </div>                 </div>
+                    </div>                 
+                </div>
             </div>
         </div>
 
 
         <script type="module">
 
-            import protoCore from "/javascript/protoCore/protoCore.js";
-            import ArrayUtil from "/javascript/protoCore/arrays/arrayUtil.js";
-            import Keyboard from "/javascript/protoCore/input/keyboard.js";
+            import {protoCore} from "/javascript/protoCore/protoCore.js";
+            import {Vector} from "/javascript/protoCore/math/vector.js";
+            import {ship} from "/javascript/spaceship.js";
 
-            function setup(canvas, ctx){
-                let k = new Keyboard(canvas);
-            }
-
-            function update(){
-                
-            }
-
-            function draw(ctx){
-                
-            }
-
+            let spaceship;
+            let s1,s2,s3,s4;
+            let mouse;
+           
 
             let options = {
                 setup: setup,
@@ -110,7 +103,61 @@
                 draw: draw,
             };
 
-            let p = new protoCore(options);
+            const p = new protoCore(options);
+
+            
+            function setup(canvas, ctx){
+
+                mouse = new Vector(0,0);
+                spaceship = new ship(ctx, 20,20, 20);
+                s1 = new ship(ctx, 20,20, 20);
+                s2 = new ship(ctx, 200,400, 20);
+                s3 = new ship(ctx, 300,200, 20);
+                s4 = new ship(ctx, 700,500, 20);
+
+
+                eventListeners(canvas)
+
+            }
+
+            function update(){
+
+                let d1 = Vector.sub(mouse,spaceship.spaceship.position)
+                spaceship.applySteering(d1);
+                
+                let d2 = Vector.sub(mouse,s1.spaceship.position)
+                s1.applySteering(d2);
+                let d3 = Vector.sub(mouse,s2.spaceship.position)
+                s2.applySteering(d3);
+                let d4 = Vector.sub(mouse,s3.spaceship.position)
+                s3.applySteering(d4);
+                let d5 = Vector.sub(mouse,s4.spaceship.position)
+                s4.applySteering(d5);
+            }
+
+            function draw(ctx){
+                ctx.clearRect(0,0, this.canvasWidth, this.canvasHeight);
+                spaceship.draw();
+                s1.draw();
+                s2.draw();
+                s3.draw();
+                s4.draw();
+            }
+
+            function eventListeners(canvas){
+                canvas.addEventListener("mousemove", (e) => {
+
+                    //calculate the mouse scaling
+                    var rect = canvas.getBoundingClientRect();
+                    let xScale = p.canvasWidth/rect.width;
+                    let yScale = p.canvasHeight/rect.height;
+
+                    mouse.x = e.offsetX * xScale;
+                    mouse.y = e.offsetY * yScale;
+                });
+            }
+
+            
 
 
         </script>

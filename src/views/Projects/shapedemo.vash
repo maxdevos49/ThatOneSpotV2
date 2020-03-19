@@ -8,7 +8,7 @@
 
         <div class="col-md-10 bg-white" style="margin: 10px auto;">
             <div>
-                <h1>Paint</h1>
+                <h1>ProtoCore Shape Demo</h1>
             </div>
             <div class="row">
                 <div class="col-md-8">
@@ -85,11 +85,11 @@
 
         <script type="module">
 
-            import protoCore from "/javascript/protoCore/protoCore.js";
-            import Rectangle from "/javascript/protoCore/canvas/rectangle.js"
-            import Triangle from "/javascript/protoCore/canvas/triangle.js"
-            import Ellipse from "/javascript/protoCore/canvas/ellipse.js"
-            import Text from "/javascript/protoCore/canvas/text.js"
+            import { protoCore } from "/javascript/protoCore/protoCore.js";
+            import { Rectangle } from "/javascript/protoCore/canvas/rectangle.js"
+            import { Triangle } from "/javascript/protoCore/canvas/triangle.js"
+            import { Ellipse } from "/javascript/protoCore/canvas/ellipse.js"
+            import { Text } from "/javascript/protoCore/canvas/text.js"
 
             let shape, shape2, tri, ell, text;
 
