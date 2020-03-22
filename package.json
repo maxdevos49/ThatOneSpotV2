@@ -4,7 +4,6 @@
     "description": "My personal website",
     "main": "server.js",
     "devDependencies": {
-        "@okta/oidc-middleware": "^2.0.0",
         "@types/aws-sdk": "^2.7.0",
         "@types/dotenv": "^6.1.0",
         "@types/express": "^4.16.1",
@@ -21,6 +20,7 @@
         "aws-sdk": "^2.643.0",
         "dotenv": "^6.2.0",
         "esm": "^3.2.9",
+        "@okta/oidc-middleware": "^2.0.0",
         "express": "^4.16.4",
         "express-fileupload": "^1.1.6",
         "express-session": "^1.15.6",
