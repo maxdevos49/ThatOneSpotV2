@@ -30,11 +30,11 @@
 
                             @if(item.projectType == "Internal"){
                                 <a href="/Projects/project?id=@html.DisplayFor(model => item.url)">
-                                    <img class="card-img-top" src="/uploads/@html.DisplayFor(model => item.imageUrl)">
+                                    @html.AwsImageFor(model => item.imageUrl, {"class": "card-img-top"})
                                 </a>                            
                             }else{
                                 <a href="@html.DisplayFor(model => item.url)"  target="_blank">
-                                    <img class="card-img-top" src="/uploads/@html.DisplayFor(model => item.imageUrl)">
+                                    @html.AwsImageFor(model => item.imageUrl, {"class": "card-img-top"})
                                 </a>                            
                             }
 
@@ -53,6 +53,13 @@
                 
             </div>
             })
+
+            @if(model.data.length == 0)
+            {
+                <div class="bg-white col-md-10 mx-auto p-4">
+                    <h4>No Projects to view yet :(</h4>
+                </div>
+            }
         </div>
 
         <!--Preview Script-->

@@ -23,9 +23,8 @@ let observer = new IntersectionObserver(function (entries:any, self:any) {
     });
 }, config);
 
-
-const imgs = document.querySelectorAll('[data-src]');
-
-imgs.forEach(img => {
-    observer.observe(img);
-});
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[data-src]').forEach(img => {
+        observer.observe(img);
+    });
+}, false);

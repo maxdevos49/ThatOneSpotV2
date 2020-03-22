@@ -6,6 +6,7 @@ export function loginProcess(req: any, res: any, next: any) {
         if (err) throw err;
 
         if (!doc) {
+            
             //new user
             let newuser = new userModel({
                 oktaId: req.userContext.userinfo.sub,

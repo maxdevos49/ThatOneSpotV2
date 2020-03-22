@@ -26,5 +26,12 @@ export const config = {
         "issuer": process.env.OKTA_ORG_URL,
         "client_id": process.env.OKTA_CLIENT_ID,
         "client_secret": process.env.OKTA_CLIENT_SECRET
+    },
+    "aws":{
+        "client_id": process.env.AWS_CLIENT_ID,
+        "client_secret": process.env.AWS_CLIENT_SECRET,
+        "api_version": process.env.AWS_API_VERSION,
+        "region": process.env.AWS_REGION,
+        "bucket": process.env.AWS_BUCKET
     }
 };

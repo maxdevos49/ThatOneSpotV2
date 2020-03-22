@@ -57,10 +57,11 @@
                         @html.DisplayNameFor(model => model.imageUrl)
                     </dt>
                     <dd class="col-md-9">
-                        /uploads/@html.DisplayFor(model => model.imageUrl)
+                        @html.AwsImageLinkFor(model => model.name, {})
+
                         <br/>
                         @if(model.data){
-                            <img class="img-fluid" src="/Uploads/@model.data.imageUrl">
+                            @html.AwsImageFor(model => model.imageUrl, {"class": "img-fluid"})
                         }
                     </dd>
 

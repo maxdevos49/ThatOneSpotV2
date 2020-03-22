@@ -5,10 +5,10 @@
                         @html.DisplayNameFor(model => model.name)
                     </dt>
                     <dd class="col-md-9">
-                        @html.DisplayFor(model => model.name)
+                        @html.AwsImageLinkFor(model => model.name, {})
                         <br/>
                         @if(model.data){
-                            <img class="img-fluid" src="/Uploads/@model.data.name">
+                            @html.AwsImageFor(model => model.name, {"class":"img-fluid"})
                         }
                     </dd>
 

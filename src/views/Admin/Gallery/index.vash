@@ -2,13 +2,6 @@
 
     @html.block('content', function(model){
 
-           <style>
-        img[data-src]{
-            min-height: 200px;
-            min-width: 100%;
-        }
-        </style>
-
         @{
             model.title = "Gallery - Index";
         }
@@ -44,10 +37,10 @@
                         @model.data.forEach(function(item){
                             <tr>
                                 <td>
-                                    <img src="/uploads/@html.DisplayFor(model => item.name)" class="img-fluid img-thumbnail"/>
+                                    @html.AwsImageFor(model => item.name, {"class":"img-fluid img-thumbnail"})
                                 </td>
                                 <td>
-                                    <a href="/uploads/@html.DisplayFor(model => item.name)">/uploads/@html.DisplayFor(model => item.name)</a>
+                                    @html.AwsImageLinkFor(model => item.name, {})
                                 </td>
                                 <td>
                                     @html.DisplayFor(model => item.isPublic)
@@ -66,7 +59,6 @@
 
         </div>
 
-        <script src="/javascript/util/lazyImage.js"></script>
 
     })
 })

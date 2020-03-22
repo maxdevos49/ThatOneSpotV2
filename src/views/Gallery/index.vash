@@ -2,31 +2,25 @@
 
     @html.block('content', function(model){
 
-        <style>
-        img[data-src]{
-            min-height: 200px;
-            min-width: 100%;
-            background: white;
-            transition: 2s;
-        }
-        </style>
-
         @{
             model.title = "Gallery Index";
-            var count = model.data.length;
         }
 
         <div class="gallery col-md-11 mx-auto">
         @model.data.forEach(function(item, index){
             <div class="mb-3">
-                <img data-src="/uploads/@model.data[index].name" class="img-fluid">
+                @html.AwsImageFor(model => item.name, {"class":"img-fluid"})
             </div>
         })
         </div>
 
-        <br/>
+        @if(model.data.length == 0)
+            {
+                <div class="bg-white col-md-10 mx-auto p-4">
+                    <h4>No Gallery images to view yet :(</h4>
+                </div>
+            }
 
-        <script src="/javascript/util/lazyImage.js"></script>
-     
+        <br/>
     })
 })

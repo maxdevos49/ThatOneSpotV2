@@ -102,12 +102,6 @@ thatonespot % <span class="blink">|</span>
                         </div>
                     </div>
 
-                    <div>
-                    
-                    </div>
-                    <div>
-                    
-                    </div>
                 
                 </div>
 
@@ -124,21 +118,24 @@ thatonespot % <span class="blink">|</span>
                 <h2>Recent Projects</h2>
                 <div class="clearfix">
 
+                    @if(model.data.recentProjects.length >= 4)
+                    {
+                        
                     <!-- row 1-->
                     <div class="row col-md-10 float-md-left mx-auto">
 
                         <a href="@model.data.recentProjects[0].url" class="shadow m-2 col-md-5 p-0 bg-theme-primary text-white" >
                             <div style="display: flex; align-items: center; justify-content: center; position: relative">
-                                <img src="/uploads/@model.data.recentProjects[0].imageUrl" class="img-thumbnail p-0 border-0 rounded-0">
-                                    <div class="hover-title" style="position:absolute;">
-                                        <h2 >@model.data.recentProjects[0].name</h2>
-                                    </div>
+                                @html.AwsImageFor(model => model.recentProjects[0].imageUrl, {"class": "img-thumbnail p-0 border-0 rounded-0"})
+                                <div class="hover-title" style="position:absolute;">
+                                    <h2 >@model.data.recentProjects[0].name</h2>
+                                </div>
                             </div>
                         </a>
 
                         <a href="@model.data.recentProjects[1].url" class="shadow m-2 col-md-5 p-0 bg-theme-primary text-white" >
                             <div style="display: flex; align-items: center; justify-content: center; position: relative">
-                                <img src="/uploads/@model.data.recentProjects[1].imageUrl" class="img-thumbnail p-0 border-0 rounded-0">
+                                @html.AwsImageFor(model => model.recentProjects[1].imageUrl, {"class": "img-thumbnail p-0 border-0 rounded-0"})
                                 <div class="hover-title" style="position:absolute;">
                                     <h2 >@model.data.recentProjects[1].name</h2>
                                 </div>              
@@ -152,7 +149,7 @@ thatonespot % <span class="blink">|</span>
 
                         <a href="@model.data.recentProjects[2].url" class="shadow m-2 col-md-5 p-0 bg-theme-primary text-white">
                             <div style="display: flex; align-items: center; justify-content: center; position: relative">
-                                <img src="/uploads/@model.data.recentProjects[2].imageUrl" class="img-thumbnail p-0 border-0 rounded-0">
+                                @html.AwsImageFor(model => model.recentProjects[2].imageUrl, {"class": "img-thumbnail p-0 border-0 rounded-0"})
                                 <div class="hover-title" style="position:absolute;">
                                     <h2 >@model.data.recentProjects[2].name</h2>
                                 </div>  
@@ -161,7 +158,7 @@ thatonespot % <span class="blink">|</span>
 
                         <a href="@model.data.recentProjects[3].url" class="shadow m-2 col-md-5 p-0 bg-theme-primary text-white" >
                             <div style="display: flex; align-items: center; justify-content: center; position: relative">
-                                <img src="/uploads/@model.data.recentProjects[3].imageUrl" class="img-thumbnail p-0 border-0 rounded-0">
+                                @html.AwsImageFor(model => model.recentProjects[3].imageUrl, {"class": "img-thumbnail p-0 border-0 rounded-0"})
                                 <div class="hover-title" style="position:absolute;">
                                     <h2 >@model.data.recentProjects[3].name</h2>
                                 </div>                        
@@ -169,6 +166,12 @@ thatonespot % <span class="blink">|</span>
                         </a>
 
                     </div>
+
+                    }else{
+
+                        <p>No Projects to see yet :(</p>
+
+                    }
 
                 </div>
             
@@ -187,9 +190,16 @@ thatonespot % <span class="blink">|</span>
 
                 @model.data.recentGallery.forEach(function(item, index){
                     <div class="mb-3">
-                        <img src="/uploads/@item.name" class="img-fluid">
+                        @html.AwsImageFor(model => item.name, {"class": "img-fluid"})
                     </div>
                 })
+
+                @if(model.data.recentGallery.length == 0)
+                    {
+                        <div class="bg-white col-md-10 mx-auto p-4">
+                            <p>No Gallery images to view yet :(</p>
+                        </div>
+                    }
 
                 </div>
 

@@ -52,6 +52,13 @@ OKTA_ORG_URL="<your okta domain>"
 OKTA_CLIENT_ID="<your okta client id>"
 OKTA_CLIENT_SECRET="<your okta client secret>"
 
+#AWS
+AWS_CLIENT_ID="<your aws clientid>"
+AWS_CLIENT_SECRET="<your aws client secret>"
+AWS_API_VERSION="2006-03-01"
+AWS_REGION="<aws region>"
+AWS_BUCKET="<bucket name>"
+
 EOF
         echo ".env file was generated. Version: $version";
     else

@@ -1,5 +1,6 @@
 import { IViewModel, IViewProperty, InputType } from "./vashInterfaces";
 import { Validation } from "./validation";
+import {config } from "../../config";
 const vash = require("vash");
 
 const days: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -92,7 +93,7 @@ vash.helpers.EditorFor = function (model: Function, value?: string, attributes?:
 
     //dont throw undefined for lack of data
     if (this.model.data)
-        value = model(this.model.data) || value;
+        value = model(this.model.data) ?? value;
 
     let type: string = getType(property.type.name as InputType);
 
@@ -127,6 +128,26 @@ vash.helpers.EditorFor = function (model: Function, value?: string, attributes?:
 
    
 };
+
+vash.helpers.AwsImageFor = function (model: Function, attributes?: object) : void {
+
+    let value = model(this?.model?.data) ?? "";
+
+    this.buffer.push(`
+        <img data-src="https://${config.aws.bucket}.s3.${config.aws.region}.amazonaws.com/${value}" ${processAttributes(attributes)}/>
+    `);
+}
+
+vash.helpers.AwsImageLinkFor = function (model: Function, attributes?: object) : void {
+
+    let value = model(this?.model?.data) ?? "";
+
+    this.buffer.push(`
+        <a href="https://${config.aws.bucket}.s3.${config.aws.region}.amazonaws.com/${value}" target="_blank">
+            https://${config.aws.bucket}.s3.${config.aws.region}.amazonaws.com/${value}
+        </a>
+    `);
+}
 
 /**
  * PasswordBoxFor()

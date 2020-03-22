@@ -49,11 +49,13 @@
             <div class="col-md-10">
                 @html.LabelFor(model => model.image)
                 @html.EditorFor(model => model.image, "", {class: "form-control"})
-                <p>Image Url: /uploads/@html.DisplayFor(model => model.imageUrl)</p>
+                <p>
+                    Image Url: @html.AwsImageLinkFor(model => model.imageUrl, {})
+                </p>
                 @html.ValidationMessageFor(model => model.image)
             </div>
             <div class="col-md-2">
-                <img class="img-fluid" src="/Uploads/@model.data.imageUrl">
+                @html.AwsImageFor(model => model.imageUrl, {"class": "img-fluid"})
             </div>
         </div>
     }

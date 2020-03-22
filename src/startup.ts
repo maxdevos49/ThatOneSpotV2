@@ -3,8 +3,9 @@ import mongoose from "mongoose";
 import http from "http";
 import bodyParser from "body-parser";
 import session from "express-session";
-import { ExpressOIDC } from '@okta/oidc-middleware';
 import fileUpload from "express-fileupload";
+
+import { ExpressOIDC } from '@okta/oidc-middleware';
 
 //controllers
 import homeController from "./controllers/HomeController";

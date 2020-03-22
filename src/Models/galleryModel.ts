@@ -4,8 +4,11 @@ const Schema = mongoose.Schema;
 
 const GallerySchema = new Schema({
     name: {
-        required: true,
-        type: String
+        type: String,
+        required: true
+    },
+    tags: {
+        type: String,
     },
     isPublic: {
         type: Boolean,

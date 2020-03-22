@@ -1,8 +1,9 @@
 import { config } from "../config";
 import { Response } from "express";
-import nodemailer from "nodemailer"; 
-import fileModel from "../Models/fileModel";
+import nodemailer from "nodemailer";
 import userModel from "../Models/userModel";
+import { S3 } from "aws-sdk";
+import { v1 } from "uuid";
 
 
 /**
@@ -90,7 +91,7 @@ export class GeneralUtils {
 
     public static async UploadFiles(options: IFileUploadConfig): Promise<string[]> {
 
-        let resultIds: string[] = [];
+        let fileSources: string[] = [];
         let files: any[] = [];
 
         //make sure we always have an array
@@ -113,56 +114,63 @@ export class GeneralUtils {
             }
         }
 
+        let s3 = new S3({
+            "accessKeyId": config.aws.client_id,
+            "secretAccessKey": config.aws.client_secret,
+            "apiVersion": config.aws.api_version,
+            "region": config.aws.region
+        });
+
         //Process all files
         for (let i = 0; i < files.length; i++) {
 
-            //create db object to track file
-            let newFile = new fileModel({
-                name: files[i].name,
-            });
-
             try {
-                let filedata = await newFile.save();
 
-                //get extension
-                let fileName = `${filedata._id}.${GeneralUtils.getFileExtension(files[i].name)}`;
+                let fileName = `${v1()}.${GeneralUtils.getFileExtension(files[i].name)}`;
+
+                let fileParams = {
+                    "Bucket": config.aws.bucket,
+                    "Key": fileName,
+                    "Body": files[i].data,
+                    "ContentType": files[i].mimetype,
+                    "ACL": "public-read"
+                };
+
+                await s3.upload(fileParams).promise();
 
                 //add to the results
-                resultIds.push(fileName);
-
-                //move and rename file
-                files[i].mv(`${config.path}/wwwroot/uploads/${fileName}`, (err1: any) => {
-                    if (err1) throw err1;
-                });
+                fileSources.push(fileName);
 
             } catch (err) {
-                //do stuff here cuz save failed. Probably just pass on the exception
+                console.log(err);
             }
         }
 
-        return resultIds;
+        return fileSources;
     }
 
     public static async DeactivateFiles(files: string[]): Promise<void> {
-        if (files.length > 0) {
 
-            //filter out strings with zero length
-            files = files.filter(x => x.length > 0);
 
-            console.log(files)
+        // if (files.length > 0) {
 
-            return await fileModel.updateMany(//TODO fix filter if the items do not exist
-                {
-                    _id: {
-                        $in: files.filter(x => typeof x == "string").map(x => x.split(".")[0])
-                    }
-                },
-                {
-                    $set: {
-                        isActive: false
-                    }
-                });
-        }
+        //     //filter out strings with zero length
+        //     files = files.filter(x => x.length > 0);
+
+        //     console.log(files)
+
+        //     return await fileModel.updateMany(
+        //         {
+        //             _id: {
+        //                 $in: files.filter(x => typeof x == "string").map(x => x.split(".")[0])
+        //             }
+        //         },
+        //         {
+        //             $set: {
+        //                 isActive: false
+        //             }
+        //         });
+        // }
     }
 
     public static GetLoggedInUserId(res: Response): string {
@@ -184,7 +192,7 @@ export class GeneralUtils {
         return userData.firstname + " " + userData.lastname;
     }
 
-    public static SetModelError(res: Response): void{
+    public static SetModelError(res: Response): void {
         //TODO
     }
 }
