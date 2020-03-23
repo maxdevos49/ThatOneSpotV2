@@ -149,28 +149,24 @@ export class GeneralUtils {
         return fileSources;
     }
 
-    public static async DeactivateFiles(files: string[]): Promise<void> {
+    public static DeactivateFiles(files: string[]) : void{
 
+        let s3 = new S3({
+            "accessKeyId": config.aws.client_id,
+            "secretAccessKey": config.aws.client_secret,
+            "apiVersion": config.aws.api_version,
+            "region": config.aws.region
+        });
 
-        // if (files.length > 0) {
+        files.forEach(async (item) => {
+            let fileParams = {
+                "Bucket": config.aws.bucket,
+                "Key": item
+            }
 
-        //     //filter out strings with zero length
-        //     files = files.filter(x => x.length > 0);
+            await s3.deleteObject(fileParams).promise();
+        })
 
-        //     console.log(files)
-
-        //     return await fileModel.updateMany(
-        //         {
-        //             _id: {
-        //                 $in: files.filter(x => typeof x == "string").map(x => x.split(".")[0])
-        //             }
-        //         },
-        //         {
-        //             $set: {
-        //                 isActive: false
-        //             }
-        //         });
-        // }
     }
 
     public static GetLoggedInUserId(res: Response): string {
