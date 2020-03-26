@@ -1,0 +1,44 @@
+@html.extend('/Shared/_layout', function(model){
+
+    @html.block('content', function(model){
+
+        <link rel="stylesheet" href="/css/projects/protopaint/protopaint.css"/>
+        <link rel="stylesheet" href="/css/Resize.css"/>
+
+        @{
+            model.title = "ProtoPaint";
+        }
+
+        <div id="background">
+
+            <canvas id="protocanvas"></canvas>
+
+            <!-- Left Panel-->
+            <div data-panel="left" data-resize="right">
+                <p>Test</p>
+                <p>Test</p>
+                <p>Test</p>
+                <p>Test</p>
+                <p>Test</p>
+                <p>Test</p>
+                <p>Test</p>
+                <p>Test</p>
+                <p>Test</p>
+            </div>
+            
+            <!-- Right Panel-->
+            <div data-panel="right" data-resize="left">
+            
+            </div>
+
+            <!-- Search -->
+            <div data-search>
+            
+            </div>
+
+        </div>
+
+        <script src="/javascript/projects/protopaint/protopaint.js"></script>
+        <script src="/javascript/util/resize.js"></script>
+    })
+})

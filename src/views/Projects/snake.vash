@@ -93,7 +93,7 @@
             import {Keyboard} from "/javascript/protoCore/input/keyboard.js";
             import {GamePad} from "/javascript/protoCore/input/gamepad.js";
             import {Text} from "/javascript/protoCore/canvas/text.js";
-            import { Snake, SnakeDirection } from "/javascript/snake.js";
+            import { Snake, SnakeDirection } from "/javascript/projects/snake/snake.js";
 
             
             let grid;
