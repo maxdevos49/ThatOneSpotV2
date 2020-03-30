@@ -9,21 +9,15 @@
             model.title = "ProtoPaint";
         }
 
-        <div id="background">
+        <div id="backdrop">
 
-            <canvas id="protocanvas"></canvas>
+            <!-- Top Menu-->
+            <div data-panel="menu">
+            </div>
 
             <!-- Left Panel-->
             <div data-panel="left" data-resize="right">
-                <p>Test</p>
-                <p>Test</p>
-                <p>Test</p>
-                <p>Test</p>
-                <p>Test</p>
-                <p>Test</p>
-                <p>Test</p>
-                <p>Test</p>
-                <p>Test</p>
+       
             </div>
             
             <!-- Right Panel-->
@@ -32,13 +26,13 @@
             </div>
 
             <!-- Search -->
-            <div data-search>
-            
+            <div data-panel="search" class="hide">
+                <input id="search" type="text" placeholder="Action Search" tabindex="-1"/>
             </div>
 
         </div>
 
-        <script src="/javascript/projects/protopaint/protopaint.js"></script>
-        <script src="/javascript/util/resize.js"></script>
+        <script type="module" src="/javascript/projects/protopaint/protopaint.js"></script>
+        <script type="module" src="/javascript/util/resize.js"></script>
     })
 })
