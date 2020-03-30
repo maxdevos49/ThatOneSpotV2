@@ -3,7 +3,7 @@
     @html.block('content', function(model){
 
         <link rel="stylesheet" href="/css/projects/protopaint/protopaint.css"/>
-        <link rel="stylesheet" href="/css/Resize.css"/>
+        <link rel="stylesheet" href="/css/resize.css"/>
 
         @{
             model.title = "ProtoPaint";
