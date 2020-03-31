@@ -9,8 +9,8 @@ export class View extends ActionCommand<ProtoPaint>{
             description: "",
             keyBinding: new Map<string, string>(
                 Object.entries({
-                    "Control+h": "View -h",
-                    "Control+s": "View -s"
+                    "Control+h": "view -h",
+                    "Control+s": "view -s"
                 })
             ),
             subcommands: new Map<string, ActionCommand<ProtoPaint>>(
@@ -22,12 +22,12 @@ export class View extends ActionCommand<ProtoPaint>{
 
     public action(dependency: ProtoPaint, options: ActionOptions<ProtoPaint>): boolean {
 
-        if(options.values.has("-h") || options.values.has("--hide")){
+        if (options.values.has("-h") || options.values.has("--hide")) {
             dependency.hidePanel("left");
             dependency.hidePanel("right");
         }
 
-        if(options.values.has("-s") || options.values.has("--show")){
+        if (options.values.has("-s") || options.values.has("--show")) {
             dependency.showPanel("left");
             dependency.showPanel("right");
         }
@@ -66,7 +66,7 @@ export class Toggle extends ActionCommand<ProtoPaint>{
         }
 
         if (options.values.has("-s") || options.values.has("--search")) {
-            dependency.togglePanel("search");
+            dependency.showSearch();
         }
 
         return true;

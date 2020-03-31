@@ -6,19 +6,24 @@ import { KeyCommander } from "./KeyCommander.js";
  */
 export class ActionCommander<T> {
 
-    private _inputElement: HTMLInputElement;
+    private _dependency: T;
 
-    private _commands: Map<string, ActionCommand<T>>;
+    private _searchContainer: HTMLElement;
+
+    private _inputElement: HTMLInputElement;
 
     private _keyBindings: Map<string, string>;
 
-    private _dependency: T;
+    private _commands: Map<string, ActionCommand<T>>;
+    private _actionHistory: ActionHistory;
 
-    public constructor(inputElement: HTMLInputElement, dependency: T, commands: Map<string, ActionCommand<T>>) {
-        this._inputElement = inputElement;
+    public constructor(searchPanel: HTMLElement, dependency: T, commands: Map<string, ActionCommand<T>>) {
+        this._inputElement = searchPanel.querySelector("input");
+        this._searchContainer = searchPanel;
         this._dependency = dependency;
         this._commands = commands;
         this._keyBindings = new Map<string, string>();
+        this._actionHistory = new ActionHistory();
 
         this._commands.forEach(c => {
             this.mapKeyBindings(c);
@@ -29,10 +34,6 @@ export class ActionCommander<T> {
         this.init();
     }
 
-    /**
-     * Builds a map of all of the key combinations by searching the commands recursivly
-     * @param commands 
-     */
     private mapKeyBindings(commands: ActionCommand<T>): void {
 
         this._keyBindings = new Map<string, string>([...this._keyBindings, ...commands.keyBinding]);
@@ -42,9 +43,6 @@ export class ActionCommander<T> {
         });
     }
 
-    /**
-     * Maps keybindings 
-     */
     private registerKeyBindings(): void {
         this._keyBindings.forEach((value, key) => {
 
@@ -120,11 +118,9 @@ export class ActionCommander<T> {
                     break;
                 }
             }
-
         }
 
         return result;
-
     }
 
     /**
@@ -149,44 +145,54 @@ export class ActionCommander<T> {
         return this.execute(this.parse(command));
     }
 
-    public clearInput(): void {
-        this._inputElement.value = "";
+    /**
+     * Shows the search and properly gives it focus
+     */
+    public showSearch(): void {
+        this._searchContainer.classList.remove("hide");
+        this._inputElement.focus();
     }
 
-
     /**
-     * Initilizes the search input
+     * Hides and clears the search
      */
+    public hideSearch(): void {
+        this.clearInput();
+        this._searchContainer.classList.add("hide")
+    }
+
+    private clearInput(): void {
+        this._inputElement.value = "";
+        this._inputElement.blur();
+    }
+
     private init(): void {
 
         this._inputElement.addEventListener("keydown", (e) => {
-
             if (e.key === "Enter") {
 
+                this._actionHistory.add(this._inputElement);
 
-                if (this.parseAndExecute(this._inputElement.value)) {//only clear and toggle if valid command
-                    this.parseAndExecute("view toggle -s");
-                    this.clearInput();
-
-                    //blur element
-                    let el = e.target as HTMLElement;
-                    el.blur();
-                    console.log("unfocusing")
-
+                //only clear and hide if valid command
+                if (this.parseAndExecute(this._inputElement.value)) {
+                    this.hideSearch();
                 }
 
             } else if (e.key === "Escape") {
-                this.parseAndExecute("view toggle -s");
-                this.clearInput();
-
-                //blur element
-                let el = e.target as HTMLElement;
-                el.blur();
-                console.log("unfocusing")
-
+                this.hideSearch();
+            } else if (e.altKey && e.key === "ArrowDown") {
+                this._actionHistory.view(this._inputElement, -1);
+            } else if (e.altKey && e.key === "ArrowUp") {
+                this._actionHistory.view(this._inputElement, 1);
             }
 
-        });
+
+        }, false);
+
+        this._inputElement.addEventListener("focusout", (e) => {
+            this.hideSearch();
+        }, false);
+
     }
 
 }
@@ -264,4 +270,57 @@ export interface ActionConfiguration<T> {
     keyBinding?: Map<string, string>;
     subcommands?: Map<string, ActionCommand<T>>;
     flags?: Map<string, Function>;
+}
+
+class ActionHistory {
+    private _initialCommand?: string;
+    private _currentIndex?: number;
+
+    private _history: Array<string>;
+
+    constructor() {
+        this._initialCommand = null;
+        this._currentIndex = null;
+        this._history = JSON.parse(localStorage.getItem("actionCommandHistory")) ?? new Array<string>();
+    }
+
+    public add(input: HTMLInputElement): void {
+        if (input.value.length > 0) {
+            this.reset();
+            this._history.unshift(input.value);
+
+            localStorage.setItem("actionCommandHistory", JSON.stringify(this._history.slice(0, this._history.length < 100 ? this._history.length : 100)));
+        }
+    }
+
+    public view(input: HTMLInputElement, offset: number): void {
+
+        if (this._history.length == 0) {
+            return;
+        }
+
+        if (this._initialCommand === null) {
+            this._initialCommand = input.value;
+        }
+
+        let index = this._currentIndex == null ? 0 : this._currentIndex + offset;
+
+        if (index < 0) {
+            input.value = this._initialCommand;
+            this.reset();
+            return;
+        } else if (index > this._history.length - 1) {
+            index = this._history.length - 1;
+        }
+
+        this._currentIndex = index;
+        input.value = this._history[this._currentIndex];
+    }
+
+    public reset(): void {
+        this._initialCommand = null;
+        this._currentIndex = null;
+    }
+
+
 }

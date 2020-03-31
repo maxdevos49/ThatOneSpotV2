@@ -8,7 +8,7 @@ export class ProtoPaint {
     private _panels: Map<string, HTMLElement>;
 
     public constructor() {
-        this._actionCommand = new ActionCommander<ProtoPaint>(document.querySelector('#search'), this, CommandRegistry());
+        this._actionCommand = new ActionCommander<ProtoPaint>(document.querySelector('div[data-search]'), this, CommandRegistry());
         this._panels = new Map<string, HTMLElement>();
 
         //Register panels
@@ -27,30 +27,18 @@ export class ProtoPaint {
     public showPanel(panel: string) {
         if (this._panels.has(panel)) {
             this._panels.get(panel).classList.remove("hide");
-
-            if (this._panels.get(panel).dataset.panel === "search") {
-                this.focusSearch();
-            }
         }
     }
 
     public togglePanel(panel: string) {
         if (this._panels.has(panel)) {
             this._panels.get(panel).classList.toggle("hide");
-
-            if (!this._panels.get(panel).classList.contains("hide")) {
-                this.focusSearch();
-            }
         }
     }
 
-    private focusSearch() {
-        window.setTimeout(() => {
-            console.log("focusing")
-            document.getElementById("search").focus();
-        }, 10);
+    public showSearch(){
+        this._actionCommand.showSearch();
     }
 
 }
 
-let pp = new ProtoPaint();

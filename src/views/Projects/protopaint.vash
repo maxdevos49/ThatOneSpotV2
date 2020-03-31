@@ -11,9 +11,7 @@
 
         <div id="backdrop">
 
-            <!-- Top Menu-->
-            <div data-panel="menu">
-            </div>
+            <canvas id="protopaint" width="700" height="700"></canvas>
 
             <!-- Left Panel-->
             <div data-panel="left" data-resize="right">
@@ -25,14 +23,18 @@
             
             </div>
 
+            <div data-panel="footer">
+                x - <span data-dynamic-value="x">100</span>px, y - <span data-dynamic-value="y">23</span>px | Mode: <span data-dynamic-value="mode">Edit</span>
+            </div>
+
             <!-- Search -->
-            <div data-panel="search" class="hide">
+            <div data-search class="hide">
                 <input id="search" type="text" placeholder="Action Search" tabindex="-1"/>
             </div>
 
         </div>
 
-        <script type="module" src="/javascript/projects/protopaint/protopaint.js"></script>
+        <script type="module" src="/javascript/projects/protopaint/index.js"></script>
         <script type="module" src="/javascript/util/resize.js"></script>
     })
 })

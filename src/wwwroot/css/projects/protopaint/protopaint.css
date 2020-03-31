@@ -1,6 +1,6 @@
-:root{
+:root {
     /* Backdrop styles */
-    --backdrop-background-color: white;
+    --backdrop-background-color: rgba(60, 60, 60, 1);
     /* Panel styles */
     --panel-color: white;
     --panel-background-color: rgba(30, 30, 30, 0.7);
@@ -8,11 +8,13 @@
 }
 
 /** Make header match the theme better **/
+
 #header {
     background-color: black !important;
 }
 
 /** Backdrop **/
+
 div#backdrop {
     height: 92vh;
     width: 100%;
@@ -21,19 +23,23 @@ div#backdrop {
     position: relative;
 }
 
+div[data-panel] {
+    background-color: var(--panel-background-color);
+    box-shadow: 0 4px 8px 0 black !important;
+    color: var(--panel-color);
+}
+
 /** Style the left and right panels **/
-div[data-panel="left"],div[data-panel="right"] {
+
+div[data-panel="left"], div[data-panel="right"] {
     min-width: 15%;
     max-width: 40%;
     min-height: 25%;
     max-height: 100%;
-    background-color: var(--panel-background-color);
-    box-shadow: 0 4px 8px 0 black !important;
     overflow: scroll;
     padding: 0;
     margin: 0;
     transition: transform 0.4s;
-    color: var(--panel-color);
 }
 
 div[data-panel="left"] {
@@ -52,22 +58,21 @@ div[data-panel="right"].hide {
     transform: translateX(110%);
 }
 
-/** Menu Style **/
-
-div[data-panel="menu"] {
-    width: 100%;
-    color: var(--panel-color);
-    background-color: var(--panel-background-color);
-    box-shadow: 0 4px 8px 0 black !important;
-    height: 35px;
-    margin-bottom: 1%;
+div[data-panel="footer"] {
+    /* height: 3vh; */
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 2px;
 }
 
 /** Search style **/
-div[data-panel="search"]{
-    position: absolute;
+
+div[data-search] {
     background-color: var(--panel-background-color);
+    box-shadow: 0 4px 8px 0 black !important;
     color: var(--panel-color);
+    position: absolute;
     height: 5vh;
     width: 50%;
     margin-left: auto;
@@ -81,7 +86,7 @@ div[data-panel="search"]{
     opacity: 1;
 }
 
-div[data-panel="search"]>input{
+div[data-search]>input {
     border-radius: inherit;
     background-color: inherit;
     color: inherit;
@@ -91,17 +96,21 @@ div[data-panel="search"]>input{
     padding: 1%;
 }
 
-div[data-panel="search"].hide{
-    visibility: hidden;
-    z-index: -1000;
-    opacity: 0;
+div[data-search].hide {
+    display: none;
 }
 
 /** Canvas styles **/
 
-/* canvas
-{
+canvas {
     background-image: linear-gradient(45deg, #808080 25%, transparent 25%), linear-gradient(-45deg, #808080 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #808080 75%), linear-gradient(-45deg, transparent 75%, #808080 75%);
     background-size: 20px 20px;
     background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-} */
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    cursor: crosshair;
+}
