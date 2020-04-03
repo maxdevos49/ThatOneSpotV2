@@ -12,18 +12,34 @@ export class ActionCommander<T> {
 
     private _inputElement: HTMLInputElement;
 
+    private _commandSuggestions: HTMLUListElement;
+
     private _keyBindings: Map<string, string>;
 
     private _commands: Map<string, ActionCommand<T>>;
     private _actionHistory: ActionHistory;
 
-    public constructor(searchPanel: HTMLElement, dependency: T, commands: Map<string, ActionCommand<T>>) {
-        this._inputElement = searchPanel.querySelector("input");
-        this._searchContainer = searchPanel;
+    public constructor(dependency: T, searchContainer: HTMLElement, commands: Map<string, ActionCommand<T>>) {
+
         this._dependency = dependency;
+        this._searchContainer = searchContainer;
         this._commands = commands;
         this._keyBindings = new Map<string, string>();
         this._actionHistory = new ActionHistory();
+
+        //create input
+        this._inputElement = document.createElement("INPUT") as HTMLInputElement;
+        this._inputElement.setAttribute("id", "ActionSearch");
+        this._inputElement.setAttribute("type", "text");
+        this._inputElement.setAttribute("placeholder", "ActionSearch");
+        this._inputElement.setAttribute("tabindex", "-1");
+        searchContainer.appendChild(this._inputElement);
+
+        //create suggestions
+        this._commandSuggestions = document.createElement("UL") as HTMLUListElement;
+        this._commandSuggestions.setAttribute("id", "ActionSuggestions");
+        searchContainer.appendChild(this._commandSuggestions);
+
 
         this._commands.forEach(c => {
             this.mapKeyBindings(c);
@@ -149,7 +165,7 @@ export class ActionCommander<T> {
      * Shows the search and properly gives it focus
      */
     public showSearch(): void {
-        this._searchContainer.classList.remove("hide");
+        this._searchContainer.classList.add("show");
         this._inputElement.focus();
     }
 
@@ -158,7 +174,7 @@ export class ActionCommander<T> {
      */
     public hideSearch(): void {
         this.clearInput();
-        this._searchContainer.classList.add("hide")
+        this._searchContainer.classList.remove("show")
     }
 
     private clearInput(): void {

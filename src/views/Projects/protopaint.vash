@@ -4,6 +4,7 @@
 
         <link rel="stylesheet" href="/css/projects/protopaint/protopaint.css"/>
         <link rel="stylesheet" href="/css/resize.css"/>
+        <link rel="stylesheet" href="/css/actionsearch.css"/>
 
         @{
             model.title = "ProtoPaint";
@@ -13,14 +14,112 @@
 
             <canvas id="protopaint" width="700" height="700"></canvas>
 
+            <!-- Mouse Interaction layer-->
+            <div id="interaction-layer"></div>
+
             <!-- Left Panel-->
             <div data-panel="left" data-resize="right">
-       
+                <h5>Key Bindings</h5>
+                <ul>
+                    <li><kbd>Meta+p</kbd> - Action Search</li>
+                    <li><kbd>Control+l</kbd> - Toggle left panel</li>
+                    <li><kbd>Control+r</kbd> - Toggle right panel</li>
+                    <li><kbd>Control+s</kbd> - Show all panels</li>
+                    <li><kbd>Control+h</kbd> - Hide all panels</li>
+                </ul>
+
+                <h5>Canvas</h5>
+                <ul>
+                    <li><kbd>Alt+Scroll</kbd> - Zoom canvas</li>
+                    <li><kbd>Scroll</kbd> - Pan canvas horizontally and vertically</li>
+                </ul>
+
+                <h5>Action Search</h5>
+                <ul>
+                    <li><kbd>Alt+ArrowUp</kbd> - View older executed commands</li>
+                    <li><kbd>Alt+ArrowDown</kbd> - View newer executed commands</li>
+                    <li><kbd>Esc</kbd> - Hide search</li>
+                    <li><kbd>Enter</kbd> - Execute current command</li>
+                </ul>
+
+                <hr/>
+
+                <h5>TODO</h5>
+                <ol>
+                    <li>
+                        <input type="checkbox" checked>
+                        Add zoom zoom to canvas
+                    </li>
+                    <li>
+                        <input type="checkbox" checked>
+                        Add panning to canvas by scroll
+                    </li>
+                     <li>
+                        <input type="checkbox">
+                        Add panning to canvas by mouse click and drag
+                    </li>
+                    <li>
+                        <input type="checkbox">
+                        Add autocomplete to actionsearch
+                    </li>
+                    <li>
+                        <input type="checkbox">
+                        Add menu bar/ make a file menu ui library?? Maybe its an extension to ActionCommander so it has a place to find commands.
+                    </li>
+                    <li>
+                        <input type="checkbox">
+                        Make the footer update its values and add the scalling percentage
+                    </li>
+                    <li>
+                        <input type="checkbox">
+                        Start designing how drawing will work
+                    </li>
+                    <li>
+                        <input type="checkbox">
+                        Start designing how the property panels will be structured/generated.
+                    </li>
+                    <li>
+                        <input type="checkbox">
+                        Create reactive data wrapper class that performs an action on value changes.(Update text value on screen automatically like in footer)
+                    </li>
+                    <li>
+                        <input type="checkbox">
+                        Hide page footer and header and prevent all scrolling.
+                    </li>
+                    <li>
+                        <input type="checkbox">
+                        Full screen mode would be hot.
+                    </li>
+                    <li>
+                        <input type="checkbox">
+                        Add a settings object and make sure it gets stored in local storage.
+                    </li>
+                    <li>
+                        <input type="checkbox">
+                       Fix scroll in this panel type D:
+                    </li>
+                </ol>
             </div>
             
             <!-- Right Panel-->
             <div data-panel="right" data-resize="left">
-            
+                <h4>l  My library notes</h4>
+                <ol>
+                    <li>
+                        <h5>KeyCommander.js</h5>
+                        <p>Small library that makes binding key combinations(not sequences) super easy. Used for all keyboard input in this app and for the time being is mostly complete. In due time I will be making a npm package for this</p>
+                    </li>
+                    <li>
+                        <h5>ActionCommander.js</h5>
+                        <p>A library to make it easy to create cli like commands that can be bound to keybindings or forms be built for them automatically to fill in values. This library is still very incomplete. Missing features include autocomplete, command history visualization, and scripting support. I may also make this a npm package as long as it does not end up depending on this project.</p>
+                    </li>
+                    <li>
+                        <h5>Resize.js</h5>
+                        <p>
+                            Used to allow these panels to be resized simply by adding a data tag and indicating the side to be able to be resized. Will make a npm package after I fix a padding issued on sides with the reszing tab. Functionaly complete.
+                        </p>
+                    </li>
+                </ol>
             </div>
 
             <div data-panel="footer">
@@ -28,9 +127,7 @@
             </div>
 
             <!-- Search -->
-            <div data-search class="hide">
-                <input id="search" type="text" placeholder="Action Search" tabindex="-1"/>
-            </div>
+            <div data-search></div>
 
         </div>
 

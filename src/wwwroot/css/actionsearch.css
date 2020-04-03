@@ -1,0 +1,32 @@
+/** Search style **/
+
+div[data-search] {
+    background-color: var(--panel-background-color);
+    color: var(--panel-color);
+    box-shadow: 0 4px 8px 0 black !important;
+    position: absolute;
+    height: 5vh;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top: 10%;
+    border-radius: 4px;
+    z-index: 100;
+    display: none;
+}
+
+div[data-search]>input {
+    border-radius: inherit;
+    background-color: inherit;
+    color: inherit;
+    border: none;
+    width: 100%;
+    height: inherit;
+    padding: 1%;
+}
+
+div[data-search].show {
+    display: block;
+}

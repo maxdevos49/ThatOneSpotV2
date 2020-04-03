@@ -18,27 +18,35 @@
 div#backdrop {
     height: 92vh;
     width: 100%;
-    padding: 10px;
+    padding: 0;
     background-color: var(--backdrop-background-color);
     position: relative;
+    overflow: hidden;
+}
+
+div#interaction-layer{
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    position: absolute;
 }
 
 div[data-panel] {
     background-color: var(--panel-background-color);
     box-shadow: 0 4px 8px 0 black !important;
     color: var(--panel-color);
+    margin: 10px;
 }
 
 /** Style the left and right panels **/
 
 div[data-panel="left"], div[data-panel="right"] {
-    min-width: 15%;
-    max-width: 40%;
+    min-width: 200px;
+    max-width: 30%;
     min-height: 25%;
     max-height: 100%;
     overflow: scroll;
     padding: 0;
-    margin: 0;
     transition: transform 0.4s;
 }
 
@@ -66,39 +74,7 @@ div[data-panel="footer"] {
     padding: 2px;
 }
 
-/** Search style **/
 
-div[data-search] {
-    background-color: var(--panel-background-color);
-    box-shadow: 0 4px 8px 0 black !important;
-    color: var(--panel-color);
-    position: absolute;
-    height: 5vh;
-    width: 50%;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
-    top: 10%;
-    border-radius: 4px;
-    z-index: 200;
-    /* transition: 0.1s; */
-    opacity: 1;
-}
-
-div[data-search]>input {
-    border-radius: inherit;
-    background-color: inherit;
-    color: inherit;
-    border: none;
-    width: 100%;
-    height: inherit;
-    padding: 1%;
-}
-
-div[data-search].hide {
-    display: none;
-}
 
 /** Canvas styles **/
 
