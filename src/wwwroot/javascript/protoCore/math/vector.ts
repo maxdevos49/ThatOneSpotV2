@@ -15,7 +15,7 @@ export class Vector {
      * @param { number } x The starting x component of the vector
      * @param { number } y The starting y component of the vector
      */
-    constructor(x: number, y: number) {
+    constructor(x: number = 0, y: number = 0) {
         this.x = x;
         this.y = y;
     }
@@ -24,7 +24,7 @@ export class Vector {
      * Adds a given vector into the current instance
      * @param { Vector } vector
      */
-    public add(vector: Vector) : void{
+    public add(vector: Vector): void {
         if (!(vector instanceof Vector)) {
             throw new TypeError("Argument must be of type Vector.");
         }
@@ -37,7 +37,7 @@ export class Vector {
      * Subtracts a given vector from the current instance
      * @param { Vector } vector
      */
-    public sub(vector: Vector) : void{
+    public sub(vector: Vector): void {
         if (!(vector instanceof Vector)) {
             throw new TypeError("Argument must be of type Vector.");
         }
@@ -53,7 +53,7 @@ export class Vector {
      * @throws { TypeError } When an argument is not a vector
      * @returns { Vector } The resultant vector of subtracting two given vectors
      */
-    public static sub(vector1: Vector, vector2: Vector) : Vector {
+    public static sub(vector1: Vector, vector2: Vector): Vector {
         if (!(vector1 instanceof Vector)) {
             throw new TypeError("Argument must be of type Vector.");
         }
@@ -72,7 +72,7 @@ export class Vector {
      * Multiplies a given vector from the current instance
      * @param { number } scalar
      */
-    public mult(scalar: number) : void {
+    public mult(scalar: number): void {
         if (typeof scalar !== "number") {
             throw new TypeError("Argument must be of type number.");
         }
@@ -94,15 +94,15 @@ export class Vector {
      * Gets the current angle of the vector in radians
      * @returns { number } the angle in radians
      */
-    public getRadians() : number {
-        return Math.atan2(this.y , this.x);
+    public getRadians(): number {
+        return Math.atan2(this.y, this.x);
     }
 
     /**
      * Gets the current angle of the vector in degrees
      * @returns { number } angle in degrees.
      */
-    public getDegrees() : number {
+    public getDegrees(): number {
         return this.getRadians() * (180 / Math.PI);
     }
 
@@ -110,7 +110,7 @@ export class Vector {
      * Gets the magnitude of the current vector
      * @returns { number } The magnitude of the current vector
      */
-    public getMagnitude() : number {
+    public getMagnitude(): number {
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
     }
 
@@ -127,9 +127,9 @@ export class Vector {
      * Limits the size of the magnitude of the vector
      * @param { number } givenLimit 
      */
-    public limit(givenLimit: number): void{
+    public limit(givenLimit: number): void {
         let mag = this.getMagnitude();
-        if(mag > givenLimit){
+        if (mag > givenLimit) {
             this.setMagnitude(givenLimit);
         }
     }

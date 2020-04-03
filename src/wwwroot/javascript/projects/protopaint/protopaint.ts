@@ -1,4 +1,5 @@
 import { ActionCommander, ActionCommand } from "../../util/ActionCommander.js"
+import { Vector } from "../../protoCore/math/vector.js";
 
 export class ProtoPaint {
 
@@ -58,6 +59,7 @@ export class ProtoPaint {
 
         if (this._interactionModes.has(canvasModeName)) {
             this._activeInteractionMode = this._interactionModes.get(canvasModeName);
+            this._activeInteractionMode.init(this);
         }
     }
 
@@ -70,7 +72,7 @@ export class ProtoPaint {
 
         //On Mouse Down
         this._interactionLayer.addEventListener("mousedown", (e) => {
-            this._activeInteractionMode.onMouseClick(this, e);
+            this._activeInteractionMode.onMouseDown(this, e);
         }, false);
 
         //On Mouse Up
@@ -123,6 +125,8 @@ export abstract class InteractionMode {
         this.description = description;
     }
 
+    public abstract init(dependency: ProtoPaint): void;
+
     public onMouseClick(dependency: ProtoPaint, e: MouseEvent): void { }
     public onMouseDblClick(dependency: ProtoPaint, e: MouseEvent): void { }
     public onMouseDown(dependency: ProtoPaint, e: MouseEvent): void { }
@@ -138,15 +142,7 @@ export abstract class InteractionMode {
 
         if (e.altKey) {
 
-            let newScale = (c.scale + e.deltaY * -0.01);
-            let scalechange = newScale - c.scale;
-            let zoomPointX = (e.offsetX - c.x) / c.scale;
-            let zoomPointY = (e.offsetY - c.y) / c.scale;
-
-            if (newScale < c.maximumScale && newScale > c.minimumScale) {
-                c.setScale(newScale);
-                c.pan(-(zoomPointX * scalechange), -(zoomPointY * scalechange));
-            }
+            c.scaleCanvasToPoint(e.deltaY * -0.01, new Vector(e.offsetX, e.offsetY));
 
         } else {
             c.pan(e.deltaX * -0.2, e.deltaY * -0.2);
@@ -159,6 +155,7 @@ export class CanvasInfo {
 
     public readonly maximumScale: number = 4;
     public readonly minimumScale: number = 0.25;
+    public readonly dblClickScale: number = 0.5;
 
     public readonly canvas: HTMLCanvasElement;
     public readonly ctx: CanvasRenderingContext2D;
@@ -227,6 +224,18 @@ export class CanvasInfo {
         this._originX = originX;
         this._originY = originY;
         this.applyTransformations();
+    }
+
+    public scaleCanvasToPoint(scaleChange: number, mouse: Vector) {
+        let newScale = scaleChange + this.scale;
+
+        let zoomPointX = (mouse.x - this.x) / this.scale;
+        let zoomPointY = (mouse.y - this.y) / this.scale;
+
+        if (newScale < this.maximumScale && newScale > this.minimumScale) {
+            this.setScale(newScale);
+            this.pan(-(zoomPointX * scaleChange), -(zoomPointY * scaleChange));
+        }
     }
 
     private validateOffset(): void {

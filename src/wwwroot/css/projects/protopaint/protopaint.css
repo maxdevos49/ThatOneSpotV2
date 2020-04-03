@@ -7,24 +7,46 @@
     /* Menu Styles */
 }
 
-/** Make header match the theme better **/
+body, #page-body {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+}
 
-#header {
-    background-color: black !important;
+footer, #header, #background-image, #theme-slant {
+    display: none;
+}
+
+/** Container **/
+
+div#protoContainer {
+    background-color: var(--backdrop-background-color);
+    color: var(--panel-color);
+    height: 100vh;
+    overflow: hidden;
+}
+
+div#protoHeader {
+    height: 4%;
+    background-color: var(--panel-background-color);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 /** Backdrop **/
 
-div#backdrop {
-    height: 92vh;
+div#protoBackdrop {
+    height: 96%;
     width: 100%;
     padding: 0;
-    background-color: var(--backdrop-background-color);
     position: relative;
     overflow: hidden;
 }
 
-div#interaction-layer{
+div#interaction-layer {
     height: 100%;
     width: 100%;
     background-color: transparent;
@@ -36,16 +58,16 @@ div[data-panel] {
     box-shadow: 0 4px 8px 0 black !important;
     color: var(--panel-color);
     margin: 10px;
+    position: relative;
 }
 
 /** Style the left and right panels **/
 
 div[data-panel="left"], div[data-panel="right"] {
     min-width: 200px;
+    width: 25%;
     max-width: 30%;
-    min-height: 25%;
-    max-height: 100%;
-    overflow: scroll;
+    height: 90%;
     padding: 0;
     transition: transform 0.4s;
 }
@@ -74,11 +96,9 @@ div[data-panel="footer"] {
     padding: 2px;
 }
 
-
-
 /** Canvas styles **/
 
-canvas {
+#protoCanvas {
     background-image: linear-gradient(45deg, #808080 25%, transparent 25%), linear-gradient(-45deg, #808080 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #808080 75%), linear-gradient(-45deg, transparent 75%, #808080 75%);
     background-size: 20px 20px;
     background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
@@ -88,5 +108,19 @@ canvas {
     right: 0;
     top: 0;
     bottom: 0;
-    cursor: crosshair;
+}
+
+kbd {
+    background-color: rgb(170, 170, 170);
+}
+
+/*
+Temp fix I think
+*/
+
+.scrolly {
+    position: absolute;
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
 }

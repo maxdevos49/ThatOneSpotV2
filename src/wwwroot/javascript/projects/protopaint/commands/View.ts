@@ -15,7 +15,8 @@ export class View extends ActionCommand<ProtoPaint>{
             ),
             subcommands: new Map<string, ActionCommand<ProtoPaint>>(
                 Object.entries({
-                    "toggle": new Toggle()
+                    "toggle": new Toggle(),
+                    "fullscreen": new Fullscreen()
                 }))
         });
     }
@@ -31,7 +32,44 @@ export class View extends ActionCommand<ProtoPaint>{
             dependency.showPanel("left");
             dependency.showPanel("right");
         }
+
+
+
         return true;
+    }
+}
+
+export class Fullscreen extends ActionCommand<ProtoPaint>{
+    public constructor() {
+        super({
+            summary: "Toggles Full Screen",
+            description: "Toggles Full Screen",
+            keyBinding: new Map<string, string>(
+                Object.entries({
+                    "f": "view fullscreen",
+                })
+            ),
+            subcommands: new Map<string, ActionCommand<ProtoPaint>>(
+                Object.entries({}))
+
+        });
+    }
+
+    public action(dependency: ProtoPaint, options: ActionOptions<ProtoPaint>): boolean {
+        let doc = window.document as any;
+        let docEl = doc.documentElement as any;
+
+        let requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+        let cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+        if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+            requestFullScreen.call(docEl);
+        }
+        else {
+            cancelFullScreen.call(doc);
+        }
+
+        return true
     }
 }
 

@@ -16,7 +16,7 @@
         <div id="body-wrapper" style="overflow-x:hidden; height: 100vh; width: 100vw;">
 
             @*Texture backgroun*@
-            <div style="position:relative; z-index: 2">
+            <div style="position:relative; z-index: 2" id="background-image">
                 <picture>
                     <source srcset="/images/background.png" media="(min-width: 800px)"/>
                     <img class="theme-shadow" src="/images/background-mobile.png" alt="example"/>
@@ -39,11 +39,11 @@
             <div class="bg-theme-secondary">
 
                 @*Theme slant*@
-                <div style="position: relative; z-index: 1;">
+                <div id="theme-slant" style="position: relative; z-index: 1;">
                     <div class="slanted slanted-left" style="--slant-color: var(--theme-primary);"></div>
                 </div>
 
-                <div style="margin-top: -150px; position: relative; z-index: 3;">
+                <div id="page-body" style="margin-top: -150px; position: relative; z-index: 3;">
                     @html.block('content')
                 </div>
 

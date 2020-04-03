@@ -5,7 +5,7 @@ import { ActionCommand } from "../../util/ActionCommander.js";
 
 
 let pp = new ProtoPaint({
-    canvas: document.getElementById("protopaint") as HTMLCanvasElement,
+    canvas: document.getElementById("protoCanvas") as HTMLCanvasElement,
     interactionLayer: document.getElementById("interaction-layer") as HTMLDivElement,
     interactionModes: new Map<string, InteractionMode>(
         Object.entries({
