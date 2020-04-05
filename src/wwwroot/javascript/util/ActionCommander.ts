@@ -12,12 +12,16 @@ export class ActionCommander<T> {
 
     private _inputElement: HTMLInputElement;
 
-    private _commandSuggestions: HTMLUListElement;
+    private _autocompleteElement: HTMLDListElement;
 
     private _keyBindings: Map<string, string>;
 
     private _commands: Map<string, ActionCommand<T>>;
-    private _actionHistory: ActionHistory;
+    private _history: ActionHistory;
+
+    private _autocomplete: Autocomplete;
+
+    private _autocompleteMode: AutocompleteMode;
 
     public constructor(dependency: T, searchContainer: HTMLElement, commands: Map<string, ActionCommand<T>>) {
 
@@ -25,7 +29,8 @@ export class ActionCommander<T> {
         this._searchContainer = searchContainer;
         this._commands = commands;
         this._keyBindings = new Map<string, string>();
-        this._actionHistory = new ActionHistory();
+        this._history = new ActionHistory();
+        this._autocompleteMode = AutocompleteMode.Command;
 
         //create input
         this._inputElement = document.createElement("INPUT") as HTMLInputElement;
@@ -36,10 +41,11 @@ export class ActionCommander<T> {
         searchContainer.appendChild(this._inputElement);
 
         //create suggestions
-        this._commandSuggestions = document.createElement("UL") as HTMLUListElement;
-        this._commandSuggestions.setAttribute("id", "ActionSuggestions");
-        searchContainer.appendChild(this._commandSuggestions);
+        this._autocompleteElement = document.createElement("DL") as HTMLDListElement;
+        this._autocompleteElement.setAttribute("class", "autocomplete");
+        searchContainer.appendChild(this._autocompleteElement);
 
+        this._autocomplete = new Autocomplete(this._inputElement, this._autocompleteElement)
 
         this._commands.forEach(c => {
             this.mapKeyBindings(c);
@@ -48,6 +54,18 @@ export class ActionCommander<T> {
         this.registerKeyBindings();
 
         this.init();
+    }
+
+    private autocompleteMode(mode: AutocompleteMode) {
+        this._autocompleteMode = mode;
+
+        this._autocomplete.clear();
+
+        if (mode === AutocompleteMode.Command) {
+            //TODO
+        } else if (mode === AutocompleteMode.History) {
+            this._autocomplete.generateHTML("History", this._history.getHistoryData());
+        }
     }
 
     private mapKeyBindings(commands: ActionCommand<T>): void {
@@ -173,8 +191,10 @@ export class ActionCommander<T> {
      * Hides and clears the search
      */
     public hideSearch(): void {
+        this._searchContainer.classList.remove("show");
         this.clearInput();
-        this._searchContainer.classList.remove("show")
+        this.autocompleteMode(AutocompleteMode.Command)
+        this._autocomplete.clear();
     }
 
     private clearInput(): void {
@@ -185,23 +205,43 @@ export class ActionCommander<T> {
     private init(): void {
 
         this._inputElement.addEventListener("keydown", (e) => {
+
+            if (e.altKey || e.metaKey || e.ctrlKey) {
+                e.preventDefault();//prevent all special actions like printing :D
+            }
+
             if (e.key === "Enter") {
 
-                this._actionHistory.add(this._inputElement);
+                if (this._autocomplete.isSelecting()) {
+                    this._autocomplete.selectIndex();
+                }
 
-                //only clear and hide if valid command
+                this._history.add(this._inputElement);
+
                 if (this.parseAndExecute(this._inputElement.value)) {
                     this.hideSearch();
                 }
 
-            } else if (e.key === "Escape") {
-                this.hideSearch();
-            } else if (e.altKey && e.key === "ArrowDown") {
-                this._actionHistory.view(this._inputElement, -1);
-            } else if (e.altKey && e.key === "ArrowUp") {
-                this._actionHistory.view(this._inputElement, 1);
-            }
+            } else if (e.key == "Tab") {
 
+                if (this._autocomplete.isSelecting()) {
+                    this._autocomplete.selectIndex();
+                }
+
+            } else if (e.key === "Escape" || (e.key === "p" && e.metaKey)) {
+                this.hideSearch();
+            } else if (e.key === "Alt") {
+                //toggle command mode
+                if (this._autocompleteMode === AutocompleteMode.Command) {
+                    this.autocompleteMode(AutocompleteMode.History)
+                } else {
+                    this.autocompleteMode(AutocompleteMode.Command)
+                }
+            } else if (e.key === "ArrowUp") {
+                this._autocomplete.moveSelection(-1)
+            } else if (e.key === "ArrowDown") {
+                this._autocomplete.moveSelection(1);
+            }
 
         }, false);
 
@@ -212,6 +252,9 @@ export class ActionCommander<T> {
     }
 
 }
+
+
+
 export abstract class ActionCommand<T> {
 
     /**
@@ -280,6 +323,152 @@ export class ActionOptions<T>{
 
 }
 
+export class ActionHistory {
+
+    private _history: Array<string>;
+
+    constructor() {
+        this._history = JSON.parse(localStorage.getItem("actionCommandHistory")) ?? new Array<string>();
+    }
+
+    public getHistoryData(): AutocompleteData[] {
+        return this._history.map((value) => {
+            return {
+                header: value
+            }
+        })
+    }
+
+    public add(input: HTMLInputElement): void {
+        if (input.value.length > 0) {
+            this._history.unshift(input.value);
+
+            localStorage.setItem("actionCommandHistory", JSON.stringify(this._history.slice(0, this._history.length < 50 ? this._history.length : 50)));
+        }
+    }
+
+}
+
+export class Autocomplete {
+
+    private _selectionIndex?: number;
+
+    private _selectionsCount: number;
+
+    private _initialValue?: string;
+
+    private _autoCompleteElement: HTMLDListElement;
+
+    private _inputElement: HTMLInputElement;
+
+    constructor(input: HTMLInputElement, autocomplete: HTMLDListElement) {
+        this._inputElement = input;
+        this._autoCompleteElement = autocomplete;
+
+        this._selectionIndex = null;
+        this._initialValue = null;
+
+        this.init();
+    }
+
+    public generateHTML(title: string, data: AutocompleteData[]): void {
+
+        let html: string = `<dt class="title">${title}</dt>`;
+
+        html += data.map((value: AutocompleteData, index: number) => {
+
+            let section = "";
+
+            if (value.subHeader) {
+                section += `<dt>${value.header}</dt>`
+            }
+
+            section += `<dd>${value.subHeader ?? value.header}</dd>`
+
+
+            return `<section data-index="${index}" data-value="${value.header}">${section}</section>`;
+        }).join("");
+
+        this._selectionsCount = data.length;
+        this._autoCompleteElement.innerHTML = html;
+        this._selectionIndex = null;
+
+    }
+
+    public selectIndex(index?: number): void {
+        index = index ?? this._selectionIndex;
+
+        if (index == null)
+            return;
+
+        let section = this._autoCompleteElement.querySelector(`section[data-index="${index}"]`) as HTMLElement;
+        this._inputElement.value = section?.dataset.value ?? "";
+
+        this._selectionIndex = null;
+    }
+
+    public moveSelection(amount: number): void {
+
+        //remove previous selection
+        this._autoCompleteElement.querySelector(`section[data-index="${this._selectionIndex}"]`)?.classList.remove("active");
+
+        //apply increment amount
+        if (this._selectionIndex == null && amount > 0) {
+            this._selectionIndex = 0;
+            this._initialValue = this._inputElement.value;
+        } else {
+            this._selectionIndex += amount;//null + -1 = -1
+        }
+
+        //check index bounds
+        if (this._selectionIndex < 0) {
+            this._selectionIndex = null;
+            return;
+        } else if (this._selectionIndex >= this._selectionsCount) {
+            this._selectionIndex -= 1;
+        }
+
+        let newSelection = this._autoCompleteElement.querySelector(`section[data-index="${this._selectionIndex}"]`) as any;
+        newSelection?.scrollIntoViewIfNeeded?.()// || newSelection?.scrollIntoView?.();
+        newSelection?.classList.add("active");
+    }
+
+    public isSelecting(): boolean {
+        return this._selectionIndex !== null;
+    }
+
+    public clear(): void {
+        this._autoCompleteElement.innerHTML = "";
+        this._selectionIndex = null;
+        this._selectionsCount = 0;
+    }
+
+    private init(): void {
+
+        this._autoCompleteElement.addEventListener("mousedown", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("test")
+            let target = e.target as HTMLElement;
+
+            let section = target.closest("section[data-index]") as HTMLElement;
+
+            if (section) {
+
+                let index = parseInt(section.dataset.index);
+                this.selectIndex(index);
+            }
+
+        }, false);
+    }
+}
+
+export interface AutocompleteData {
+    header: string;
+
+    subHeader?: string;
+}
+
 export interface ActionConfiguration<T> {
     summary: string;
     description: string;
@@ -288,55 +477,7 @@ export interface ActionConfiguration<T> {
     flags?: Map<string, Function>;
 }
 
-class ActionHistory {
-    private _initialCommand?: string;
-    private _currentIndex?: number;
-
-    private _history: Array<string>;
-
-    constructor() {
-        this._initialCommand = null;
-        this._currentIndex = null;
-        this._history = JSON.parse(localStorage.getItem("actionCommandHistory")) ?? new Array<string>();
-    }
-
-    public add(input: HTMLInputElement): void {
-        if (input.value.length > 0) {
-            this.reset();
-            this._history.unshift(input.value);
-
-            localStorage.setItem("actionCommandHistory", JSON.stringify(this._history.slice(0, this._history.length < 100 ? this._history.length : 100)));
-        }
-    }
-
-    public view(input: HTMLInputElement, offset: number): void {
-
-        if (this._history.length == 0) {
-            return;
-        }
-
-        if (this._initialCommand === null) {
-            this._initialCommand = input.value;
-        }
-
-        let index = this._currentIndex == null ? 0 : this._currentIndex + offset;
-
-        if (index < 0) {
-            input.value = this._initialCommand;
-            this.reset();
-            return;
-        } else if (index > this._history.length - 1) {
-            index = this._history.length - 1;
-        }
-
-        this._currentIndex = index;
-        input.value = this._history[this._currentIndex];
-    }
-
-    public reset(): void {
-        this._initialCommand = null;
-        this._currentIndex = null;
-    }
-
-
+export enum AutocompleteMode {
+    History,
+    Command
 }

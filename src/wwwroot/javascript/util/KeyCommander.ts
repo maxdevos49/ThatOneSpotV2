@@ -107,6 +107,8 @@ export class KeyCommander {
             if (this._stopCallbackFunc(e, e.target as HTMLElement))
                 return;
 
+            e.preventDefault();
+
             if (!this._activeKeys.includes(key))
                 this._activeKeys.push(key);
 
@@ -121,7 +123,7 @@ export class KeyCommander {
 
             let key = e.key;
 
-            if(key === "Meta"){//This is a hack because on macos the meta key is special and a pain in the ass
+            if (key === "Meta") {//This is a hack because on macos the meta key is special and a pain in the ass
                 this._activeKeys = [];
                 return;
             }

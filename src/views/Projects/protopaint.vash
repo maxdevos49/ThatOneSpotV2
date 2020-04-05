@@ -47,7 +47,6 @@
                             <li><kbd>Control+h</kbd> - Hide all panels</li>
                             <li><kbd>f</kbd> - Toggles fullscreen</li>
                         </ul>
-
                         <h5>Canvas</h5>
                         <ul>
                             <li>
@@ -65,8 +64,9 @@
 
                         <h5>Action Search</h5>
                         <ul>
-                            <li><kbd>Alt+ArrowUp</kbd> - View older executed commands</li>
-                            <li><kbd>Alt+ArrowDown</kbd> - View newer executed commands</li>
+                            <li><kbd>Alt</kbd> - Toggle history or command mode</li>
+                            <li><kbd>ArrowUp</kbd> - View older executed commands</li>
+                            <li><kbd>ArrowDown</kbd> - View newer executed commands</li>
                             <li><kbd>Esc</kbd> - Hide search</li>
                             <li><kbd>Enter</kbd> - Execute current command</li>
                         </ul>
@@ -113,7 +113,7 @@
                                 Add double click to zoom
                             </li>
                             <li>
-                                <input type="checkbox">
+                                <input type="checkbox" checked>
                                 Add autocomplete to actionsearch
                             </li>
                             <li>
@@ -134,7 +134,7 @@
                             </li>
                             <li>
                                 <input type="checkbox">
-                                Create reactive data wrapper class that performs an action on value changes.(Update text value on screen automatically like in footer)
+                                Create reactive data wrapper class thing. (Slide slider updates value or changing value updates slider) Basically what react does for you D;
                             </li>
                             <li>
                                 <input type="checkbox" checked>
@@ -147,6 +147,10 @@
                             <li>
                                 <input type="checkbox">
                                 Add a settings object and make sure it gets stored in local storage.
+                            </li>
+                            <li>
+                                <input type="checkbox">
+                                Make interaction layer less interactive when the command search is up
                             </li>
                             <li>
                                 <input type="checkbox" checked>

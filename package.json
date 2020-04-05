@@ -14,13 +14,14 @@
         "@types/node": "^11.10.4",
         "@types/nodemailer": "^6.2.0",
         "@types/uuid": "^3.4.4",
+        "concurrently": "^5.1.0",
         "nodemon": "^2.0.2"
     },
     "dependencies": {
+        "@okta/oidc-middleware": "^2.0.0",
         "aws-sdk": "^2.643.0",
         "dotenv": "^6.2.0",
         "esm": "^3.2.9",
-        "@okta/oidc-middleware": "^2.0.0",
         "express": "^4.16.4",
         "express-fileupload": "^1.1.6",
         "express-session": "^1.15.6",
@@ -36,7 +37,7 @@
         "setup": "./scripts/dotenv.sh -f && npm i",
         "build": "tsc",
         "start": "node -r esm -r source-map-support/register -r dotenv/config --unhandled-rejections=strict src/server.js",
-        "dev": "nodemon"
+        "dev": "tsc && concurrently \"tsc -w\" \"nodemon\""
     },
     "repository": {
         "type": "git"
@@ -45,8 +46,8 @@
         "watch": [
             "src"
         ],
-        "exec": "npm run build && npm run start",
-        "ext": "ts"
+        "exec": "npm start",
+        "ext": "js"
     },
     "author": "Maxwell DeVos",
     "license": "ISC"
