@@ -125,6 +125,10 @@
                                 Make the footer update its values and add the scalling percentage
                             </li>
                             <li>
+                                <input type="checkbox" checked>
+                                Display error for unknown command with no suggestions
+                            </li>
+                            <li>
                                 <input type="checkbox">
                                 Start designing how drawing will work
                             </li>
@@ -149,7 +153,7 @@
                                 Add a settings object and make sure it gets stored in local storage.
                             </li>
                             <li>
-                                <input type="checkbox">
+                                <input type="checkbox" checked>
                                 Make interaction layer less interactive when the command search is up
                             </li>
                             <li>

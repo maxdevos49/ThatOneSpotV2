@@ -14,6 +14,8 @@ export class ActionCommander<T> {
 
     private _autocompleteElement: HTMLDListElement;
 
+    private _errorElement: HTMLSpanElement;
+
     private _keyBindings: Map<string, string>;
 
     private _commands: Map<string, ActionCommand<T>>;
@@ -21,7 +23,6 @@ export class ActionCommander<T> {
 
     private _autocomplete: Autocomplete;
 
-    private _autocompleteMode: AutocompleteMode;
 
     public constructor(dependency: T, searchContainer: HTMLElement, commands: Map<string, ActionCommand<T>>) {
 
@@ -30,7 +31,6 @@ export class ActionCommander<T> {
         this._commands = commands;
         this._keyBindings = new Map<string, string>();
         this._history = new ActionHistory();
-        this._autocompleteMode = AutocompleteMode.Command;
 
         //create input
         this._inputElement = document.createElement("INPUT") as HTMLInputElement;
@@ -39,6 +39,11 @@ export class ActionCommander<T> {
         this._inputElement.setAttribute("placeholder", "ActionSearch");
         this._inputElement.setAttribute("tabindex", "-1");
         searchContainer.appendChild(this._inputElement);
+
+        //create error
+        this._errorElement = document.createElement("SPAN") as HTMLSpanElement;
+        this._errorElement.setAttribute("id", "ActionError");
+        searchContainer.appendChild(this._errorElement);
 
         //create suggestions
         this._autocompleteElement = document.createElement("DL") as HTMLDListElement;
@@ -57,12 +62,12 @@ export class ActionCommander<T> {
     }
 
     private autocompleteMode(mode: AutocompleteMode) {
-        this._autocompleteMode = mode;
+        this._autocomplete.mode = mode;
 
         this._autocomplete.clear();
 
         if (mode === AutocompleteMode.Command) {
-            //TODO
+            this.triggerAutocomplete();
         } else if (mode === AutocompleteMode.History) {
             this._autocomplete.generateHTML("History", this._history.getHistoryData());
         }
@@ -95,13 +100,55 @@ export class ActionCommander<T> {
 
         let result: ActionOptions<T> = new ActionOptions<T>();
 
+        // result.command = null;
+        // result.commandString = command = command.trim();
+
+        // let char: string = '';
+        // let startIndex: number = 0;
+        // let endIndex: number = 0;
+
+        // let insideQuotes: boolean = false;
+        // let valueMode: boolean = false;
+
+        // // view toggle -r "rawr"
+        // while (endIndex < command.length) {
+
+        //     char = command[endIndex];
+
+        //     if (char === " " && !insideQuotes) {
+
+
+
+        //         result.searchKey = ""
+
+
+        //     } else if (char === '"') {
+        //         if (!insideQuotes) {
+        //             insideQuotes = true;
+        //         } else {
+        //             insideQuotes = false;
+        //             //TODO quotes
+        //         }
+        //     } else {
+        //         result.searchKey += char;
+        //     }
+
+        //     endIndex++;
+        // }
+
+        // if (insideQuotes) {
+        //     //TODO error no closing quote
+        // }
+
+        // return result;
+
         //split command by spaces
         let splitCommand = command.match(/(?:[^\s"]+|"[^"]*")+/gi);
         //removes any escaped quotes
         splitCommand.forEach(x => x.replace("\\\"", ""));
 
         //selects the first section of the command.(Primary command)
-        let commandKey = splitCommand.shift();
+        let commandKey = result.searchKey = splitCommand.shift();
 
         if (!this._commands.has(commandKey)) {
             result.error += "Command does not exist or is invalid";
@@ -115,10 +162,10 @@ export class ActionCommander<T> {
         //Search the commands tree and parse out values and flags to the command
         while (splitCommand.length > 0) {
 
-            commandKey = splitCommand.shift();
+            commandKey = result.searchKey = splitCommand.shift();
 
             if (flagMode && commandKey[0] !== "-") {
-                result.error = "Subcommands can not be declared after flags;";
+                result.error = "Subcommands can not be declared after flags";
                 break;
             }
 
@@ -127,7 +174,7 @@ export class ActionCommander<T> {
                 if (commandKey.length < 2
                     || (commandKey.length === 2 && commandKey[1] === "-")
                     || (commandKey.length > 2 && commandKey[2] === "-")) {//Probabaly overkill or not enough here
-                    result.error = "Invalid flag. Flag must be in form as '-<single letter>' or '--<word>';";
+                    result.error = "Invalid flag. Flag must be in form as '-<single letter>' or '--<word>'";
                 }
 
                 //No more sub commands
@@ -148,7 +195,7 @@ export class ActionCommander<T> {
                 if (result.command.subcommands && result.command.subcommands.has(commandKey)) {
                     result.command = result.command.subcommands.get(commandKey);
                 } else {
-                    result.error = "Subcommand does not exist or is invalid;";
+                    result.error = "Subcommand does not exist or is invalid";
                     break;
                 }
             }
@@ -164,7 +211,14 @@ export class ActionCommander<T> {
     public execute(commandOptions: ActionOptions<T>): boolean {
 
         if (commandOptions.isValid) {
-            return commandOptions.command.action(this._dependency, commandOptions)
+            let value = commandOptions.command.action(this._dependency, commandOptions);
+
+            if (!value) {
+                this._errorElement.innerHTML = `Command requires flag. Ex: '-r | --right' or '-v <myvalue> | --value <myvalue>';`
+                this._errorElement.classList.add("show");
+            }
+
+            return value;
         }
         else {
             return false;
@@ -183,6 +237,7 @@ export class ActionCommander<T> {
      * Shows the search and properly gives it focus
      */
     public showSearch(): void {
+        this.triggerAutocomplete();
         this._searchContainer.classList.add("show");
         this._inputElement.focus();
     }
@@ -192,8 +247,8 @@ export class ActionCommander<T> {
      */
     public hideSearch(): void {
         this._searchContainer.classList.remove("show");
+        // this.autocompleteMode(AutocompleteMode.Command)
         this.clearInput();
-        this.autocompleteMode(AutocompleteMode.Command)
         this._autocomplete.clear();
     }
 
@@ -202,16 +257,62 @@ export class ActionCommander<T> {
         this._inputElement.blur();
     }
 
+    private triggerAutocomplete() {
+        if (this._autocomplete.mode === AutocompleteMode.History)
+            return;
+
+        if (this._inputElement.value.length === 0) {
+
+            this._errorElement.innerHTML = "";
+            this._errorElement.classList.remove("show");
+
+
+            this._autocomplete.generateHTML(null, [...this._commands]?.map((value) => {
+                return {
+                    header: value[0],
+                    subHeader: value[1].summary
+                }
+            }));
+
+            return;
+        }
+
+        this._errorElement.innerHTML = "";
+        this._errorElement.classList.remove("show");
+
+        let parsedcommand = this.parse(this._inputElement.value);
+
+        let commandMap = (!parsedcommand.command)
+            ? this._commands
+            : parsedcommand.command.subcommands;
+
+        let data = [...commandMap]?.map((value) => {
+            return {
+                header: value[0],
+                subHeader: value[1].summary
+            }
+        });
+
+        if (parsedcommand.searchKey.length > 0 && !parsedcommand.isValid)
+            data = data.filter(value => value.header.startsWith(parsedcommand.searchKey));
+
+        if (!data.length) {
+            this._errorElement.innerHTML = parsedcommand.error;
+            this._errorElement.classList.add("show");
+        }
+
+        this._autocomplete.generateHTML(null, data);
+    }
+
     private init(): void {
 
         this._inputElement.addEventListener("keydown", (e) => {
 
-            if (e.altKey || e.metaKey || e.ctrlKey) {
+            if (e.altKey || e.metaKey || e.ctrlKey || e.key === "Tab") {
                 e.preventDefault();//prevent all special actions like printing :D
             }
 
             if (e.key === "Enter") {
-
                 if (this._autocomplete.isSelecting()) {
                     this._autocomplete.selectIndex();
                 }
@@ -221,18 +322,17 @@ export class ActionCommander<T> {
                 if (this.parseAndExecute(this._inputElement.value)) {
                     this.hideSearch();
                 }
-
             } else if (e.key == "Tab") {
-
                 if (this._autocomplete.isSelecting()) {
                     this._autocomplete.selectIndex();
-                }
 
+                    this.autocompleteMode(AutocompleteMode.Command)
+                }
             } else if (e.key === "Escape" || (e.key === "p" && e.metaKey)) {
                 this.hideSearch();
             } else if (e.key === "Alt") {
                 //toggle command mode
-                if (this._autocompleteMode === AutocompleteMode.Command) {
+                if (this._autocomplete.mode === AutocompleteMode.Command) {
                     this.autocompleteMode(AutocompleteMode.History)
                 } else {
                     this.autocompleteMode(AutocompleteMode.Command)
@@ -245,15 +345,16 @@ export class ActionCommander<T> {
 
         }, false);
 
+        this._inputElement.addEventListener("input", (e) => {
+            this.triggerAutocomplete();
+        }, false)
+
         this._inputElement.addEventListener("focusout", (e) => {
             this.hideSearch();
         }, false);
 
     }
-
 }
-
-
 
 export abstract class ActionCommand<T> {
 
@@ -300,23 +401,20 @@ export abstract class ActionCommand<T> {
 
 export class ActionOptions<T>{
 
-    public command?: ActionCommand<T>
-
+    public commandString: string;
+    public command?: ActionCommand<T>;
+    public searchKey?: string;
     public values: Map<string, string> = new Map<string, string>();
-
     private _valid: boolean = true;
-
     private _error: string = "";
 
     public set error(value: string) {
         this._error += value + ";";
         this._valid = false;
     }
-
     public get error(): string {
         return this._error;
     }
-
     public get isValid(): boolean {
         return this._valid;
     }
@@ -355,9 +453,9 @@ export class Autocomplete {
 
     private _selectionsCount: number;
 
-    private _initialValue?: string;
-
     private _autoCompleteElement: HTMLDListElement;
+
+    public mode: AutocompleteMode;
 
     private _inputElement: HTMLInputElement;
 
@@ -366,14 +464,17 @@ export class Autocomplete {
         this._autoCompleteElement = autocomplete;
 
         this._selectionIndex = null;
-        this._initialValue = null;
+        this.mode = AutocompleteMode.Command;
 
         this.init();
     }
 
     public generateHTML(title: string, data: AutocompleteData[]): void {
 
-        let html: string = `<dt class="title">${title}</dt>`;
+        let html: string = "";
+
+        if (title)
+            html += `<dt class="title">${title}</dt>`;
 
         html += data.map((value: AutocompleteData, index: number) => {
 
@@ -402,7 +503,40 @@ export class Autocomplete {
             return;
 
         let section = this._autoCompleteElement.querySelector(`section[data-index="${index}"]`) as HTMLElement;
-        this._inputElement.value = section?.dataset.value ?? "";
+
+        let newValue = section?.dataset.value ?? "";
+
+        if (this.mode === AutocompleteMode.History) {
+            this._inputElement.value = newValue;
+        } else {
+
+            let value = this._inputElement.value
+
+            if (value.length === 0) {
+                this._inputElement.value += newValue;
+                return;
+            }
+
+            let lastPart = value.split(" ").pop();
+
+            if (newValue.startsWith(lastPart)) {
+
+                let index = value.length - lastPart.length;
+                value = value.substr(0, index);
+
+                value += newValue;
+
+                this._inputElement.value = value;
+
+            } else {
+
+                if (value[value.length - 1] !== " ") {
+                    this._inputElement.value += " " + newValue
+                } else if (value[value.length - 1] === " ") {
+                    this._inputElement.value += newValue
+                }
+            }
+        }
 
         this._selectionIndex = null;
     }
@@ -415,7 +549,6 @@ export class Autocomplete {
         //apply increment amount
         if (this._selectionIndex == null && amount > 0) {
             this._selectionIndex = 0;
-            this._initialValue = this._inputElement.value;
         } else {
             this._selectionIndex += amount;//null + -1 = -1
         }
@@ -429,7 +562,7 @@ export class Autocomplete {
         }
 
         let newSelection = this._autoCompleteElement.querySelector(`section[data-index="${this._selectionIndex}"]`) as any;
-        newSelection?.scrollIntoViewIfNeeded?.()// || newSelection?.scrollIntoView?.();
+        newSelection?.scrollIntoViewIfNeeded?.()
         newSelection?.classList.add("active");
     }
 
@@ -448,7 +581,6 @@ export class Autocomplete {
         this._autoCompleteElement.addEventListener("mousedown", (e) => {
             e.preventDefault();
             e.stopPropagation();
-            console.log("test")
             let target = e.target as HTMLElement;
 
             let section = target.closest("section[data-index]") as HTMLElement;
