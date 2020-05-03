@@ -1,9 +1,16 @@
 import { ProtoPaint, InteractionMode } from "./protopaint.js";
 import { PanMode } from "./modes/PanMode.js";
-import { View } from "./commands/View.js";
-import { ActionCommand } from "../../util/ActionCommander.js";
-import { Canvas } from "./commands/Canvas.js";
+import { View } from "./actions/View.js";
+import { ActionController } from "../../util/ActionCommander/ActionController.js";
 
+class protoAction extends ActionController<ProtoPaint>{
+
+    constructor() {
+        super("required","required","required");
+
+        this.registerSubAction(View);
+    }
+}
 
 let pp = new ProtoPaint({
     canvas: document.getElementById("protoCanvas") as HTMLCanvasElement,
@@ -18,8 +25,7 @@ let pp = new ProtoPaint({
         ["footer", document.querySelector('div[data-panel="footer"]')]
     ]),
     searchPanel: document.querySelector("div[data-search]"),
-    actionCommands: new Map<string, ActionCommand<ProtoPaint>>([
-        ["view", new View()],
-        ["canvas", new Canvas()]
-    ]),
+    actionCommands: new protoAction()
 });
+
+

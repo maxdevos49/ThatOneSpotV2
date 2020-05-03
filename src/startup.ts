@@ -65,12 +65,13 @@ export function setup(server: http.Server) {
             loginCallback: {
                 handler: loginProcess
             },
-        },
-
+        }
     });
 
     // ExpressOIDC will attach handlers for the /login and /authorization-code/callback routes
-    router.use(oidc.router);
+    if(config.server.environment !== "noOkta")
+        router.use(oidc.router);
+        
     router.use(authentication);
 
     //web page controllers

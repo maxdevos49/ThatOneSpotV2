@@ -14,10 +14,10 @@ export class KeyCommander {
 
         this._stopCallbackFunc = (e: KeyboardEvent, element: HTMLElement) => {
 
-            return element.tagName == 'INPUT'
-                || element.tagName == 'SELECT'
-                || element.tagName == 'TEXTAREA'
-                || (element.contentEditable && element.contentEditable == 'true');
+            return element.tagName === "INPUT"
+                || element.tagName === "SELECT"
+                || element.tagName === "TEXTAREA"
+                || (element.contentEditable === "true");
         };
 
         this.init();
@@ -78,10 +78,8 @@ export class KeyCommander {
 
         let combo = this.formatCombination(combination);
 
-        // console.log("Triggering: " + combo)
-
         if (this._instance._keyBindings.has(combo)) {
-            if (!this._instance._keyBindings.get(combo)(e, combo)) {
+            if (!this._instance._keyBindings?.get(combo)(e, combo)) {
                 e?.preventDefault();
             }
         }

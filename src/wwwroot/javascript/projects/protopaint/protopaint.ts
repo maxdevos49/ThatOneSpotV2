@@ -1,7 +1,8 @@
-import { ActionCommander, ActionCommand } from "../../util/ActionCommander.js"
 import { Vector } from "../../protoCore/math/vector.js";
+import { ActionCommander } from "../../util/ActionCommander/ActionCommander.js";
+import { ActionController } from "../../util/ActionCommander/ActionController.js";
 
-export class ProtoPaint {
+export class ProtoPaint {//TODO add interface
 
     public canvas: CanvasInfo;
 
@@ -21,8 +22,12 @@ export class ProtoPaint {
         this.canvas = new CanvasInfo(configuration.canvas, configuration.interactionLayer);
         this._interactionLayer = configuration.interactionLayer;
         this._interactionModes = configuration.interactionModes;
-        ///assign primary interaction mode. No need to check if fails becuase without it we cant do anything anyways
-        this._activeInteractionMode = this._interactionModes.get(configuration.primaryInteractionMode);
+        
+        let interactionMode = this._interactionModes.get(configuration.primaryInteractionMode);
+        if (!interactionMode)
+            throw "Primary interaction mode does not exist";
+        this._activeInteractionMode = interactionMode;
+
         this._panels = configuration.menuPanels;
 
         this._actionCommand = new ActionCommander<ProtoPaint>(
@@ -30,40 +35,43 @@ export class ProtoPaint {
             configuration.searchPanel,
             configuration.actionCommands);
 
-        this.init();
+        this.initEvents();
     }
 
     public hidePanel(panel: string) {
         if (this._panels.has(panel)) {
-            this._panels.get(panel).classList.add("hide");
+            this._panels.get(panel)?.classList.add("hide");
         }
     }
 
     public showPanel(panel: string) {
         if (this._panels.has(panel)) {
-            this._panels.get(panel).classList.remove("hide");
+            this._panels.get(panel)?.classList.remove("hide");
         }
     }
 
     public togglePanel(panel: string) {
         if (this._panels.has(panel)) {
-            this._panels.get(panel).classList.toggle("hide");
+            this._panels.get(panel)?.classList.toggle("hide");
         }
     }
 
     public showSearch() {
-        this._actionCommand.showSearch();
+        this._actionCommand.focus();
     }
 
-    public switchCanvasMode(canvasModeName: string) {
+    public switchInteractionMode(canvasModeName: string) {
 
         if (this._interactionModes.has(canvasModeName)) {
-            this._activeInteractionMode = this._interactionModes.get(canvasModeName);
+            let interactionMode = this._interactionModes.get(canvasModeName);
+            if (!interactionMode)
+                throw `Interaction Mode failed to be changed`;
+            this._activeInteractionMode = interactionMode;
             this._activeInteractionMode.init(this);
         }
     }
 
-    private init() {
+    private initEvents() {
 
         //On Click
         this._interactionLayer.addEventListener("click", (e) => {
@@ -141,9 +149,7 @@ export abstract class InteractionMode {
         let c = d.canvas;
 
         if (e.altKey) {
-
             c.scaleCanvasToPoint(e.deltaY * -0.01, new Vector(e.offsetX, e.offsetY));
-
         } else {
             c.pan(e.deltaX * -0.2, e.deltaY * -0.2);
         }
@@ -157,8 +163,8 @@ export class CanvasInfo {
     public readonly minimumScale: number = 0.25;
     public readonly dblClickScale: number = 0.5;
 
-    public readonly canvas: HTMLCanvasElement;
-    public readonly ctx: CanvasRenderingContext2D;
+    public readonly element: HTMLCanvasElement;
+    public readonly context: CanvasRenderingContext2D;
     public readonly interactionLayer: HTMLDivElement;
 
     private _scale: number = 1;
@@ -173,8 +179,11 @@ export class CanvasInfo {
 
 
     constructor(canvas: HTMLCanvasElement, interactionLayer: HTMLDivElement) {
-        this.canvas = canvas;
-        this.ctx = canvas.getContext("2d");
+        this.element = canvas;
+        let context = canvas.getContext("2d");
+        if (!context)
+            throw "Failed to get the canvas render context";
+        this.context = context;
         this._width = canvas.width;
         this._height = canvas.height;
         this._x = canvas.offsetLeft;
@@ -256,8 +265,8 @@ export class CanvasInfo {
     }
 
     private applyTransformations(): void {
-        this.canvas.style.transformOrigin = `${this._originX}px ${this._originY}px`;
-        this.canvas.style.transform = `translate(${this._offsetX}px,${this._offsetY}px) scale(${this._scale})`;
+        this.element.style.transformOrigin = `${this._originX}px ${this._originY}px`;
+        this.element.style.transform = `translate(${this._offsetX}px,${this._offsetY}px) scale(${this._scale})`;
     }
 }
 
@@ -275,5 +284,5 @@ export interface ProtoPaintConfiguration {
 
     searchPanel: HTMLDivElement;
 
-    actionCommands: Map<string, ActionCommand<ProtoPaint>>;
+    actionCommands: ActionController<ProtoPaint>;
 }

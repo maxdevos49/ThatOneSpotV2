@@ -11,7 +11,8 @@ class Resize{
 
     public constructor(parentElement: HTMLElement){
         this._parentElement = parentElement;
-        this._side = parentElement.dataset.resize;
+        this._side = parentElement.dataset?.resize ?? "right";
+        this._dragElement = document.createElement("div");
         
         this._dragging = false;
 
@@ -21,7 +22,6 @@ class Resize{
 
     private addDragger() : void {
         
-        this._dragElement = document.createElement("div");
         this._dragElement.setAttribute("data-dragger", this._side)
         this._dragElement.innerHTML += "<hr/>";
 

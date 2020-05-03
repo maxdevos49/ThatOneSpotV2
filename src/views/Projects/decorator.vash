@@ -1,0 +1,10 @@
+@html.extend('/Shared/_layout', function(model){ 
+    @html.block('content', function(model){ 
+        @{ 
+            model.title = "Decorator Testing"; 
+        }
+
+        <script type="module" src="/javascript/projects/decorator.js"></script>
+       
+    })
+})

@@ -1,9 +1,10 @@
 import { Response, NextFunction } from "express";
+import {config} from "../config";
 
 export function authentication(req: any, res: Response, next: NextFunction) {
 
 
-    if (!req.userContext) {
+    if (!req.userContext || config.server.environment === "noOkta") {
         res.locals = {
             authentication: {
                 role: ["public"]
