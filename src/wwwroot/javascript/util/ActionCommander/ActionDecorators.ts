@@ -1,60 +1,113 @@
-import { ActionController } from "./ActionController.js";
-import { Action } from "./Action.js";
-import { IFlag } from "./IFlag.js";
+import { IAction } from "./interfaces/IAction.js";
+import { IFlag } from "./interfaces/IFlag.js";
+
+
+//#region ActionController Decorator
 
 /**
- * Declares a class method as a Action and registers it with the controller
- * @param summary A brief summary of what the action does
- * @param description A longer more detailed explanation of what the action does
+ * Annotates the class as a Action controller
+ * @param name The controller name
+ * @param summary Brief summary of the controllers actions
+ * @param description Long description of the controller actions
  */
-export function action<T extends ActionController<any>>(
-    summary: string,
-    description: string
-) {
-    return function (target: T, propertyKey: string, descriptor: PropertyDescriptor) {
-        let a = new Action(propertyKey, summary, description, descriptor.value);
-        target.registerAction(a);
+export function actioncontroller(name: string, summary: string, description?: string): ClassDecorator {
+    return function (target: any) {
+
+        Reflect.defineMetadata("name", name, target);
+        Reflect.defineMetadata("summary", summary, target);
+        Reflect.defineMetadata("description", description, target);
+
+        initActionsMetadata(target);
     };
 }
 
-/**
- * Defines a flag to be used for a action
- * @param shortFlag single character version of a flag
- * @param longFlag single word version of a flag
- * @param summary A brief summary of the purpose of the flag
- * @param type The type of value the flag will return. Default type is "Boolean"
- */
-export function flag<T extends ActionController<any>>(
-    shortFlag: string,
-    longFlag: string,
-    summary: string,
-    type: new () => Boolean | String | Number | Array<any> = Boolean,
-) {
-    return function (target: T, propertyKey: string, descriptor: PropertyDescriptor) {
+//#endregion
 
-        let flag: IFlag = {
-            shortFlag: shortFlag,
-            longFlag: longFlag,
+
+//#region Action Decorator
+
+/**
+ * Annotates the method as a Action method
+ * @param name The name of the action
+ * @param summary The brief description of the action
+ * @param description The long description of the action
+ */
+export function action(name: string, summary: string, description?: string): MethodDecorator {
+
+    return function (target: object, methodKey: string | symbol) {
+
+        const actions = getActionsMetadata(target);
+
+        actions.set(methodKey, {
+            name: name,
+            methodKey: methodKey,
             summary: summary,
-            type: type,
-        };
+            description: description
+        });
 
-        target.registerFlagForAction(propertyKey, flag);
-    };
+        Reflect.defineMetadata("actions", actions, target.constructor);
+    }
 }
 
-//TODO eventually
-// export function debugAction<T extends ActionController<any>>(target: T, propertyKey: string, descriptor: PropertyDescriptor) {
-//     let value = descriptor.value;
+//#endregion
 
-//     descriptor.value = function (...args: any[]) {
 
-//         console.log("Debugging Action: " + propertyKey + " (WIP maybe doesnt pass parameters through yet)");
-//         let returnValue = descriptor.value(...args);
-//         console.log("Action resulted in: " + (returnValue ? "Success" : "Failure"));
-//         if (!returnValue)
-//             console.log("Error Result: \n"/* TODO print error */)
+//#region Flag Decorator
 
-//         return returnValue;
-//     }
-// }
+/**
+ * Declares a paramater as a command flag
+ * @param flags Flags the action contains
+ */
+export function flag(flags: Array<string>): ParameterDecorator {
+
+    return function (target: object, methodKey: string | symbol, parameterIndex: number): void {
+
+        if (!Reflect.hasMetadata("flags", target, methodKey)) {
+            Reflect.defineMetadata("flags", new Map<string, IFlag>(), target, methodKey);
+        }
+
+        let methodFlags = Reflect.getMetadata("flags", target, methodKey);
+
+        //Register every variation of the flag in flag map with duplicate data
+        flags.forEach((flag) => {
+
+            let flagDefinition: IFlag = {
+                parameterIndex: parameterIndex,
+                flag: flag,
+                type: (Reflect.getMetadata("design:paramtypes", target, methodKey) as Array<any>)[parameterIndex]
+            }
+
+            methodFlags.set(flag, flagDefinition);
+
+        });
+
+        Reflect.defineMetadata("flags", methodFlags, target, methodKey);
+    }
+}
+
+//#endregion
+
+
+//#region Helpers
+
+/**
+ * Inits action metadata if does not already exist
+ * @param target The target to init it on
+ */
+function initActionsMetadata(target: object) {
+    if (!Reflect.hasMetadata("actions", target.constructor))
+        Reflect.defineMetadata("actions", new Map<string | symbol, IAction>(), target.constructor);
+}
+
+/**
+ * Gets the action metadata from a target
+ * @param target The target to get the actions from
+ */
+export function getActionsMetadata(target: any): Map<string | symbol, IAction> {
+
+    initActionsMetadata(target);
+
+    return Reflect.getMetadata("actions", target.constructor) as Map<string | symbol, IAction>;
+}
+
+//#endregion

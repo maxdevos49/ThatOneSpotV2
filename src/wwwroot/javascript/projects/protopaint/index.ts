@@ -1,31 +1,47 @@
-import { ProtoPaint, InteractionMode } from "./protopaint.js";
-import { PanMode } from "./modes/PanMode.js";
+import { ActionCommanderBuilder } from "../../util/ActionCommander/ActionCommandBuilder.js";
+import { ActionCommander } from "../../util/ActionCommander/ActionCommander.js";
+
+import { IConfiguration } from "../../util/ActionCommander/interfaces/IConfiguration.js";
+import { IStartup } from "../../util/ActionCommander/interfaces/IStartup.js";
+import { IServiceCollection } from "../../util/DependencyInjection.js";
+
+import { ProtoPaint } from "./protopaint.js";
+
+//Action Controllers
 import { View } from "./actions/View.js";
-import { ActionController } from "../../util/ActionCommander/ActionController.js";
 
-class protoAction extends ActionController<ProtoPaint>{
+class Startup implements IStartup {
 
-    constructor() {
-        super("required","required","required");
+    public configureServices(services: IServiceCollection): void {
 
-        this.registerSubAction(View);
+        services.addSingleton(ProtoPaint);
+        services.configure(ProtoPaint, protoPaint => {
+
+        });
+
+
+    }
+
+    public configure(app: ActionCommander): void {
+
+        // app.registerExtension(Autocomplete);
+
     }
 }
 
-let pp = new ProtoPaint({
-    canvas: document.getElementById("protoCanvas") as HTMLCanvasElement,
-    interactionLayer: document.getElementById("interaction-layer") as HTMLDivElement,
-    interactionModes: new Map<string, InteractionMode>([
-        ["Pan", new PanMode()]
-    ]),
-    primaryInteractionMode: "Pan",
-    menuPanels: new Map<string, HTMLDivElement>([
-        ["left", document.querySelector('div[data-panel="left"]')],
-        ["right", document.querySelector('div[data-panel="right"]')],
-        ["footer", document.querySelector('div[data-panel="footer"]')]
-    ]),
-    searchPanel: document.querySelector("div[data-search]"),
-    actionCommands: new protoAction()
-});
+let config: IConfiguration = {
+    actionControllers: [
+        View,
+    ]
 
+}
 
+function main() {
+    ActionCommanderBuilder
+        .buildConfiguration(config)
+        .startup(Startup)
+        .run();
+}
+
+//entry point
+main();

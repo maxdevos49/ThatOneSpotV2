@@ -1,1 +1,5 @@
-//TODO
+
+
+export class File {
+
+}

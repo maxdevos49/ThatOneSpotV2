@@ -5,6 +5,10 @@
             "path": "./src"
         },
         {
+            "name": "wwwroot",
+            "path": "./src/wwwroot"
+        },
+        {
             "name": "Other",
             "path": "."
         }
@@ -16,7 +20,7 @@
             "**/.svn": true,
             "**/.hg": true,
             "**/.gitignore": false,
-            "**/src": true,            
+            "**/src": true,
             "**/CVS": true,
             "**/.DS_Store": true,
             "**/*.js.m*": true,
@@ -42,6 +46,44 @@
             "statusBar.border": "#215732",
             "titleBar.border": "#215732"
         },
-        "peacock.color": "#215732"
+        "peacock.color": "#215732",
+        "better-comments.tags": [
+            {
+                "tag": "!",
+                "color": "#FF2D00",
+                "strikethrough": false,
+                "backgroundColor": "transparent"
+            },
+            {
+                "tag": "#",
+                "color": "#ffffff",
+                "strikethrough": false,
+                "backgroundColor": "#007777"
+            },
+            {
+                "tag": "?",
+                "color": "#3498DB",
+                "strikethrough": false,
+                "backgroundColor": "transparent"
+            },
+            {
+                "tag": "//",
+                "color": "#474747",
+                "strikethrough": true,
+                "backgroundColor": "transparent"
+            },
+            {
+                "tag": "todo",
+                "color": "#FF8C00",
+                "strikethrough": false,
+                "backgroundColor": "transparent"
+            },
+            {
+                "tag": "*",
+                "color": "#98C379",
+                "strikethrough": false,
+                "backgroundColor": "transparent"
+            }
+        ]
     }
 }

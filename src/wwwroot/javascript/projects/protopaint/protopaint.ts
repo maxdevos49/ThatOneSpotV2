@@ -1,14 +1,14 @@
 import { Vector } from "../../protoCore/math/vector.js";
-import { ActionCommander } from "../../util/ActionCommander/ActionCommander.js";
-import { ActionController } from "../../util/ActionCommander/ActionController.js";
+import { service } from "../../util/DependencyInjection.js";
 
-export class ProtoPaint {//TODO add interface
+
+
+@service()
+export class ProtoPaint {
 
     public canvas: CanvasInfo;
 
     private readonly _interactionLayer: HTMLDivElement;
-
-    private readonly _actionCommand: ActionCommander<ProtoPaint>;
 
     private readonly _panels: Map<string, HTMLElement>;
 
@@ -22,19 +22,14 @@ export class ProtoPaint {//TODO add interface
         this.canvas = new CanvasInfo(configuration.canvas, configuration.interactionLayer);
         this._interactionLayer = configuration.interactionLayer;
         this._interactionModes = configuration.interactionModes;
-        
+
         let interactionMode = this._interactionModes.get(configuration.primaryInteractionMode);
         if (!interactionMode)
             throw "Primary interaction mode does not exist";
+            
         this._activeInteractionMode = interactionMode;
 
         this._panels = configuration.menuPanels;
-
-        this._actionCommand = new ActionCommander<ProtoPaint>(
-            this,
-            configuration.searchPanel,
-            configuration.actionCommands);
-
         this.initEvents();
     }
 
@@ -54,10 +49,6 @@ export class ProtoPaint {//TODO add interface
         if (this._panels.has(panel)) {
             this._panels.get(panel)?.classList.toggle("hide");
         }
-    }
-
-    public showSearch() {
-        this._actionCommand.focus();
     }
 
     public switchInteractionMode(canvasModeName: string) {
@@ -284,5 +275,5 @@ export interface ProtoPaintConfiguration {
 
     searchPanel: HTMLDivElement;
 
-    actionCommands: ActionController<ProtoPaint>;
+    // actionCommands: ActionController<ProtoPaint>;
 }

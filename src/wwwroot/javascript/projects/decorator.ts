@@ -1,18 +1,13 @@
-import "../util/reflect-metadata-browser.js";
-import { ActionService, ActionInjector } from "../util/ActionCommander/ActionDependency.js";
+import { actioncontroller, action, flag } from "../util/ActionCommander/ActionDecorators.js";
+import { service, Injector } from "../util/DependencyInjection.js";
 
-
-const controller = function (constructor: Function) {
-
-}
-
-@ActionService()
-class OtherOtherTest{
+@service()
+class OtherOtherTest {
     public yeet: boolean = false;
 }
 
 
-@ActionService()
+@service()
 class Test {
 
 
@@ -37,21 +32,41 @@ class Test {
 }
 
 
-@controller
+@actioncontroller("test", "", "")
 class OtherTest {
 
-    public test: Test;
+    private readonly _t: Test;
 
     public yee: number = 56;
 
 
 
     constructor(dependency: Test) {
-        this.test = dependency;
+        this._t = dependency;
     }
+
+    /**
+     * testAction
+     */
+    @action("test", "Do a test")
+    public testAction(
+        @flag(["-t", "--test"]) test: boolean,
+        @flag(["-x"]) x: number,
+        @flag(["-y"]) y: number
+    ): IActionResult {
+        this._t.otherThing();
+
+        return null;
+    }
+
 }
 
-let ot = ActionInjector.resolve(OtherTest);
+let ot = Injector.resolve(OtherTest);
 
 console.log(ot);
 
+
+
+interface IActionResult {
+
+}

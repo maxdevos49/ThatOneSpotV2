@@ -1,3 +1,8 @@
+
+export class Canvas {
+    //TODO
+}
+
 // import { ProtoPaint } from "../protopaint.js";
 // import { ActionController } from "../../../util/ActionCommander/ActionController.js";
 // import { ActionOptions } from "../../../util/ActionCommander/Action.js";
