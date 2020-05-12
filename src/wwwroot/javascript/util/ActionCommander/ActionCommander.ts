@@ -1,10 +1,12 @@
 import { IActionExtension, IActionExtensionConstructor } from "./interfaces/IActionExtension.js";
-import { IParsedCommmad } from "./CommandParser.js";
 import { IActionController } from "./interfaces/IActionController.js";
 import { IConfiguration } from "./interfaces/IConfiguration.js";
 import { Injector } from "../DependencyInjection.js";
 import { getActionsMetadata } from "./ActionDecorators.js";
 import { IFlag } from "./interfaces/IFlag.js";
+import { IParsedCommmand } from "./interfaces/IParsedCommand.js";
+import { CommandParser } from "./CommandParser.js";
+import { KeyCommander } from "../KeyCommander.js";
 
 //#region IActionCommander
 
@@ -12,13 +14,11 @@ export interface IActionCommander {
 
     registerExtension<T extends IActionExtension>(extension: IActionExtensionConstructor<T>): void;
     configureExtension<T extends IActionExtension>(extension: IActionExtensionConstructor<T>, configureCallback: (extension: T) => void): void;
-    unregisterExtension<T extends IActionExtension>(extension: IActionExtensionConstructor<T>): void;
 
     registerController<T>(controller: new (...args: any[]) => T): void;
-    getController<T>(controller: new (...args: any[]) => T): T;//TODO
 
-    parse(command: string): IParsedCommmad;
-    execute(parsedCommand: IParsedCommmad): boolean;
+    parse(command: string): IParsedCommmand;
+    execute(parsedCommand: IParsedCommmand): boolean;
     parseAndExecute(command: string): boolean;
 
 
@@ -62,25 +62,21 @@ export class ActionCommander implements IActionCommander {
         throw new Error("Method not implemented.");
     }
 
-    public unregisterExtension<T extends IActionExtension>(extension: IActionExtensionConstructor<T>): void {
-        throw new Error("Method not implemented.");
-    }
-
     //#endregion
 
     //#region Controller Configuration
 
     public registerController<T>(controller: new (...args: any[]) => T): void {
 
-        let name = Reflect.getMetadata("name", controller);
+        let controllerName = Reflect.getMetadata("name", controller);
 
-        if (!name) {
+        if (!controllerName) {
             console.warn(`The controller: "${controller.name}" was not added due to metadata not being found`);
             return;
         }
 
-        if (this._controllers.has(name)) {
-            console.warn(`The controller: "${controller.name}" with command name: "${name}" is registered more than once! The repeated occurences will be omitted`);
+        if (this._controllers.has(controllerName)) {
+            console.warn(`The controller: "${controller.name}" with command name: "${controllerName}" is registered more than once! The repeated occurences will be omitted`);
             return;
         }
 
@@ -88,7 +84,7 @@ export class ActionCommander implements IActionCommander {
 
         //Build controller metadata
         let controllerInfo: IActionController = {
-            name: name,
+            name: controllerName,
             summary: Reflect.getMetadata("summary", controller),
             description: Reflect.getMetadata("summary", controller),
             controller: instance,
@@ -100,6 +96,23 @@ export class ActionCommander implements IActionCommander {
         //add flag metadata to actions
         controllerInfo?.actions?.forEach((action) => {
 
+            //# Variation registration for keyboard shortcuts
+            action.variations?.forEach((variation) => {
+                if (variation.keyCombination) {
+
+                    if(KeyCommander.bindingExist(variation.keyCombination))
+                        console.warn(`The keyboard shortcut: "${variation.keyCombination}" already exist. The original binding will be lost.`);
+
+                    KeyCommander.bind(variation.keyCombination, (e) => {
+                        e.preventDefault();
+
+                        this.parseAndExecute(`${controllerName} ${action.name} ${variation.flagOptions}`);
+                    });
+                }
+            });
+
+
+            //# Flag registration
             if (!Reflect.hasMetadata("flags", instance, action.methodKey))
                 Reflect.defineMetadata("flags", new Map<string, IFlag>(), instance, action.methodKey);
 
@@ -108,25 +121,33 @@ export class ActionCommander implements IActionCommander {
 
         this._controllers.set(controllerInfo.name, controllerInfo);
     }
-    public getController<T>(controller: new (...args: any[]) => T): T {
-        throw new Error("Method not implemented.");
-    }
 
     //#endregion
 
     //#region Parsing and Execution
 
-    public parse(command: string): IParsedCommmad {
-        throw new Error("Method not implemented.");
+    public parse(command: string): IParsedCommmand {
+        return CommandParser.parseCommand(command, this._controllers);
     }
 
 
-    public execute(parsedCommand: IParsedCommmad): boolean {
-        throw new Error("Method not implemented.");
+    public execute(parsedCommand: IParsedCommmand): boolean {
+        if (!parsedCommand.isValid) {
+            console.log(parsedCommand.errors)
+            return false;
+        }
+
+        try {
+            parsedCommand.controllerMetaData.controller[parsedCommand.actionMetaData.methodKey](...parsedCommand.actionArguments);
+        } catch (err) {
+            return false;
+        }
+
+        return true;
     }
 
     public parseAndExecute(command: string): boolean {
-        throw new Error("Method not implemented.");
+        return this.execute(this.parse(command));
     }
 
     //#endregion
@@ -175,8 +196,6 @@ export class ActionCommander implements IActionCommander {
 
         //TODO Init Extensions
 
-
-
         // throw new Error("Method not fully implemented.");
     }
 
@@ -203,10 +222,10 @@ export class ActionCommander implements IActionCommander {
 
             //TODO override default with extensions
 
-            if (e.key === "Enter") {
+            if (e.key === "Enter" && this.getText().length > 0) {
+
 
                 // this._history.add(this.getText());//TODO History
-
 
                 let parsedCommand = this.parse(this.getText());
 

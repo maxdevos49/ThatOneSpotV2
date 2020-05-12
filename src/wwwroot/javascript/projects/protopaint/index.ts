@@ -5,7 +5,7 @@ import { IConfiguration } from "../../util/ActionCommander/interfaces/IConfigura
 import { IStartup } from "../../util/ActionCommander/interfaces/IStartup.js";
 import { IServiceCollection } from "../../util/DependencyInjection.js";
 
-import { ProtoPaint } from "./protopaint.js";
+// import { InteractionLayer } from "./services/InteractionService.js";
 
 //Action Controllers
 import { View } from "./actions/View.js";
@@ -14,10 +14,14 @@ class Startup implements IStartup {
 
     public configureServices(services: IServiceCollection): void {
 
-        services.addSingleton(ProtoPaint);
-        services.configure(ProtoPaint, protoPaint => {
-
-        });
+        // services.addSingleton(InteractionLayer);
+        // services.configure(InteractionLayer, protoPaint => {
+        //     // protoPaint.canvasId = "";
+        //     // protoPaint.interactionLayers = new Map([
+        //     //     "": 
+        //     // ])
+        //     // protoPaint.init();
+        // });
 
 
     }
@@ -45,3 +49,4 @@ function main() {
 
 //entry point
 main();
+

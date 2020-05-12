@@ -1,5 +1,6 @@
 import { IAction } from "./interfaces/IAction.js";
 import { IFlag } from "./interfaces/IFlag.js";
+import { IActionBinding } from "./interfaces/IActionBinding.js";
 
 
 //#region ActionController Decorator
@@ -42,7 +43,7 @@ export function action(name: string, summary: string, description?: string): Met
             name: name,
             methodKey: methodKey,
             summary: summary,
-            description: description
+            description: description,
         });
 
         Reflect.defineMetadata("actions", actions, target.constructor);
@@ -50,7 +51,6 @@ export function action(name: string, summary: string, description?: string): Met
 }
 
 //#endregion
-
 
 //#region Flag Decorator
 
@@ -87,6 +87,41 @@ export function flag(flags: Array<string>): ParameterDecorator {
 
 //#endregion
 
+//#region Binding Decorator
+
+/**
+ * Binds a action with a given set of flags for use with a key combination or in ui menus
+ * @param bindingDescription The description of the variation
+ * @param flagOptions The flag options to use with the command;
+ * @param keyCombo The key combination used to trigger the action
+ */
+export function bindVariation(bindingDescription: string, flagOptions: string, keyCombo?: string): MethodDecorator {
+
+    return function (target: object, methodKey: string | symbol) {
+
+        const actions = getActionsMetadata(target);
+
+        if (!actions.has(methodKey))
+            throw new Error("Variation bindings must be done after registering a action. Make sure the action decorator is the closest decorator to the method.")
+
+        let action = actions.get(methodKey);
+
+        let actionBinding: IActionBinding = {
+            keyCombination: keyCombo,
+            flagOptions: flagOptions,
+            description: bindingDescription
+        }
+
+        if (!action.variations)
+            action.variations = [];
+
+        action.variations.push(actionBinding);
+
+        Reflect.defineMetadata("actions", actions, target.constructor);
+    }
+}
+
+//#endregion
 
 //#region Helpers
 

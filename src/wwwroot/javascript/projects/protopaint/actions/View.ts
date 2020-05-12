@@ -1,28 +1,33 @@
-import { actioncontroller, flag, action } from "../../../util/ActionCommander/ActionDecorators.js";
-import { ProtoPaint } from "../protopaint.js";
-
+import { actioncontroller, flag, bindVariation, action } from "../../../util/ActionCommander/ActionDecorators.js";
 
 @actioncontroller("view", "Manage the View")
 export class View {
 
-    // private readonly _paint: ProtoPaint;
+    @bindVariation("Runs a test in the way of t", "-b=false", "Control+t")
+    @bindVariation("Runs a test in the way of u", "-a=[10,10,34,56]", "Control+u")
+    @bindVariation("Runs a test in the way of j", "-b=false")//No key combo. Only accessible if used with a ui extension or a autocomplete queries it
+    @action("test", "Executes a test", "Does a test for your testing purposes")
+    public testCommand1(
+        @flag(["-b", "--boolean"]) b: boolean = false,
+        @flag(["-n", "--number"]) n: number = 0,
+        @flag(["-a", "--array"]) a: Array<any> = [],
+        @flag(["-s", "--string"]) s: string = ""
+    ): boolean {
 
-    public constructor() {
-        // this._paint = paint;
-    }
+        console.log("--boolean: ", b);
+        console.log("--number: ", n);
+        console.log("--array: ", a);
+        console.log("--string: ", s);
 
-    //@actionGroup("viewgroup1") //TODO future
-    // @keyBinding("ctrl+t", "Toggles my cool thing for your thingy thing") //TODO Future
-    @action("ssssss", "Executes a thing", "Does a thing for your thing so you can do a thing")
-    public myThing(@flag(["-f", "--force"]) force: boolean): boolean {
+        //Do actions here...
 
         return false;
     }
 
-    // @debugAction
-    @action("myotherthing", "Does a thing for your thing so you can do a thing")
-    public myotherThing(): boolean {
+    @action("test2", "Does a different test command", "Long description for command...")
+    public testCommand2(): boolean {
 
+        //Do action here
 
         return false;
     }

@@ -43,10 +43,7 @@ export const ActionCommanderBuilder = new class ActionCommanderBuilder {
         startup.configureServices(ServiceCollection);
 
         //construct actionCommander
-        let app: ActionCommander = new ActionCommander(this._configuration);//todo
-
-
-        
+        let app: ActionCommander = new ActionCommander(this._configuration);
 
         //run startup configure
         startup.configure(app);
@@ -54,22 +51,5 @@ export const ActionCommanderBuilder = new class ActionCommanderBuilder {
         app.init()
 
     }
-
-
-
-    // private registerController(controller: IControllerDefinition): IActionController {
-
-    //     let ac: IActionController
-
-    //     //TODO
-
-
-    //     controller.subcontroller?.forEach((value: IControllerDefinition) => {
-    //         ac
-    //     });
-
-    //     return ac;
-    // }
-
 
 }
