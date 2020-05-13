@@ -1,4 +1,4 @@
-import { actioncontroller, flag, bindVariation, action } from "../../../util/ActionCommander/ActionDecorators.js";
+import { actioncontroller, flag, bindVariation, action } from "../../../util/ActionCommander/helpers/ActionDecorators.js";
 
 @actioncontroller("view", "Manage the View")
 export class View {
@@ -27,7 +27,7 @@ export class View {
     @action("test2", "Does a different test command", "Long description for command...")
     public testCommand2(): boolean {
 
-        //Do action here
+        //Do actions here
 
         return false;
     }

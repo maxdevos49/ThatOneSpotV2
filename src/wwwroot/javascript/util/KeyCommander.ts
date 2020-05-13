@@ -102,8 +102,6 @@ export class KeyCommander {
 
             let key = e.key;
 
-            console.log(key);
-
             if (this._stopCallbackFunc(e, e.target as HTMLElement))
                 return;
 

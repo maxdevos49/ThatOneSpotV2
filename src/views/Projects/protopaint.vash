@@ -190,7 +190,7 @@
                 </div>
 
                 <!-- Search -->
-                <div id="search-container" data-search="true" class="show"></div>
+                <div id="search-container" data-search="true"></div>
 
             </div>
         </div>

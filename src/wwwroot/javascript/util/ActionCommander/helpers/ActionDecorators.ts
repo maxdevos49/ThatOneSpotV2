@@ -1,6 +1,6 @@
-import { IAction } from "./interfaces/IAction.js";
-import { IFlag } from "./interfaces/IFlag.js";
-import { IActionBinding } from "./interfaces/IActionBinding.js";
+import { IAction } from "../interfaces/IAction.js";
+import { IFlag } from "../interfaces/IFlag.js";
+import { IActionBinding } from "../interfaces/IActionBinding.js";
 
 
 //#region ActionController Decorator

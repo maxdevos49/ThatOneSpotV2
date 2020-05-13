@@ -1,12 +1,12 @@
 import { IActionExtension, IActionExtensionConstructor } from "./interfaces/IActionExtension.js";
 import { IActionController } from "./interfaces/IActionController.js";
 import { IConfiguration } from "./interfaces/IConfiguration.js";
-import { Injector } from "../DependencyInjection.js";
-import { getActionsMetadata } from "./ActionDecorators.js";
+import { getActionsMetadata } from "./helpers/ActionDecorators.js";
 import { IFlag } from "./interfaces/IFlag.js";
 import { IParsedCommmand } from "./interfaces/IParsedCommand.js";
-import { CommandParser } from "./CommandParser.js";
+import { CommandParser } from "./helpers/CommandParser.js";
 import { KeyCommander } from "../KeyCommander.js";
+import { Injector } from "../DependencyInjection.js";
 
 //#region IActionCommander
 
@@ -14,13 +14,13 @@ export interface IActionCommander {
 
     registerExtension<T extends IActionExtension>(extension: IActionExtensionConstructor<T>): void;
     configureExtension<T extends IActionExtension>(extension: IActionExtensionConstructor<T>, configureCallback: (extension: T) => void): void;
+    activateExtensionHook(hookCallback: (extension: IActionExtension) => void): void;
 
     registerController<T>(controller: new (...args: any[]) => T): void;
 
-    parse(command: string): IParsedCommmand;
-    execute(parsedCommand: IParsedCommmand): boolean;
-    parseAndExecute(command: string): boolean;
-
+    parseCommand(command: string): IParsedCommmand;
+    executeCommand(parsedCommand: IParsedCommmand): boolean;
+    parseAndExecuteCommand(command: string): boolean;
 
     focus(): void;
     blur(): void;
@@ -28,11 +28,11 @@ export interface IActionCommander {
     getText(): string;
     setText(text: string): void;
     appendText(text: string): void;
+    isFocused(): boolean;
+    appendChildElement(element: HTMLDivElement): void;
 
-    //error();
-    //getDataSource()
+    registerKeyBinding(keyCombo: string, action: () => void): void;
 
-    //TODO
     init(): void;
 }
 
@@ -40,14 +40,19 @@ export interface IActionCommander {
 
 export class ActionCommander implements IActionCommander {
 
-    private _configuration: IConfiguration;
-    private _inputElement: HTMLInputElement;
-    private _controllers: Map<string, IActionController>;
+    private _searchContainer: HTMLDivElement;
+    private readonly _configuration: IConfiguration;
+    private readonly _inputElement: HTMLInputElement;
+    private readonly _controllers: Map<string, IActionController>;
+    private readonly _extensions: Map<IActionExtensionConstructor<any>, IActionExtension>;
+    private readonly _extensionConfigurations: Map<IActionExtensionConstructor<any>, (extension: any) => void>;
 
     constructor(configuration?: IConfiguration) {
         this._configuration = configuration;
 
         this._controllers = new Map();
+        this._extensions = new Map();
+        this._extensionConfigurations = new Map();
         this._inputElement = document.createElement("INPUT") as HTMLInputElement;
     }
 
@@ -55,12 +60,34 @@ export class ActionCommander implements IActionCommander {
     //#region Extension Configuration
 
     public registerExtension<T extends IActionExtension>(extension: IActionExtensionConstructor<T>): void {
-        throw new Error("Method not implemented.");
+
+        if (this._extensions.has(extension))
+            throw new Error(`The extension with the name of: ${extension.name} already exist. Extensions can only be registered once`);
+
+        let args: any[] = [];
+
+        let tokens = Reflect.getMetadata("design:paramtypes", extension) ?? [];
+        tokens.shift();//The first argument will always be ActionCommander
+
+        this._extensions.set(extension, new extension(this, Injector.resolveGroup(tokens)));
+
     }
 
     public configureExtension<T extends IActionExtension>(extension: IActionExtensionConstructor<T>, configureCallback: (extension: T) => void): void {
-        throw new Error("Method not implemented.");
+
+        if (this._extensionConfigurations.has(extension))
+            throw new Error(`The extension with the name of: ${extension.name} is already configured. Extensions can only be configured once.`);
+
+        this._extensionConfigurations.set(extension, configureCallback);
     }
+
+    public activateExtensionHook(hookCallback: (extension: IActionExtension) => void): void {
+        this._extensions.forEach(ext => {
+            hookCallback(ext);
+        });
+    }
+
+
 
     //#endregion
 
@@ -80,7 +107,7 @@ export class ActionCommander implements IActionCommander {
             return;
         }
 
-        let instance = Injector.resolve(controller);
+        let instance = Injector.resolve<T>(controller);
 
         //Build controller metadata
         let controllerInfo: IActionController = {
@@ -96,23 +123,16 @@ export class ActionCommander implements IActionCommander {
         //add flag metadata to actions
         controllerInfo?.actions?.forEach((action) => {
 
-            //# Variation registration for keyboard shortcuts
+            // Variation registration for keyboard shortcuts
             action.variations?.forEach((variation) => {
                 if (variation.keyCombination) {
-
-                    if(KeyCommander.bindingExist(variation.keyCombination))
-                        console.warn(`The keyboard shortcut: "${variation.keyCombination}" already exist. The original binding will be lost.`);
-
-                    KeyCommander.bind(variation.keyCombination, (e) => {
-                        e.preventDefault();
-
-                        this.parseAndExecute(`${controllerName} ${action.name} ${variation.flagOptions}`);
+                    this.registerKeyBinding(variation.keyCombination, () => {
+                        this.parseAndExecuteCommand(`${controllerName} ${action.name} ${variation.flagOptions}`);
                     });
                 }
             });
 
-
-            //# Flag registration
+            // Flag registration
             if (!Reflect.hasMetadata("flags", instance, action.methodKey))
                 Reflect.defineMetadata("flags", new Map<string, IFlag>(), instance, action.methodKey);
 
@@ -126,12 +146,12 @@ export class ActionCommander implements IActionCommander {
 
     //#region Parsing and Execution
 
-    public parse(command: string): IParsedCommmand {
+    public parseCommand(command: string): IParsedCommmand {
         return CommandParser.parseCommand(command, this._controllers);
     }
 
 
-    public execute(parsedCommand: IParsedCommmand): boolean {
+    public executeCommand(parsedCommand: IParsedCommmand): boolean {
         if (!parsedCommand.isValid) {
             console.log(parsedCommand.errors)
             return false;
@@ -140,14 +160,15 @@ export class ActionCommander implements IActionCommander {
         try {
             parsedCommand.controllerMetaData.controller[parsedCommand.actionMetaData.methodKey](...parsedCommand.actionArguments);
         } catch (err) {
+            parsedCommand.errors += err;
             return false;
         }
 
         return true;
     }
 
-    public parseAndExecute(command: string): boolean {
-        return this.execute(this.parse(command));
+    public parseAndExecuteCommand(command: string): boolean {
+        return this.executeCommand(this.parseCommand(command));
     }
 
     //#endregion
@@ -155,11 +176,17 @@ export class ActionCommander implements IActionCommander {
     //#region Search Manipulation
 
     public focus(): void {
+        this.activateExtensionHook(ext => ext.onFocus?.());
         this._inputElement.focus();
     }
 
     public blur(): void {
-        this._inputElement.blur();
+        (document.activeElement as HTMLElement).blur();
+        this.activateExtensionHook(ext => ext.onBlur?.());
+    }
+
+    public isFocused(): boolean {
+        return document.activeElement === this._inputElement;
     }
 
     public clear(): void {
@@ -178,6 +205,23 @@ export class ActionCommander implements IActionCommander {
         this._inputElement.value += text;
     }
 
+    public appendChildElement(element: HTMLDivElement): void {
+        this._searchContainer.appendChild(element);
+    }
+
+    //#endregion
+
+    //#region KeyBinding
+
+    public registerKeyBinding(keyCombo: string, action: () => void) {
+        if (KeyCommander.bindingExist(keyCombo))
+            throw new Error(`The keybinding: "${keyCombo}" already exist. There can not be duplicate keybindings.`);
+
+        KeyCommander.bind(keyCombo, (e, combo) => {
+            action();
+        });
+    }
+
     //#endregion
 
     //#region Initilization
@@ -192,25 +236,29 @@ export class ActionCommander implements IActionCommander {
             this.registerController(controller);
         });
 
-        //TODO Init Key Combos
+        //configure extensions
+        this._extensionConfigurations.forEach((extensionConfiguration, extensionKey) => {
+            if (this._extensions.has(extensionKey)) {
+                extensionConfiguration(this._extensions.get(extensionKey));
+            }
+        });
 
-        //TODO Init Extensions
-
-        // throw new Error("Method not fully implemented.");
+        //init extensions
+        this.activateExtensionHook((extension) => extension.init());
     }
 
     private initUI(): void {
 
-        let searchContainer = document.getElementById(this._configuration.searchContainerId ?? "search-container");
+        this._searchContainer = document.getElementById(this._configuration.searchContainerId ?? "search-container") as HTMLDivElement;
 
-        if (!searchContainer)
+        if (!this._searchContainer)
             throw new Error(`The SearchContainerId: ${this._configuration.searchContainerId ?? "search-container"} is not valid. Aborting Initilization.`);
 
         this._inputElement.setAttribute("id", "ActionSearch");
         this._inputElement.setAttribute("type", "text");
         this._inputElement.setAttribute("placeholder", "ActionSearch");
         this._inputElement.setAttribute("tabindex", "-1");
-        searchContainer.appendChild(this._inputElement);
+        this._searchContainer.appendChild(this._inputElement);
     }
 
     private initEvents(): void {
@@ -220,34 +268,29 @@ export class ActionCommander implements IActionCommander {
             if (e.altKey || e.metaKey || e.ctrlKey || e.key === "Tab")
                 e.preventDefault();//prevent all special actions like printing :D
 
-            //TODO override default with extensions
-
             if (e.key === "Enter" && this.getText().length > 0) {
 
+                this.activateExtensionHook(ext => ext.onSubmit?.(parsedCommand));
 
-                // this._history.add(this.getText());//TODO History
+                let parsedCommand = this.parseCommand(this.getText());
 
-                let parsedCommand = this.parse(this.getText());
-
-                if (this.execute(parsedCommand)) {
-                    //TODO onSubmit(command, valid)
+                if (this.executeCommand(parsedCommand)) {
+                    this.activateExtensionHook(ext => ext.onSuccess?.(parsedCommand));
                 } else {
-                    //TODO onError
+                    this.activateExtensionHook(ext => ext.onError?.(parsedCommand));
                 }
             }
 
-        }, false);
+            this.activateExtensionHook(ext => ext.onInput?.(e));
 
-        this._inputElement.addEventListener("input", (e) => {
-            //TODO onInput
         }, false);
 
         this._inputElement.addEventListener("focusin", (e) => {
-            // TODO onFocus
+            this.focus();
         }, false);
 
         this._inputElement.addEventListener("focusout", (e) => {
-            // TODO onBlur
+            this.blur();
         }, false);
 
     }

@@ -13,7 +13,6 @@ export function service(): GenericClassDecorator<Type<object>> {
     };
 };
 
-//Singleton
 export class Injector {
 
     /**
@@ -40,6 +39,10 @@ export class Injector {
         });
 
         return new target(...injections);
+    }
+
+    public static resolveGroup(tokens: any[]): any[] {
+        return tokens.map((token) => Injector.resolve(token));
     }
 
 }
@@ -146,4 +149,3 @@ export const ServiceCollection = new class ServiceCollection implements IService
         return newService;
     }
 }
-

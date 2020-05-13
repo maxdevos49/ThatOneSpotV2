@@ -1,8 +1,8 @@
-import { IParsedCommmand } from "./interfaces/IParsedCommand.js";
-import { IParsedFlag } from "./interfaces/IParsedFlag.js";
-import { IActionController } from "./interfaces/IActionController.js";
-import { IAction } from "./interfaces/IAction.js";
-import { IFlag } from "./interfaces/IFlag.js";
+import { IParsedCommmand } from "../interfaces/IParsedCommand.js";
+import { IParsedFlag } from "../interfaces/IParsedFlag.js";
+import { IActionController } from "../interfaces/IActionController.js";
+import { IAction } from "../interfaces/IAction.js";
+import { IFlag } from "../interfaces/IFlag.js";
 
 export class CommandParser {
 

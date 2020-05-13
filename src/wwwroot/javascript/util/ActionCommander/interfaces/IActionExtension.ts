@@ -1,13 +1,14 @@
 import { IActionCommander } from "../ActionCommander.js";
+import { IParsedCommmand } from "./IParsedCommand.js";
 
 export interface IActionExtension {
 
-    activate(): void;
-    deactivate(): void;
+    init(): void;
 
-    onError?(): void;
-    onInput?(): void;
-    onSubmit?(): void;
+    onInput?(event: KeyboardEvent): void;
+    onSubmit?(parsedCommand: IParsedCommmand): void;
+    onSuccess?(parsedCommand: IParsedCommmand): void;
+    onError?(parsedCommand: IParsedCommmand): void;
     onFocus?(): void;
     onBlur?(): void;
 
