@@ -16,8 +16,10 @@ import { ToggleSearch } from "../../util/ActionCommander/extensions/ToggleSearch
 import { ErrorDisplay } from "../../util/ActionCommander/extensions/ErrorDisplay.js";
 import { ActionSuggestions } from "../../util/ActionCommander/extensions/ActionSuggestions.js";
 import { ActionHistory } from "../../util/ActionCommander/extensions/ActionHistory.js";
+
 import { Autocomplete } from "../../util/ActionCommander/extensions/Autocomplete.js";
 import { InputButtons } from "../../util/ActionCommander/extensions/InputButtons.js";
+
 import { InteractionLayer } from "./extension/InteractionLayerExtension.js";
 import { FooterConfiguration } from "./extension/FooterConfiguration.js";
 

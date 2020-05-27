@@ -3,7 +3,7 @@ import { IParsedCommmand } from "../interfaces/IParsedCommand.js";
 import { IActionCommander } from "../ActionCommander.js";
 import { DataSourceCollection, IDataPart, SelectMode, IDataSource, SourceMode } from "../services/DataSourceCollection.js";
 import { extension } from "../../DependencyInjection.js";
-import { Observable, fromEvent, fromProperty } from "../../Observable/observable.js";
+import { Observable, fromProperty } from "../../Observable/observable.js";
 
 @extension()
 export class ActionHistory implements IActionExtension {
