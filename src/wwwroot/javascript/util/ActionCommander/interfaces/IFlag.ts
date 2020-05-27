@@ -1,5 +1,6 @@
 export interface IFlag {
-    flag: string;
+    name: string;
+    description?: string;
     type: (...args: any[]) => String | Number | Boolean | Array<string>;
     parameterIndex: number;
 }

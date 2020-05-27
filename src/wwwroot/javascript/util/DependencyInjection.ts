@@ -13,6 +13,13 @@ export function service(): GenericClassDecorator<Type<object>> {
     };
 };
 
+export function extension(): GenericClassDecorator<Type<object>> {
+    //By decorating the class the constuctor will have its parameters decorated with type metadata
+    return function (target: Type<object>) {
+        //Maybe in the future itll be necessary to do something here 
+    };
+};
+
 export class Injector {
 
     /**
@@ -21,21 +28,16 @@ export class Injector {
      */
     public static resolve<T>(target: Type<any>): T {
 
-        //What the required dependencies are
+        if (ServiceCollection.isSingleton(target))
+            return ServiceCollection.getService(target)
+
         let tokens = Reflect.getMetadata("design:paramtypes", target) ?? []
+        let injections = tokens.map((token: any) => {//resolve arguments
 
-        //inject the dependencies while recursivly resolving those dependencies dependencies
-        let injections = tokens.map((token: any) => {
-
-            try {
-                //return a registered service if exist
+            if (ServiceCollection.hasService(token))
                 return ServiceCollection.getService(token);
-            }
-            catch (err) {
-                //resolve unregistered service if possible
-                return Injector.resolve<any>(token);
-            }
 
+            return Injector.resolve<any>(token);
         });
 
         return new target(...injections);
@@ -73,6 +75,9 @@ export interface IServiceCollection {
      * @param service The service to retrieve
      */
     getService<T>(service: new (...args: any) => T): T | null;
+
+    hasService<T>(service: new (...args: any) => T): boolean;
+    isSingleton<T>(service: new (...args: any) => T): boolean;
 }
 
 enum ServiceType {
@@ -93,15 +98,18 @@ export const ServiceCollection = new class ServiceCollection implements IService
     private _singletonInstances: Map<new (...args: any) => any, any> = new Map();
     private _services: Map<new (...args: any) => any, IServiceDefinition> = new Map();
 
-
     public addSingleton<T>(service: new (...args: any) => T): void {
 
         if (this._services.has(service))
             throw `Service: ${service.name} is already registered.`;
 
+        //Create singleton before registering as singleton so we dont get a recursive loop
+        this._singletonInstances.set(service, Injector.resolve(service));
+
         this._services.set(service, {
             serviceType: ServiceType.Singleton
         });
+
     }
 
     public addTransient<T>(service: new (...args: any) => T): void {
@@ -128,24 +136,40 @@ export const ServiceCollection = new class ServiceCollection implements IService
         //save definition
         this._services.set(service, serviceDef);
 
+        //Configure singleton instance right away
+        if (serviceDef.serviceType === ServiceType.Singleton) {
+            serviceDef.serviceConfiguration(this._singletonInstances.get(service));
+
+        }
     }
 
     public getService<T>(service: new (...args: any) => T): T {
 
+        //check if service exist
         if (!this._services.has(service))
             throw `The service: ${service.name} is not registered`;
 
         let sdef = this._services.get(service);
 
-        if (this._singletonInstances.has(service))
+        //early out with singleton
+        if (sdef.serviceType === ServiceType.Singleton)
             return this._singletonInstances.get(service);
 
+        //--------- Transient only ----------
         let newService: T = Injector.resolve(service);
         sdef.serviceConfiguration?.(newService);
 
-        if (sdef.serviceType === ServiceType.Singleton)
-            this._singletonInstances.set(service, newService);
-
         return newService;
+    }
+
+    public hasService<T>(service: new (...args: any) => T): boolean {
+        return this._services.has(service);
+    }
+
+    public isSingleton<T>(service: new (...args: any) => T): boolean {
+        if (this._services.has(service))
+            return this._services.get(service).serviceType === ServiceType.Singleton;
+
+        return false;
     }
 }

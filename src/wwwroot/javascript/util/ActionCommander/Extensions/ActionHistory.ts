@@ -1,36 +1,71 @@
-import { ActionAutocompleteData } from "./ActionAutocomplete.js";
+import { IActionExtension } from "../interfaces/IActionExtension.js";
+import { IParsedCommmand } from "../interfaces/IParsedCommand.js";
+import { IActionCommander } from "../ActionCommander.js";
+import { DataSourceCollection, IDataPart, SelectMode, IDataSource, SourceMode } from "../services/DataSourceCollection.js";
+import { extension } from "../../DependencyInjection.js";
+import { Observable, fromEvent, fromProperty } from "../../Observable/observable.js";
 
-export class ActionHistory {
+@extension()
+export class ActionHistory implements IActionExtension {
 
-    private _history: Array<string>;
+    public historyDataSourceKey: string;
+    private readonly _actionCommander: IActionCommander;
+    private readonly _dsc: DataSourceCollection;
 
-    constructor() {
-        let items = localStorage.getItem("actionCommandHistory") ?? "";
+    public _historyDataSource: IDataSource;
+    private readonly _$historyDataSource: Observable<IDataSource>;
 
-        this._history = JSON.parse(items) ?? new Array<string>();
+    public constructor(actionCommander: IActionCommander, dsc: DataSourceCollection) {
+        this._actionCommander = actionCommander;
+        this._dsc = dsc;
+        this.historyDataSourceKey = "action-history";
+
+        this._historyDataSource = null;
+        this._$historyDataSource = fromProperty(this, "_historyDataSource");
     }
 
-    /**
-     * Gets the history data to display in the autocomplete dropdown
-     */
-    public getHistoryData(): ActionAutocompleteData[] {
-        return this._history.map((value) => {
-            return {
-                header: value
-            }
-        })
+    public init(): void {
+
+        let items = localStorage.getItem(this.historyDataSourceKey) ?? "[]";
+        let data: IDataPart[] = [];
+
+        (JSON.parse(items) ?? new Array<string>()).forEach((item: string) => {
+            data.push({ value: item });
+        });
+
+        this._historyDataSource = {
+            title: "Action History",
+            sourceMode: SourceMode.Action,
+            allowFiltering: true,
+            resetOnSelect: true,
+            selectMode: SelectMode.Replace,
+            tabCharacter: "",
+            data: data
+        };
+
+        this._dsc.addSource(this.historyDataSourceKey, this._$historyDataSource);
+
+
     }
 
-    /**
-     * Adds an entry to the history
-     * @param input the command to add to the history
-     */
-    public add(input: HTMLInputElement): void {
-        if (input.value.length > 0) {
-            this._history.unshift(input.value);
+    public onSubmit(parsedCommand: IParsedCommmand): void {
 
-            localStorage.setItem("actionCommandHistory", JSON.stringify(this._history.slice(0, this._history.length < 50 ? this._history.length : 50)));
-        }
+        let command = this._actionCommander.getText();
+
+        //get current history
+        let datasource = this._historyDataSource;
+
+        //add new history
+        datasource.data.unshift({ value: command });
+
+        //constrain history to 100 entries
+        if (datasource.data.length > 100)
+            datasource.data.pop();
+
+        //Replace history in local storage
+        localStorage.setItem(this.historyDataSourceKey, JSON.stringify(datasource.data.map(value => value.value)));
+
+        //update the datasource
+        this._historyDataSource = datasource;
     }
-
 }

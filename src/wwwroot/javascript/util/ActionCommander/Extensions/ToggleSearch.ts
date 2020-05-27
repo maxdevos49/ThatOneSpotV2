@@ -1,7 +1,9 @@
 import { IActionExtension } from "../interfaces/IActionExtension.js";
 import { IActionCommander } from "../ActionCommander.js";
 import { IParsedCommmand } from "../interfaces/IParsedCommand.js";
+import { extension } from "../../DependencyInjection.js";
 
+@extension()
 export class ToggleSearch implements IActionExtension {
 
     private _actionCommander: IActionCommander;

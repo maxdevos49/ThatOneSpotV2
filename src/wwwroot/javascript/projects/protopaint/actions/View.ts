@@ -1,35 +1,85 @@
 import { actioncontroller, flag, bindVariation, action } from "../../../util/ActionCommander/helpers/ActionDecorators.js";
+import { PanelService } from "../services/PanelService.js";
 
 @actioncontroller("view", "Manage the View")
 export class View {
 
-    @bindVariation("Runs a test in the way of t", "-b=false", "Control+t")
-    @bindVariation("Runs a test in the way of u", "-a=[10,10,34,56]", "Control+u")
-    @bindVariation("Runs a test in the way of j", "-b=false")//No key combo. Only accessible if used with a ui extension or a autocomplete queries it
-    @action("test", "Executes a test", "Does a test for your testing purposes")
-    public testCommand1(
-        @flag(["-b", "--boolean"]) b: boolean = false,
-        @flag(["-n", "--number"]) n: number = 0,
-        @flag(["-a", "--array"]) a: Array<any> = [],
-        @flag(["-s", "--string"]) s: string = ""
-    ): boolean {
+    private readonly _panelService: PanelService;
 
-        console.log("--boolean: ", b);
-        console.log("--number: ", n);
-        console.log("--array: ", a);
-        console.log("--string: ", s);
-
-        //Do actions here...
-
-        return false;
+    constructor(panelService: PanelService) {
+        this._panelService = panelService;
     }
 
-    @action("test2", "Does a different test command", "Long description for command...")
-    public testCommand2(): boolean {
+    @bindVariation("Toggle Left Panel", "-p=Left", "Control+l")
+    @bindVariation("Toggle Right Panel", "-p=Right", "Control+r")
+    @action("togglepanel", "Toggle a Panel", "Toggles a panel with a given panel key.")
+    public togglePanel(
+        @flag(["-p", "--panel"], "The panel to target") panelKey: string
+    ): void {
+        if (panelKey.length > 0)
+            this._panelService.togglePanel(panelKey.toLowerCase())
+    }
 
-        //Do actions here
+    @action("hidepanel", "Hide a Panel", "Hides a panel with a given panel key.")
+    public hidePanel(
+        @flag(["-p", "--panel"], "The panel to target") panelKey: string
+    ): void {
+        if (panelKey.length > 0)
+            this._panelService.hidePanel(panelKey.toLowerCase())
+    }
 
-        return false;
+    @action("showpanel", "Show a Panel", "Shows a panel with a given panel key.")
+    public showPanel(
+        @flag(["-p", "--panel"], "The panel to target") panelKey: string
+    ): void {
+        if (panelKey.length > 0)
+            this._panelService.showPanel(panelKey.toLowerCase())
+    }
+
+    @bindVariation("Toggle Fullscreen Mode", "", "Shift+F11")
+    @action("togglefullscreen", "Toggle Fullscreen Mode", "Toggle Fullscreen Mode")
+    public toggleFullScreen(): void {
+
+        // @ts-ignore
+        let isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) || (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) || (document.mozFullScreenElement && document.mozFullScreenElement !== null) || (document.msFullscreenElement && document.msFullscreenElement !== null);
+
+        if (!isInFullScreen) {
+            this.enterFullscreen();
+        } else {
+            this.exitFullscreen();
+        }
+    }
+
+    @action("enterfullscreen", "Enter Fullscreen Mode", "Enter Fullscreen Mode")
+    public enterFullscreen(): void {
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+        }
+        //@ts-ignore
+        else if (document.documentElement.webkitRequestFullscreen) {//For safari
+            //@ts-ignore
+            document.documentElement.webkitRequestFullscreen();
+        }
+    }
+
+    @action("exitfullscreen", "Exit Fullscreen Mode", "Exit Fullscreen Mode")
+    public exitFullscreen(): void {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+        //@ts-ignore
+        else if (document.webkitExitFullscreen) {//For safari
+            //@ts-ignore
+            document.webkitExitFullscreen();
+        }
+    }
+
+    @action("zenmode", "Hides all of the clutter", "Hides all of the clutter and enables fullscreen")
+    public zenMode(): void {
+        this.enterFullscreen();
+
+        let keys = this._panelService.getPanelKeys();
+        keys.forEach(key => this._panelService.hidePanel(key));
     }
 
 }

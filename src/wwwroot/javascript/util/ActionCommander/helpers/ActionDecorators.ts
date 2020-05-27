@@ -58,7 +58,7 @@ export function action(name: string, summary: string, description?: string): Met
  * Declares a paramater as a command flag
  * @param flags Flags the action contains
  */
-export function flag(flags: Array<string>): ParameterDecorator {
+export function flag(flags: Array<string>, description: string): ParameterDecorator {
 
     return function (target: object, methodKey: string | symbol, parameterIndex: number): void {
 
@@ -73,7 +73,8 @@ export function flag(flags: Array<string>): ParameterDecorator {
 
             let flagDefinition: IFlag = {
                 parameterIndex: parameterIndex,
-                flag: flag,
+                name: flag,
+                description: description,
                 type: (Reflect.getMetadata("design:paramtypes", target, methodKey) as Array<any>)[parameterIndex]
             }
 

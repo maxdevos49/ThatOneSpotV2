@@ -1,3 +1,5 @@
+/** ---------------------------- Theme variables ------------------------------ **/
+
 :root {
     /* Backdrop styles */
     --backdrop-background-color: rgba(60, 60, 60, 1);
@@ -6,6 +8,8 @@
     --panel-background-color: rgba(30, 30, 30, 0.7);
     /* Menu Styles */
 }
+
+/** ---------------------------------- Setup ---------------------------------- **/
 
 body, #page-body {
     margin: 0 !important;
@@ -17,40 +21,148 @@ footer, #header, #background-image, #theme-slant {
     display: none;
 }
 
-/** Container **/
+/** ----------------------------- Project Container -------------------------- **/
 
 div#protoContainer {
+    display: flex;
+    flex-direction: column;
     background-color: var(--backdrop-background-color);
     color: var(--panel-color);
     height: 100vh;
     overflow: hidden;
 }
 
-div#protoHeader {
-    height: 4%;
-    background-color: var(--panel-background-color);
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
-/** Backdrop **/
+/** -------------------------------- Backdrop -------------------------------- **/
 
 div#protoBackdrop {
-    height: 96%;
+    height: 100%;
     width: 100%;
     padding: 0;
+    margin: 0;
     position: relative;
     overflow: hidden;
+    /* border: solid red 1px; */
 }
+
+/** -------------------------------Interaction layer ------------------------- **/
 
 div#interaction-layer {
     height: 100%;
     width: 100%;
+    padding: 0;
+    margin: 0;
     background-color: transparent;
     position: absolute;
+    /* border: solid green 1px; */
+}
+
+/** ---------------------------------- Canvas ------------------------------------------ **/
+
+#protoCanvas {
+    background-image: linear-gradient(45deg, #808080 25%, transparent 25%), linear-gradient(-45deg, #808080 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #808080 75%), linear-gradient(-45deg, transparent 75%, #808080 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    border: solid white 1px;
+}
+
+/** ----------------------------------- Dropdown Menu ------------------------------------------ **/
+
+div.header {
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    padding: 0;
+    margin: 0;
+    background-color: var(--panel-background-color);
+    overflow: hidden;
+}
+
+div.header>div {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+    padding: 0 4px 0 4px;
+    align-items: center;
+}
+
+div.header>div#left {
+    align-content: flex-start;
+}
+
+div.header>div#right {
+    justify-content: flex-end;
+}
+
+div.header>div#left>span#title {
+    font-weight: bold;
+    font-size: 1.5rem;
+    padding: auto;
+    text-transform: uppercase;
+}
+
+/** ----------------------------------- Footer Menu------------------------------------------------- **/
+
+div.footer {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 18px;
+    background-color: rgba(20, 20, 20, 1);
+    overflow: hidden;
+}
+
+div.footer>div {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+    padding: 0 4px 0 4px;
+    align-items: center;
+}
+
+div.footer>div#left {
+    align-content: flex-start;
+}
+
+div.footer>div#right {
+    justify-content: flex-end;
+}
+
+span.footer-value {
+    font-family: monospace, monospace;
+    padding: 0 12px;
+    transition: 0.2s;
+    cursor: pointer;
+    font-size: smaller;
+    text-align: center;
+    vertical-align: middle;
+}
+
+span.footer-value:hover {
+    background-color: rgba(70, 70, 70, 1);
+}
+
+/** ----------------------------------- Miscellaneous ------------------------------------------ **/
+
+kbd {
+    background-color: rgb(170, 170, 170);
+}
+
+/*
+Temp fix I think
+*/
+
+.scrolly {
+    position: absolute;
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
+    padding: 10px 0 0 10px;
 }
 
 div[data-panel] {
@@ -61,13 +173,22 @@ div[data-panel] {
     position: relative;
 }
 
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 /** Style the left and right panels **/
 
 div[data-panel="left"], div[data-panel="right"] {
     min-width: 200px;
     width: 25%;
     max-width: 30%;
-    height: 90%;
+    height: 95%;
     padding: 0;
     transition: transform 0.4s;
 }
@@ -86,41 +207,4 @@ div[data-panel="left"].hide {
 
 div[data-panel="right"].hide {
     transform: translateX(110%);
-}
-
-div[data-panel="footer"] {
-    /* height: 3vh; */
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    padding: 2px;
-}
-
-/** Canvas styles **/
-
-#protoCanvas {
-    background-image: linear-gradient(45deg, #808080 25%, transparent 25%), linear-gradient(-45deg, #808080 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #808080 75%), linear-gradient(-45deg, transparent 75%, #808080 75%);
-    background-size: 20px 20px;
-    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-    position: absolute;
-    margin: auto;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-}
-
-kbd {
-    background-color: rgb(170, 170, 170);
-}
-
-/*
-Temp fix I think
-*/
-
-.scrolly {
-    position: absolute;
-    overflow-y: scroll;
-    height: 100%;
-    width: 100%;
 }

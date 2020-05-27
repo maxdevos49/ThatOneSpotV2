@@ -1,122 +1,181 @@
 import { service } from "../../../util/DependencyInjection.js";
+import { Observable, fromProperty } from "../../../util/Observable/observable.js";
 
 @service()
 export class CanvasService {
 
+    public canvasId: string;
+    public interactionLayerId: string;
+    public maximumScale: number;
+    public minimumScale: number;
+    public dblClickScale: number;
 
 
+    public element: HTMLCanvasElement;
+    public interactionLayer: HTMLDivElement;
+    public context: CanvasRenderingContext2D;
+
+    /**
+     * The current x position of the canvas
+     */
+    public x: number;
+    public readonly $x: Observable<number>;
+
+    /**
+     * The current y position of the canvas
+     */
+    public y: number;
+    public readonly $y: Observable<number>;
+
+    /**
+     * The non scaled width of the canvas
+     */
+    public width: number;
+    public readonly $width: Observable<number>;
+
+    /**
+     * The non scaled height of the canvas
+     */
+    public height: number;
+    public readonly $height: Observable<number>;
+
+    /**
+     * The x origin of the canvas. if the the canvas is 100px wide then an origin of 0 would equal 0 and an origin of 1 would equal 100
+     */
+    public originX: number;
+    public readonly $originX: Observable<number>;
+
+    /**
+     * The y origin of the canvas. if the the canvas is 100px tall then an origin of 0 would equal 0 and an origin of 1 would equal 100
+     */
+    public originY: number;
+    public readonly $originY: Observable<number>;
+
+    /**
+     * The current scale of the canvas
+     */
+    public scale: number;
+    public readonly $scale: Observable<number>;
+
+
+
+    constructor() {
+        //default values
+        this.canvasId = "protoCanvas";
+        this.interactionLayerId = "interaction-layer";
+        this.maximumScale = 4;
+        this.minimumScale = 0.25;
+        this.dblClickScale = 0.25;
+
+        //observables config
+        this.x = 0;
+        this.$x = fromProperty(this, "x");
+
+        this.y = 0;
+        this.$y = fromProperty(this, "y");
+
+        this.width = 500;
+        this.$width = fromProperty(this, "width");
+
+        this.height = 500;
+        this.$height = fromProperty(this, "height");
+
+        this.originX = 0;
+        this.$originX = fromProperty(this, "originX", v => Math.round((v + Number.EPSILON) * 10000) / 10000)
+
+        this.originY = 0;
+        this.$originY = fromProperty(this, "originY", v => Math.round((v + Number.EPSILON) * 10000) / 10000);
+
+        this.scale = 1;
+        this.$scale = fromProperty(this, "scale", v => Math.round((Math.min(Math.max(v, this.minimumScale), this.maximumScale) + Number.EPSILON) * 100) / 100);
+
+    }
+
+    public pan(xOffset: number, yOffset: number): void {
+        this.x += xOffset;
+        this.y += yOffset;
+    }
+
+    public setTranslation(x: number, y: number): void {
+        this.x = x;
+        this.y = y;
+    }
+
+    public setOrigin(x: number, y: number): void {
+        this.originX = x;
+        this.originY = y;
+    }
+
+    public setScale(scale: number): void {
+        this.scale = scale;
+    }
+
+    public scaleFromPoint(scale: number, x: number, y: number): void {
+        let newScale = scale;
+        let scaleChange = this.scale - newScale;
+
+        let zoomPointX = (x - this.x) / this.scale;
+        let zoomPointY = (y - this.y) / this.scale;
+
+        if (newScale < this.maximumScale && newScale > this.minimumScale) {
+            this.setScale(scale);
+            this.pan((zoomPointX * scaleChange), (zoomPointY * scaleChange));
+        }
+    }
+
+    public centerCanvas(): void {
+        let interBounds = this.interactionLayer.getBoundingClientRect();
+        let canvasBounds = this.element.getBoundingClientRect();
+
+        this.x = interBounds.width / 2 - canvasBounds.width / 2;
+        this.y = interBounds.height / 2 - canvasBounds.height / 2;
+    }
+
+    public init(): void {
+
+        //init and verify elements
+        this.element = document.getElementById(this.canvasId) as HTMLCanvasElement;
+        this.interactionLayer = document.getElementById(this.interactionLayerId) as HTMLDivElement;
+
+        if (!this.element)
+            throw new Error(`The canvas id: "${this.canvasId}" is not valid.`);
+
+        if (!this.interactionLayer)
+            throw new Error(`The interaction layer id: ${this.interactionLayerId} is not valid`);
+
+        //get render context
+        this.context = this.element.getContext("2d");
+
+        if (!this.context)
+            throw new Error("The canvas context failed to be initilized.");
+
+        //set variables to actual values
+        let canvasBounds = this.element.getBoundingClientRect();
+        this.x = canvasBounds.x;
+        this.y = canvasBounds.y;
+        this.width = canvasBounds.width;
+        this.height = canvasBounds.height;
+
+        //init observers
+        this.$x.subscribe(v => this.applyTransformations());
+        this.$y.subscribe(v => this.applyTransformations());
+        this.$width.subscribe(v => {
+            this.element.width = this.width;//clears canavas
+            this.applyTransformations()
+        });
+        this.$height.subscribe(v => {
+            this.element.height = this.height;//clears canvas
+            this.applyTransformations()
+        });
+        this.$originX.subscribe(v => this.applyTransformations());
+        this.$originY.subscribe(v => this.applyTransformations());
+        this.$scale.subscribe(v => this.applyTransformations());
+
+        this.centerCanvas();
+    }
+
+    private applyTransformations(): void {
+        this.element.style.transformOrigin = `${this.originX * 100}% ${this.originY * 100}%`;
+        this.element.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
+    }
 }
-
-
-// export class CanvasService {
-
-//     public readonly maximumScale: number = 4;
-//     public readonly minimumScale: number = 0.25;
-//     public readonly dblClickScale: number = 0.5;
-
-//     public readonly element: HTMLCanvasElement;
-//     public readonly context: CanvasRenderingContext2D;
-//     public readonly interactionLayer: HTMLDivElement;
-
-//     private _scale: number = 1;
-//     private _originX: number = 0;
-//     private _originY: number = 0;
-//     private _offsetX: number = 0;
-//     private _offsetY: number = 0;
-//     private _x: number;
-//     private _y: number;
-//     private _width: number;
-//     private _height: number;
-
-
-//     constructor(canvas: HTMLCanvasElement, interactionLayer: HTMLDivElement) {
-//         this.element = canvas;
-//         let context = canvas.getContext("2d");
-//         if (!context)
-//             throw "Failed to get the canvas render context";
-//         this.context = context;
-//         this._width = canvas.width;
-//         this._height = canvas.height;
-//         this._x = canvas.offsetLeft;
-//         this._y = canvas.offsetTop;
-//         this.interactionLayer = interactionLayer;
-//     }
-
-//     public get scale(): number {
-//         return this._scale;
-//     }
-
-//     public get x(): number {
-//         return this._x + this._offsetX;
-//     }
-
-//     public get y(): number {
-//         return this._y + this._offsetY;
-//     }
-
-//     public get width(): number {
-//         return this._width * this._scale;
-//     }
-
-//     public get height(): number {
-//         return this._width * this._scale;
-//     }
-
-//     public pan(panX: number, panY: number): void {
-//         this._offsetX += panX;
-//         this._offsetY += panY;
-//         this.validateOffset();
-//         this.applyTransformations();
-//     }
-//     public setTranslation(offsetX: number, offsetY: number): void {
-//         this._offsetX = offsetX;
-//         this._offsetY = offsetY;
-//         this.validateOffset()
-//         this.applyTransformations();
-//     }
-
-//     public setScale(scale: number): void {
-//         this._scale = Math.min(Math.max(scale, this.minimumScale), this.maximumScale)
-//         this.applyTransformations();
-//     }
-
-//     public setOrigin(originX: number, originY: number): void {
-//         this._originX = originX;
-//         this._originY = originY;
-//         this.applyTransformations();
-//     }
-
-//     public scaleCanvasToPoint(scaleChange: number, mouse: Vector) {
-//         let newScale = scaleChange + this.scale;
-
-//         let zoomPointX = (mouse.x - this.x) / this.scale;
-//         let zoomPointY = (mouse.y - this.y) / this.scale;
-
-//         if (newScale < this.maximumScale && newScale > this.minimumScale) {
-//             this.setScale(newScale);
-//             this.pan(-(zoomPointX * scaleChange), -(zoomPointY * scaleChange));
-//         }
-//     }
-
-//     private validateOffset(): void {
-//         let container = this.interactionLayer.getBoundingClientRect();
-
-//         if (this.x > container.width / 2) {
-//             this._offsetX -= this.x - container.width / 2;
-//         } else if (this.x + this.width < container.width / 2) {
-//             this._offsetX -= (this.x + this.width) - container.width / 2
-//         }
-
-//         if (this.y > container.height / 2) {
-//             this._offsetY -= this.y - container.height / 2;
-//         } else if (this.y + this.height < container.height / 2) {
-//             this._offsetY -= (this.y + this.height) - container.height / 2
-//         }
-
-//     }
-
-//     private applyTransformations(): void {
-//         this.element.style.transformOrigin = `${this._originX}px ${this._originY}px`;
-//         this.element.style.transform = `translate(${this._offsetX}px,${this._offsetY}px) scale(${this._scale})`;
-//     }
-// }

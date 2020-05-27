@@ -1,48 +1,63 @@
+import { actioncontroller, flag, action } from "../../../util/ActionCommander/helpers/ActionDecorators.js";
+import { CanvasService } from "../services/CanvasService.js";
 
+@actioncontroller("canvas", "Manage the canvas")
 export class Canvas {
-    //TODO
+
+    private readonly _canvas: CanvasService;
+
+    constructor(canvas: CanvasService) {
+        this._canvas = canvas;
+    }
+
+    @action("pan", "Pan the canvas", "Pan the canvas by an x or y offset.")
+    public pan(
+        @flag(["-x"]) x: number = 0,
+        @flag(["-y"]) y: number = 0
+    ): void {
+        this._canvas.pan(x, y);
+    }
+
+    @action("position", "Position the canvas", "Position the canvas by an x or y position.")
+    public position(
+        @flag(["-x"]) x: number,
+        @flag(["-y"]) y: number
+    ): void {
+
+        if (x)
+            this._canvas.x = x;
+
+        if (y)
+            this._canvas.y = y;
+
+    }
+
+    @action("scale", "Scale the canvas", "Scale the canvas by an scalar.")
+    public scale(
+        @flag(["-s", "--scalar"]) scalar: number = 1
+    ): void {
+        this._canvas.setScale(scalar);
+    }
+
+    @action("center", "Center the canvas", "Center the canvas")
+    public centerCanvas(): void {
+
+        this._canvas.centerCanvas();
+    }
+
+    @action("resize", "Resize the canvas", "Resize the canvas")
+    public resizeCanvas(
+        @flag(["-w", "--width"]) width: number,
+        @flag(["-h", "--height"]) height: number
+    ): void {
+
+        if (width)
+            this._canvas.width = width;
+
+        if (height)
+            this._canvas.height = height;
+
+        this.centerCanvas();
+    }
+
 }
-
-// import { ProtoPaint } from "../protopaint.js";
-// import { ActionController } from "../../../util/ActionCommander/ActionController.js";
-// import { ActionOptions } from "../../../util/ActionCommander/Action.js";
-// import { action, flag } from "../../../util/ActionCommander/ActionDecorators.js";
-
-// export class Canvas extends ActionController<ProtoPaint>{
-
-//     constructor() {
-//         super("canvas", "Manipulate the canvas",  "Canvas is a primary command used to manipulate the canvas or access other subcommands.");
-//     }
-
-//     @flag("x", "x", "Translates the canvas horizontally by a specified amount")
-//     @flag("y", "y", "Translates the canvas vertically by a specified amount")
-//     @action("Pans the canvas", "Translates the canvas on the x and y axis")
-//     public pan(dependency: ProtoPaint, o: ActionOptions<ProtoPaint>): boolean {
-//         let c = dependency.canvas;
-//         let r = false;
-
-//         if (o.values.has("-x")) {
-//             let x = parseInt(o.values.get("-x"));
-//             c.pan(x, 0)
-//             r = true;
-//         }
-
-//         if (o.values.has("-y")) {
-//             let y = parseInt(o.values.get("-y"));
-//             c.pan(y, 0)
-//             r = true;
-//         }
-
-//         return r;
-//     }
-
-//     @flag("s", "scale", "Scale the canvas by a specified amount")
-//     @action("Scale the canvas", "Scales the canvas in the x and y dimensions")
-//     public scale(dependency: ProtoPaint, o: ActionOptions<ProtoPaint>): boolean {
-
-//         let s = o.getValue("s","scale") as number ?? 1;
-//         dependency.canvas.setScale(s);
-
-//         return true;
-//     }
-// }

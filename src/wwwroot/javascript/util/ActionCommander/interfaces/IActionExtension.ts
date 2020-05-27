@@ -6,6 +6,7 @@ export interface IActionExtension {
     init(): void;
 
     onInput?(event: KeyboardEvent): void;
+    onChange?(): void;
     onSubmit?(parsedCommand: IParsedCommmand): void;
     onSuccess?(parsedCommand: IParsedCommmand): void;
     onError?(parsedCommand: IParsedCommmand): void;

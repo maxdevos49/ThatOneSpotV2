@@ -1,11 +1,12 @@
-/** Search style **/
+/** ----------------------------- Search-container ------------------------------------- **/
 
 div[data-search] {
     background-color: var(--panel-background-color);
     color: var(--panel-color);
     box-shadow: 0 4px 8px 0 black !important;
     position: absolute;
-    height: 5vh;
+    min-height: 5vh;
+    max-height: 40vh;
     width: 40%;
     margin-left: auto;
     margin-right: auto;
@@ -15,23 +16,56 @@ div[data-search] {
     border-radius: 4px;
     z-index: 100;
     display: none;
+    overflow: hidden;
 }
 
-div[data-search]>input {
+div.input-container {
+    display: flex;
+    flex-direction: row;
+    height: 5vh;
     border-radius: inherit;
     background-color: inherit;
     color: inherit;
+}
+
+div[data-search]>div.input-container>input {
     border: none;
-    width: 100%;
-    height: inherit;
+    background-color: transparent;
+    color: inherit;
+    height: 5vh;
     padding: 1%;
+    flex-grow: 20;
+    align-items: center;
+    justify-content: center;
 }
 
 div[data-search].show {
     display: block;
 }
 
-dl.autocomplete {
+/** ----------------------------------- Search Buttons ------------------------------- **/
+
+span.input-button {
+    flex-grow: 1;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.1s;
+    color: rgba(255,255,255,0.7);
+}
+
+span.input-button:hover {
+    font-size: 1.4rem;
+    color: rgb(255,255,255);
+
+}
+
+/** ----------------------------------- Autocomplete --------------------------------- **/
+
+/* Container */
+
+div.autocomplete>dl {
     list-style: none;
     background-color: inherit;
     margin: 0;
@@ -40,52 +74,50 @@ dl.autocomplete {
     border-bottom-right-radius: 4px;
     overflow-y: scroll;
     overflow-x: hidden;
-    max-height: 700%;
+    max-height: 35vh;
 }
 
-dl.autocomplete>section>dt {
+/* Title header*/
+
+div.autocomplete>dl>dt {
     padding: 3px;
     margin: 0;
     background-color: rgba(100, 100, 100, 0.8);
 }
 
-dl.autocomplete>dt {
-    padding: 3px;
-    margin: 0;
-    background-color: rgba(140, 140, 140, 0.9);
-    font-size: larger;
-}
+/* Data section*/
 
-dl.autocomplete>section {
+div.autocomplete>dl>section {
     margin: 0;
     padding: 0;
     font-size: 0.9rem;
     transition: 0.2s;
 }
 
-dl.autocomplete>section>dd {
+div.autocomplete>dl>section:hover {
+    background-color: rgba(0, 0, 60, 0.8);
+    margin-left: 2px;
+}
+
+/* Data Header */
+
+div.autocomplete>dl>section>dt {
+    padding: 3px;
+    margin: 0;
+    background-color: rgba(140, 140, 140, 0.9);
+    font-size: larger;
+}
+
+/* Data Description */
+
+div.autocomplete>dl>section>dd {
     padding: 3px 3px 3px 16px;
     margin: 0;
 }
 
-dl.autocomplete>section.active {
-    background-color: rgba(0, 0, 0, 0.8);
-    margin-left: 2px;
-}
+/*Active Marker*/
 
-dl.autocomplete>section:hover{
-    background-color: rgba(0, 0, 60, 0.8);
+div.autocomplete>dl>section.active {
+    background-color: red !important;
     margin-left: 2px;
-}
-#ActionError{
-    transition: 0.8s;
-    padding: 0;
-    margin: 0;
-    background-color: red;
-    display: block;
-    width: 100%;
-}
-
-#ActionError.show{
-    padding: 3px;
 }

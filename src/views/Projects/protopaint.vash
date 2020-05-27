@@ -12,18 +12,16 @@
 
         <div id="protoContainer">
 
-            <div id="protoHeader">
+            <div class="header">
 
-                <div id="protoTitle" style="flex-grow: 7; text-align: left; padding: 3px;">
-                    <h2>ProtoPaint</h3>
+                <div id="left">
+                    <span id="title">ProtoPaint <i class="fas fa-paint-brush"></i></span>
                 </div>
 
-                <div  style="flex-grow: 1; text-align: center;">
-                    <a href="/projects/index">
-                        Back to Thatonespot
-                    </a>
+                <div id="right">
+                    <a href="/projects/index">Back to Thatonespot</a>
                 </div>
-            
+
             </div>
 
             <div id="protoBackdrop">
@@ -37,130 +35,137 @@
                 <div data-panel="left" data-resize="right">
 
                     <div class="scrolly">
+                        <h2>ProtoPaint</h2>
                         <p>Started: March 26, 2020</p>
-                        <h5>Key Bindings</h5>
-                        <ul>
-                            <li><kbd>Meta+p</kbd> - Action Search</li>
-                            <li><kbd>Control+l</kbd> - Toggle left panel</li>
-                            <li><kbd>Control+r</kbd> - Toggle right panel</li>
-                            <li><kbd>Control+s</kbd> - Show all panels</li>
-                            <li><kbd>Control+h</kbd> - Hide all panels</li>
-                            <li><kbd>f</kbd> - Toggles fullscreen</li>
-                        </ul>
-                        <h5>Canvas</h5>
-                        <ul>
-                            <li>
-                                <h6>Pan Mode(Default Mode)</h6>
-                                <ul>
-                                    <li><kbd>Alt+Scroll</kbd> - Zoom canvas</li>
-                                    <li><kbd>Scroll</kbd> - Pan canvas horizontally and vertically</li>
-                                    <li><kbd>Click+Drag</kbd> - Pan canvas horizontally and vertically</li>
-                                    <li><kbd>DblClick</kbd> - Zoom in by 50%</li>
-                                    <li><kbd>Alt+DblClick</kbd> - Zoom out by 50%</li>
-                                </ul>
-                            </li>
-                        </ul>
-                        
 
-                        <h5>Action Search</h5>
-                        <ul>
-                            <li><kbd>Alt</kbd> - Toggle history or command mode</li>
-                            <li><kbd>ArrowUp</kbd> - View older executed commands</li>
-                            <li><kbd>ArrowDown</kbd> - View newer executed commands</li>
-                            <li><kbd>Esc</kbd> - Hide search</li>
-                            <li><kbd>Enter</kbd> - Execute current command</li>
-                        </ul>
-                        <h5>Action Commands</h5>
-                        <ul>
-                            <li>
-                                <h5><code>view</code></h5>
-                                <p>Shows or hides all menu panels</p>
-                                <code>view [-s | --show] [-h | --hide]</code> 
-                                <hr>
-                            </li>
-                            <li>
-                                <h5><code>view toggle</code></h5>
-                                <p>Toggles individual panels visibility.</p>
-                                <code>view toggle [-l | --left] [-r | --right]</code>
-                                <hr>
-                            </li>
-                            <li>
-                                <h5><code>view fullscreen</code></h5>
-                                <p>Toggles fullscreen</p>
-                                <code>view fullscreen</code>
-                                <hr>
-                            </li>
-                        </ul>
+                        <p>Advanced paint application built with javascript. Extensibility and maintainability are the main goals with some ambitious features planned. </p>
 
-                        <hr/>
+                        <h4>Things TODO</h4>
+                        <ul style="list-style: none; margin: 0; padding: 0">
 
-                        <h5>TODO</h5>
-                        <ol>
-                            <li>
-                                <input type="checkbox" checked>
-                                Add zoom zoom to canvas
+                          <li>
+                                <h6>File Menu</h6>
+                                <ol>
+                                    <li>
+                                        <input type="checkbox">
+                                        Builds upon variation binding. 
+                                    </li>
+                                    <li>
+                                        <input type="checkbox">
+                                        Displays key combo if applicable
+                                    </li> 
+                                    <li>
+                                        <input type="checkbox">
+                                        Can use an observable list for options
+                                    </li>
+                                     <li>
+                                        <input type="checkbox">
+                                        Can use observable contraints for denying clickability
+                                    </li>
+                                     <li>
+                                        <input type="checkbox">
+                                        If command requires input then it opens dynamicaly generated form for entering flags
+                                    </li>
+                                </ol>
                             </li>
-                            <li>
-                                <input type="checkbox" checked>
-                                Add panning to canvas by scroll
+
+                             <li>
+                                <h6>Action Search</h6>
+                                <ol>
+                                    <li>
+                                        <input type="checkbox" checked>
+                                        Fix flags so they display grouped together
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" checked>
+                                        When using the autocomplete on the flag add the "=" instead of a space
+                                    </li>
+                                    <li>
+                                        <input type="checkbox">
+                                        Commands can use autocomplete for selecting flag option values
+                                    </li>
+                                </ol>
                             </li>
-                            <li>
-                                <input type="checkbox" checked>
-                                Add panning to canvas by mouse click and drag
+
+                             <li>
+                                <h6>Footer Menu</h6>
+                                <ol>
+                                    <li>
+                                        <input type="checkbox" checked>
+                                        Group all footer declarations into 1 file. (So its easy to find and update them)
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" checked>
+                                        Hook into the action search to display the options for each menu action when needed
+                                    </li>
+                                </ol>
                             </li>
-                            <li>
-                                <input type="checkbox" checked>
-                                Add double click to zoom
+
+                              <li>
+                                <h6>Action Commands</h6>
+                                <ol>
+                                    <li>
+                                        <input type="checkbox" checked>
+                                        Fix fullscreen command. Make typescript be happy with the function calls.
+                                    </li>
+                                    <li>
+                                        <input type="checkbox">
+                                        Create help controller
+                                    </li>
+                                    <li>
+                                        <input type="checkbox">
+                                        Create Edit controller
+                                    </li>
+                                </ol>
                             </li>
-                            <li>
-                                <input type="checkbox" checked>
-                                Add autocomplete to actionsearch
+
+                             <li>
+                                <h6>Help Commands</h6>
+                                <ol>
+                                    <li>
+                                        <input type="checkbox">
+                                        Display/Remap Keyboard Commands
+                                    </li>
+                                    <li>
+                                        <input type="checkbox">
+                                        Explain actionsearch controls
+                                    </li>
+                                </ol>
                             </li>
-                            <li>
-                                <input type="checkbox">
-                                Add menu bar/ make a file menu ui library?? Maybe its an extension to ActionCommander so it has a place to find commands.
+
+                             <li>
+                                <h6>Edit controller</h6>
+                                <ol>
+                                    <li>
+                                        <input type="checkbox">
+                                        Create new shape
+                                    </li>
+                                    <li>
+                                        <input type="checkbox">
+                                        Move virtual cursor
+                                    </li>
+                                    <li>
+                                        <input type="checkbox">
+                                        Change layer
+                                    </li>
+                                </ol>
                             </li>
+                        </ul>
+<!--
                             <li>
-                                <input type="checkbox">
-                                Make the footer update its values and add the scalling percentage
+                                <h6>Topic 1</h6>
+                                <ol>
+                                    <li>
+                                        <input type="checkbox">
+                                        Item 1
+                                    </li>
+                                    <li>
+                                        <input type="checkbox">
+                                        Item 2
+                                    </li>
+                                </ol>
                             </li>
-                            <li>
-                                <input type="checkbox" checked>
-                                Display error for unknown command with no suggestions
-                            </li>
-                            <li>
-                                <input type="checkbox">
-                                Start designing how drawing will work
-                            </li>
-                            <li>
-                                <input type="checkbox">
-                                Start designing how the property panels will be structured/generated.
-                            </li>
-                            <li>
-                                <input type="checkbox">
-                                Create reactive data wrapper class thing. (Slide slider updates value or changing value updates slider) Basically what react does for you D;
-                            </li>
-                            <li>
-                                <input type="checkbox" checked>
-                                Hide page footer and header and prevent all page scrolling.
-                            </li>
-                            <li>
-                                <input type="checkbox" checked>
-                                Full screen mode would be hot.
-                            </li>
-                            <li>
-                                <input type="checkbox">
-                                Add a settings object and make sure it gets stored in local storage.
-                            </li>
-                            <li>
-                                <input type="checkbox" checked>
-                                Make interaction layer less interactive when the command search is up
-                            </li>
-                            <li>
-                                <input type="checkbox" checked>
-                            Fix scroll in this panel type D:
-                            </li>
-                        </ol>
+                            -->
                     </div>
                 </div>
                 
@@ -185,12 +190,13 @@
                     </ol>
                 </div>
 
-                <div data-panel="footer">
-                    x - <span data-dynamic-value="x">100</span>px, y - <span data-dynamic-value="y">23</span>px | Mode: <span data-dynamic-value="mode">Pan</span>
+                <div class="footer">
+                    <div id="left"></div>
+                    <div id="right"></div>
                 </div>
 
                 <!-- Search -->
-                <div id="search-container" data-search="true"></div>
+                <div id="search-container" data-panel="search" data-search="true"></div>
 
             </div>
         </div>

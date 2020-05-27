@@ -20,7 +20,7 @@
             "**/.svn": true,
             "**/.hg": true,
             "**/.gitignore": false,
-            "**/src": true,
+            "**/src": false,
             "**/CVS": true,
             "**/.DS_Store": true,
             "**/*.js.m*": true,

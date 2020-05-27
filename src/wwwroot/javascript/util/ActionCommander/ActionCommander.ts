@@ -12,6 +12,8 @@ import { Injector } from "../DependencyInjection.js";
 
 export interface IActionCommander {
 
+    readonly controllers: Map<string, IActionController>;
+
     registerExtension<T extends IActionExtension>(extension: IActionExtensionConstructor<T>): void;
     configureExtension<T extends IActionExtension>(extension: IActionExtensionConstructor<T>, configureCallback: (extension: T) => void): void;
     activateExtensionHook(hookCallback: (extension: IActionExtension) => void): void;
@@ -29,7 +31,9 @@ export interface IActionCommander {
     setText(text: string): void;
     appendText(text: string): void;
     isFocused(): boolean;
+    submitSearch(): void;
     appendChildElement(element: HTMLDivElement): void;
+    appendButtonElement(element: HTMLButtonElement): void;
 
     registerKeyBinding(keyCombo: string, action: () => void): void;
 
@@ -39,20 +43,22 @@ export interface IActionCommander {
 //#endregion
 
 export class ActionCommander implements IActionCommander {
+    public readonly controllers: Map<string, IActionController>;
 
     private _searchContainer: HTMLDivElement;
     private readonly _configuration: IConfiguration;
     private readonly _inputElement: HTMLInputElement;
-    private readonly _controllers: Map<string, IActionController>;
+    private readonly _inputElementContainer: HTMLDivElement;
     private readonly _extensions: Map<IActionExtensionConstructor<any>, IActionExtension>;
     private readonly _extensionConfigurations: Map<IActionExtensionConstructor<any>, (extension: any) => void>;
 
     constructor(configuration?: IConfiguration) {
         this._configuration = configuration;
 
-        this._controllers = new Map();
+        this.controllers = new Map();
         this._extensions = new Map();
-        this._extensionConfigurations = new Map();
+        this._extensionConfigurations = new Map();//<i class="fas fa-times"></i>
+        this._inputElementContainer = document.createElement("DIV") as HTMLDivElement;
         this._inputElement = document.createElement("INPUT") as HTMLInputElement;
     }
 
@@ -69,7 +75,7 @@ export class ActionCommander implements IActionCommander {
         let tokens = Reflect.getMetadata("design:paramtypes", extension) ?? [];
         tokens.shift();//The first argument will always be ActionCommander
 
-        this._extensions.set(extension, new extension(this, Injector.resolveGroup(tokens)));
+        this._extensions.set(extension, new extension(this, ...Injector.resolveGroup(tokens)));
 
     }
 
@@ -102,7 +108,7 @@ export class ActionCommander implements IActionCommander {
             return;
         }
 
-        if (this._controllers.has(controllerName)) {
+        if (this.controllers.has(controllerName)) {
             console.warn(`The controller: "${controller.name}" with command name: "${controllerName}" is registered more than once! The repeated occurences will be omitted`);
             return;
         }
@@ -139,7 +145,7 @@ export class ActionCommander implements IActionCommander {
             action.flags = Reflect.getMetadata("flags", instance, action.methodKey);
         });
 
-        this._controllers.set(controllerInfo.name, controllerInfo);
+        this.controllers.set(controllerInfo.name, controllerInfo);
     }
 
     //#endregion
@@ -147,7 +153,7 @@ export class ActionCommander implements IActionCommander {
     //#region Parsing and Execution
 
     public parseCommand(command: string): IParsedCommmand {
-        return CommandParser.parseCommand(command, this._controllers);
+        return CommandParser.parseCommand(command, this.controllers);
     }
 
 
@@ -191,6 +197,7 @@ export class ActionCommander implements IActionCommander {
 
     public clear(): void {
         this._inputElement.value = "";
+        this.activateExtensionHook(ex => ex.onChange?.());
     }
 
     public getText(): string {
@@ -199,14 +206,35 @@ export class ActionCommander implements IActionCommander {
 
     public setText(text: string): void {
         this._inputElement.value = text;
+        this.activateExtensionHook(ex => ex.onChange?.());
     }
 
     public appendText(text: string): void {
         this._inputElement.value += text;
+        this.activateExtensionHook(ex => ex.onChange?.());
     }
 
     public appendChildElement(element: HTMLDivElement): void {
         this._searchContainer.appendChild(element);
+    }
+
+    public appendButtonElement(element: HTMLButtonElement): void {
+        this._inputElementContainer.appendChild(element);
+    }
+
+
+    public submitSearch(): void {
+        if (this.getText().length === 0)
+            return;
+
+        let parsedCommand = this.parseCommand(this.getText());
+        this.activateExtensionHook(ext => ext.onSubmit?.(parsedCommand));
+
+        if (this.executeCommand(parsedCommand)) {
+            this.activateExtensionHook(ext => ext.onSuccess?.(parsedCommand));
+        } else {
+            this.activateExtensionHook(ext => ext.onError?.(parsedCommand));
+        }
     }
 
     //#endregion
@@ -254,11 +282,15 @@ export class ActionCommander implements IActionCommander {
         if (!this._searchContainer)
             throw new Error(`The SearchContainerId: ${this._configuration.searchContainerId ?? "search-container"} is not valid. Aborting Initilization.`);
 
-        this._inputElement.setAttribute("id", "ActionSearch");
+        //Input Element container
+        this._inputElementContainer.setAttribute("class", "input-container")
+        this._searchContainer.appendChild(this._inputElementContainer);
+
+        //input
         this._inputElement.setAttribute("type", "text");
         this._inputElement.setAttribute("placeholder", "ActionSearch");
         this._inputElement.setAttribute("tabindex", "-1");
-        this._searchContainer.appendChild(this._inputElement);
+        this._inputElementContainer.appendChild(this._inputElement);
     }
 
     private initEvents(): void {
@@ -268,22 +300,19 @@ export class ActionCommander implements IActionCommander {
             if (e.altKey || e.metaKey || e.ctrlKey || e.key === "Tab")
                 e.preventDefault();//prevent all special actions like printing :D
 
-            if (e.key === "Enter" && this.getText().length > 0) {
-
-                this.activateExtensionHook(ext => ext.onSubmit?.(parsedCommand));
-
-                let parsedCommand = this.parseCommand(this.getText());
-
-                if (this.executeCommand(parsedCommand)) {
-                    this.activateExtensionHook(ext => ext.onSuccess?.(parsedCommand));
-                } else {
-                    this.activateExtensionHook(ext => ext.onError?.(parsedCommand));
-                }
-            }
-
             this.activateExtensionHook(ext => ext.onInput?.(e));
 
+            if (e.key.length > 1)//input event doesnt fire for 
+                this.activateExtensionHook(ex => ex.onChange?.());
+
+            if (e.key === "Enter")
+                this.submitSearch();
+
         }, false);
+
+        this._inputElement.addEventListener("input", (e) => {
+            this.activateExtensionHook(ex => ex.onChange?.());
+        })
 
         this._inputElement.addEventListener("focusin", (e) => {
             this.focus();

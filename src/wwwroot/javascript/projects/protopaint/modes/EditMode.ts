@@ -1,27 +1,21 @@
-import { Vector } from "../../../protoCore/math/vector.js";
+import { InteractionMode } from "../services/InteractionModeService.js";
 import { IInteractionMode } from "../interfaces/IInteractionMode.js";
 import { CanvasService } from "../services/CanvasService.js";
-import { InteractionMode } from "../services/InteractionModeService.js";
-import { FooterService } from "../services/FooterService.js";
+import { Vector } from "../../../protoCore/math/vector.js";
 
 @InteractionMode()
-export class PanMode implements IInteractionMode {
+export class EditMode implements IInteractionMode {
 
     private _mouseDown: boolean;
     private _previousPosition: Vector;
 
     private readonly _canvas: CanvasService;
-
-    constructor(canvasService: CanvasService) {
-        this._canvas = canvasService;
-
-        this._mouseDown = false;
-        this._previousPosition = new Vector();
-
+    constructor(canvas: CanvasService) {
+        this._canvas = canvas;
     }
 
     public init(): void {
-        this._canvas.interactionLayer.style.cursor = "grab";
+        throw new Error("Method not implemented.");
     }
 
     public onMouseDown(e: MouseEvent): void {
@@ -73,5 +67,4 @@ export class PanMode implements IInteractionMode {
         this._mouseDown = false;
         this._canvas.interactionLayer.style.cursor = "grab";
     }
-
 }

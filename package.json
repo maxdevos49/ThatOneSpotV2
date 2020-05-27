@@ -16,10 +16,15 @@
         "@types/uuid": "^3.4.4",
         "concurrently": "^5.1.0",
         "eslint": "^6.8.0",
-        "nodemon": "^2.0.2"
+        "nodemon": "^2.0.2",
+        "source-map-support": "^0.5.12",
+        "ts-nameof": "^5.0.0",
+        "ts-node": "^8.10.1",
+        "ttypescript": "^1.5.10"
     },
     "dependencies": {
         "@okta/oidc-middleware": "^2.0.0",
+        "@types/ts-nameof": "^4.2.1",
         "aws-sdk": "^2.643.0",
         "dotenv": "^6.2.0",
         "esm": "^3.2.9",
@@ -30,7 +35,6 @@
         "mongoose": "^5.9.3",
         "nodemailer": "^6.2.1",
         "reflect-metadata": "^0.1.13",
-        "source-map-support": "^0.5.12",
         "typescript": "^3.8.3",
         "uuid": "^3.3.2",
         "vash": "^0.12.6"
@@ -39,7 +43,7 @@
         "setup": "./scripts/dotenv.sh -f && npm i",
         "build": "tsc",
         "start": "node -r esm -r source-map-support/register -r dotenv/config --unhandled-rejections=strict src/server.js",
-        "dev": "tsc && concurrently \"tsc -w\" \"nodemon\""
+        "dev": "ttsc && concurrently \"ttsc -w\" \"nodemon\""
     },
     "repository": {
         "type": "git"
