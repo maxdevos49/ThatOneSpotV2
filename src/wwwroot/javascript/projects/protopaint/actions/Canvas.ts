@@ -12,16 +12,16 @@ export class Canvas {
 
     @action("pan", "Pan the canvas", "Pan the canvas by an x or y offset.")
     public pan(
-        @flag(["-x"]) x: number = 0,
-        @flag(["-y"]) y: number = 0
+        @flag(["-x"], "x offset to pan with") x: number = 0,
+        @flag(["-y"], "y offset to pan with") y: number = 0
     ): void {
         this._canvas.pan(x, y);
     }
 
     @action("position", "Position the canvas", "Position the canvas by an x or y position.")
     public position(
-        @flag(["-x"]) x: number,
-        @flag(["-y"]) y: number
+        @flag(["-x"], "x coordinate to move to") x: number,
+        @flag(["-y"], "y coordinate to move to") y: number
     ): void {
 
         if (x)
@@ -32,9 +32,9 @@ export class Canvas {
 
     }
 
-    @action("scale", "Scale the canvas", "Scale the canvas by an scalar.")
+    @action("scale", "Scale the canvas", "Scale the canvas by a scalar.")
     public scale(
-        @flag(["-s", "--scalar"]) scalar: number = 1
+        @flag(["-s", "--scalar"], "The scale to change to") scalar: number = 1
     ): void {
         this._canvas.setScale(scalar);
     }
@@ -47,8 +47,8 @@ export class Canvas {
 
     @action("resize", "Resize the canvas", "Resize the canvas")
     public resizeCanvas(
-        @flag(["-w", "--width"]) width: number,
-        @flag(["-h", "--height"]) height: number
+        @flag(["-w", "--width"], "The width to set the canvas") width: number,
+        @flag(["-h", "--height"], "The height to change the canvas") height: number
     ): void {
 
         if (width)
