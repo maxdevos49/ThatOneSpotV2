@@ -1,6 +1,5 @@
 #Project
 /src/wwwroot/uploads
-!/src/wwwroot/javascript/util/Observable/*.js
 
 #Typescript
 *.js
