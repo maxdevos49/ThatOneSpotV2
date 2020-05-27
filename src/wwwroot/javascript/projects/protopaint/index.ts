@@ -12,10 +12,6 @@ import { View } from "./actions/View.js";
 import { Canvas } from "./actions/Canvas.js";
 
 //extensions
-import { ToggleSearch } from "../../util/ActionCommander/extensions/ToggleSearch.js";
-import { ErrorDisplay } from "../../util/ActionCommander/extensions/ErrorDisplay.js";
-import { ActionSuggestions } from "../../util/ActionCommander/extensions/ActionSuggestions.js";
-import { ActionHistory } from "../../util/ActionCommander/extensions/ActionHistory.js";
 
 import { Autocomplete } from "../../util/ActionCommander/extensions/Autocomplete.js";
 import { InputButtons } from "../../util/ActionCommander/extensions/InputButtons.js";
@@ -34,6 +30,10 @@ import { MouseService } from "./services/MouseService.js";
 //interaction Modes
 import { PanMode } from "./modes/PanMode.js";
 import { EditMode } from "./modes/EditMode.js";
+import { ToggleSearch } from "../../util/ActionCommander/extensions/ToggleSearch.js";
+import { ErrorDisplay } from "../../util/ActionCommander/extensions/ErrorDisplay.js";
+import { ActionHistory } from "../../util/ActionCommander/extensions/ActionHistory.js";
+import { ActionSuggestions } from "../../util/ActionCommander/extensions/ActionSuggestions.js";
 
 class Startup implements IStartup {
 
