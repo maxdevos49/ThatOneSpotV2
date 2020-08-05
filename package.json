@@ -29,7 +29,7 @@
         "dotenv": "^6.2.0",
         "esm": "^3.2.9",
         "express": "^4.16.4",
-        "express-fileupload": "^1.1.6",
+        "express-fileupload": "^1.1.9",
         "express-session": "^1.15.6",
         "ip": "^1.1.5",
         "mongoose": "^5.9.3",
